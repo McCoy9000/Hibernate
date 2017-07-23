@@ -19,6 +19,8 @@ public class Imagen {
 	private long id;
 	@Column(name = "nombre")
 	private String nombre;
+	@Column(name = "url")
+	private String url;
 	@OneToOne(mappedBy = "imagen", fetch = FetchType.LAZY)
 	private Persona persona;
 	
@@ -45,6 +47,22 @@ public class Imagen {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public Persona getPersona() {
+		return persona;
+	}
+
+	public void setPersona(Persona persona) {
+		this.persona = persona;
 	}
 
 }

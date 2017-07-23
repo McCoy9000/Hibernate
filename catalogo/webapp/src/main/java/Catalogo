@@ -1,5 +1,0 @@
-public void prepareCatalogo();
-
-public List<ArticuloCantidad> registerOrder();
-
-public void redirectToAppropriateJSP();

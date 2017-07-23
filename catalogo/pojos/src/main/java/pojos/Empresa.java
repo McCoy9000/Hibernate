@@ -84,4 +84,14 @@ public class Empresa {
 		this.direccion = direccion;
 	}
 
+
+	public List<Persona> getPersonas() {
+		return personas;
+	}
+
+
+	public void setPersonas(List<Persona> personas) {
+		this.personas = personas;
+	}
+
 }

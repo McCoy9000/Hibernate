@@ -1,7 +1,0 @@
-Usuario usuario = session.getAttribute("usuario");
-
-public String receiveLoginData();
-
-public boolean authenticateLoginData();
-
-public void redirectToAppropriateJSP();

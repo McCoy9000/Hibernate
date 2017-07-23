@@ -125,4 +125,12 @@ public class Direccion {
 		this.persona = persona;
 	}
 
+	public Empresa getEmpresa() {
+		return empresa;
+	}
+
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
+
 }

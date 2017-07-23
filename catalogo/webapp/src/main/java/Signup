@@ -1,7 +1,0 @@
-Usuario usuario;
-
-public String receiveUserData();
-
-public boolean registerUserData();
-
-public void redirectToAppropriateJSP();

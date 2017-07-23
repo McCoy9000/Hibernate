@@ -1,5 +1,0 @@
-public List<ArticuloCantidad> ammendOrder();
-
-public boolean confirmOrder();
-
-public void redirectToAppropriateJSP();

@@ -7,11 +7,11 @@
 	<persistence-unit name="persistencia">
     
 	<class>pojos.Persona</class>
+	<class>pojos.Usuario</class>  
 	<class>pojos.Direccion</class>
 	<class>pojos.Imagen</class>
 	<class>pojos.Empresa</class>  
-	<class>pojos.Usuario</class>  
-    
+    <class>pojos.Articulo</class>
     
     <properties>
         <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
