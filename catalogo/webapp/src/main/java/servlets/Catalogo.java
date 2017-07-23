@@ -23,14 +23,14 @@ public class Catalogo extends HttpServlet {
 		
 	}
 
-	public void prepareCatalogo() {
+	private void prepareCatalogo() {
 	}
 
-	public List<ArticuloCantidad> registerOrder() {
+	private List<ArticuloCantidad> registerOrder() {
 		return null;
 	}
 
-	public void redirectToAppropriateJSP() {
+	private void redirectToAppropriateJSP() {
 	}	
 	
 }

@@ -17,4 +17,15 @@ public class Signup extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	}
 
+	private String receiveUserData() {
+		return null;
+	}
+	
+	private boolean registerUserData() {
+		return false;
+	}
+	
+	private void redirectToAppropriateJSP() {
+		
+	}
 }

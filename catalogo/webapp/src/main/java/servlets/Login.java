@@ -27,15 +27,15 @@ public class Login extends HttpServlet {
 
 	}
 	
-	public String receiveLoginData() {
+	private String receiveLoginData() {
 		return null;
 	}
 
-	public boolean authenticateLoginData() {
+	private boolean authenticateLoginData() {
 		return false;
 	}
 
-	public void redirectToAppropriateJSP() {
+	private void redirectToAppropriateJSP() {
 	}
 
 }

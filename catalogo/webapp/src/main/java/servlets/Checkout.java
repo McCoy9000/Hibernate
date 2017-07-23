@@ -23,14 +23,14 @@ public class Checkout extends HttpServlet {
 		
 	}
 	
-	public List<ArticuloCantidad> ammendOrder() {
+	private List<ArticuloCantidad> ammendOrder() {
 		return null;
 	}
 
-	public boolean confirmOrder() {
+	private boolean confirmOrder() {
 		return false;
 	}
 
-	public void redirectToAppropriateJSP() {
+	private void redirectToAppropriateJSP() {
 	}
 }
