@@ -18,4 +18,12 @@ public class ArticuloCantidad extends Articulo {
 		this.cantidad = cantidad;
 	}
 
+	public BigInteger getCantidad() {
+		return cantidad;
+	}
+
+	public void setCantidad(BigInteger cantidad) {
+		this.cantidad = cantidad;
+	}
+
 }
