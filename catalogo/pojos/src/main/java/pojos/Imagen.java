@@ -15,7 +15,7 @@ public class Imagen {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id", unique = true)
+	@Column(name = "id_imagen", unique = true)
 	private long id;
 	@Column(name = "nombre")
 	private String nombre;

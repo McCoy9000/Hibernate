@@ -15,7 +15,7 @@ public class Direccion {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id", unique = true)
+	@Column(name = "id_direccion", unique = true)
 	private long id;
 	@Column(name = "codigo_postal")
 	private String codigoPostal;

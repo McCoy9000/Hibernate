@@ -20,7 +20,7 @@ public class Empresa {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id", unique = true)
+	@Column(name = "id_empresa", unique = true)
 	private long id;
 	@Column(name = "nombre")
 	private String nombre;
@@ -29,7 +29,7 @@ public class Empresa {
 	@OneToOne(cascade = {CascadeType.ALL})
 	@JoinColumn(name = "id")
 	private Direccion direccion;
-	@OneToMany (mappedBy = "empresa", cascade = CascadeType.ALL)
+	@OneToMany (mappedBy = "empresa", cascade = CascadeType.PERSIST)
 	private List<Persona> personas = new ArrayList<Persona>();
 	
 

@@ -10,12 +10,15 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "PERSONAS")
 public class Persona implements Serializable {
 	
@@ -36,33 +39,38 @@ public class Persona implements Serializable {
 	private String documento;
 	@Column (name = "telefono")
 	private String telefono;
+	@Column (name = "email")
+	private String email;
 	@OneToOne(cascade = {CascadeType.ALL})
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "id_direccion")
 	private Direccion direccion;
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id")
+	@ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_empresa")
 	private Empresa empresa;
 	@OneToOne(cascade = {CascadeType.ALL})
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "id_imagen")
 	private Imagen imagen;
 	
 	public Persona() {
 		
 	}
 
+
 	public Persona(String nombre, String apellidos, LocalDate fechaNacimiento,
-			String documento, String telefono, Direccion direccion,
-			Empresa empresa, Imagen imagen) {
+			String documento, String telefono, String email,
+			Direccion direccion, Empresa empresa, Imagen imagen) {
 		super();
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.fechaNacimiento = fechaNacimiento;
 		this.documento = documento;
 		this.telefono = telefono;
+		this.email = email;
 		this.direccion = direccion;
 		this.empresa = empresa;
 		this.imagen = imagen;
 	}
+
 
 	public long getId() {
 		return id;
@@ -111,6 +119,16 @@ public class Persona implements Serializable {
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
 	}
+
+	public String getEmail() {
+		return email;
+	}
+
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 
 	public Direccion getDireccion() {
 		return direccion;
