@@ -10,6 +10,7 @@ public class Constantes {
 	public static final String RUTA_SIGNUP = "/WEB-INF/vistas/signup.jsp";
 	
 	public static final String RUTA_CATALOGO = "/WEB-INF/vistas/catalogo.jsp";
+	public static final String RUTA_ARTICULO = "/WEB-INF/vistas/articulo.jsp";
 	
 	public static final String RUTA_FORMULARIO_USUARIO = "/WEB-INF/vistas/usuarioform.jsp";
 	public static final String RUTA_LISTADO_USUARIO = "/WEB-INF/vistas/usuariocrud.jsp";
