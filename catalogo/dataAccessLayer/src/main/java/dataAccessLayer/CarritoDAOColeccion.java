@@ -87,7 +87,7 @@ public class CarritoDAOColeccion implements CarritoDAO {
 		BigDecimal precioTotalMasIva = BigDecimal.ZERO;
 		for (ArticuloCantidad a : this.findAll()) {
 
-			precioTotal = precioTotal.add(a.getPrecio());
+			precioTotal = precioTotal.add(a.getPrecio().multiply(new BigDecimal(a.getCantidad())));
 		}
 		
 		precioTotalMasIva = precioTotal.multiply(Constantes.IVA.add(BigDecimal.ONE)).setScale(2, BigDecimal.ROUND_HALF_EVEN);
