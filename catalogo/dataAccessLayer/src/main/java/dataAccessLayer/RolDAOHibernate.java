@@ -5,41 +5,39 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
-import pojos.Usuario;
+import pojos.Rol;
 
-public class UsuarioDAOHibernate extends IpartekDAOHibernate implements UsuarioDAO {
+public class RolDAOHibernate extends IpartekDAOHibernate implements RolDAO {
 
-	
 	@Override
-	public long insert(Usuario usuario) {
-
+	public long insert(Rol rol) {
 		EntityManager man = emf.createEntityManager();
 		EntityTransaction transaction = man.getTransaction();
 		transaction.begin();
-		man.persist(usuario);
+		man.persist(rol);
 		transaction.commit();
-		long id = usuario.getId();
+		long id = rol.getId();
 		man.close();	
 		return id;
 	}
 
 	@Override
-	public void update(Usuario usuario) {
+	public void update(Rol rol) {
 		EntityManager man = emf.createEntityManager();
 		EntityTransaction transaction = man.getTransaction();
 		transaction.begin();
-		man.merge(usuario);
+		man.merge(rol);
 		transaction.commit();
 		man.close();
 	}
 
 	@Override
-	public void delete(Usuario usuario) {
+	public void delete(Rol rol) {
 		EntityManager man = emf.createEntityManager();
 		EntityTransaction transaction = man.getTransaction();
-		Usuario user = man.find(Usuario.class, usuario.getId());
+		Rol papel = man.find(Rol.class, rol.getId());
 		transaction.begin();
-		man.remove(user);
+		man.remove(papel);
 		transaction.commit();
 		man.close();
 	}
@@ -48,53 +46,53 @@ public class UsuarioDAOHibernate extends IpartekDAOHibernate implements UsuarioD
 	public void delete(long id) {
 		EntityManager man = emf.createEntityManager();
 		EntityTransaction transaction = man.getTransaction();
-		Usuario user = man.find(Usuario.class, id);
+		Rol papel = man.find(Rol.class, id);
 		transaction.begin();
-		man.remove(user);
+		man.remove(papel);
 		transaction.commit();
 		man.close();
 	}
 
 	@Override
-	public List<Usuario> findAll() {
+	public List<Rol> findAll() {
 		EntityManager man = emf.createEntityManager();
 		@SuppressWarnings("unchecked")
-		List<Usuario> usuarios = (List<Usuario>)man.createQuery("FROM Usuario");
+		List<Rol> roles = (List<Rol>)man.createQuery("FROM Rol");
 		man.close();
-		return usuarios;
+		return roles;
 	}
 
 	@Override
-	public Usuario findById(long id) {
+	public Rol findById(int id) {
 		EntityManager man = emf.createEntityManager();
-		Usuario user = man.find(Usuario.class, id);
+		Rol rol = man.find(Rol.class, id);
 		man.close();
-		return user;
+		return rol;
 	}
 
 	@Override
-	public Usuario findByName(String username) {
+	public Rol findByName(String nombre) {
 		EntityManager man = emf.createEntityManager();
 		@SuppressWarnings("unchecked")
-		List<Usuario> usuarios = (List<Usuario>)man.createQuery("FROM Usuario WHERE username=" + username);
-		Usuario usuario = usuarios.get(0);
+		List<Rol> roles = (List<Rol>)man.createQuery("FROM Rol WHERE nombre=" + nombre);
+		Rol rol = roles.get(0);
 		man.close();
-		return usuario;
+		return rol;
 	}
 
 	@Override
-	public boolean validar(Usuario usuario) {
+	public boolean validar(Rol rol) {
 		EntityManager man = emf.createEntityManager();
-		Usuario user = man.find(Usuario.class, usuario.getId());
+		Rol papel = man.find(Rol.class, rol.getId());
 		man.close();
-		if (user == null)
+		if (papel == null)
 		return false;
 		return true;
 	}
 
 	@Override
-	public boolean validarNombre(Usuario usuario) {
-		if(this.findByName(usuario.getUsername()) != null)
+	public boolean validarNombre(Rol rol) {
+		if(this.findByName(rol.getNombre()) != null)
 		return true;
 		return true;
 	}

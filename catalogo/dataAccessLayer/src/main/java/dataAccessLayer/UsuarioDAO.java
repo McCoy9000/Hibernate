@@ -16,7 +16,7 @@ public interface UsuarioDAO {
 	
 	public List<Usuario> findAll();
 
-	public Usuario findById(int id);
+	public Usuario findById(long id);
 
 	public Usuario findByName(String username);
 

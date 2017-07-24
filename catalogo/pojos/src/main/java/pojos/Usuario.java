@@ -22,13 +22,13 @@ public class Usuario extends Persona {
 	String password;
 	@ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_rol")
-	String rol;
+	Rol rol;
 	
 	
 	public Usuario() {
 	}
 
-	public Usuario (String nombre, String apellidos, String email, String username, String password, String rol) {
+	public Usuario (String nombre, String apellidos, String email, String username, String password, Rol rol) {
 		super(nombre, apellidos, email);
 		this.username = username;
 		this.password = password;
@@ -66,6 +66,14 @@ public class Usuario extends Persona {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Rol getRol() {
+		return rol;
+	}
+
+	public void setRol(Rol rol) {
+		this.rol = rol;
 	}
 
 }

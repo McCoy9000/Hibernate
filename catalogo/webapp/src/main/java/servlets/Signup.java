@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import pojos.Usuario;
 import recursos.Constantes;
+import dataAccessLayer.RolDAO;
 import dataAccessLayer.UsuarioDAO;
 import encriptacion.Encriptador;
 
@@ -33,6 +34,7 @@ public class Signup extends HttpServlet {
 	
 		ServletContext application = request.getServletContext();
 		UsuarioDAO usuarioDAO = (UsuarioDAO) application.getAttribute("usuarioDAO");
+		RolDAO rolDAO = (RolDAO) application.getAttribute("rolDAO");
 		
 		HttpSession session = request.getSession();
 		session.removeAttribute("errorSignup");
@@ -65,7 +67,7 @@ public class Signup extends HttpServlet {
 			rawpassword2 = request.getParameter("password2").trim();
 		}
 		
-		Usuario usuario = new Usuario(nombre, apellidos, email, username, password, "Usuario");
+		Usuario usuario = new Usuario(nombre, apellidos, email, username, password, rolDAO.findByName("Usuario"));
 		
 		
 		boolean sinDatos = username == null || rawpassword == null || rawpassword2 == null;

@@ -21,8 +21,8 @@ public class Rol {
 	String nombre;
 	@Column(name = "descripcion")
 	String descripcion;
-	@OneToMany (mappedBy = "empresa", cascade = CascadeType.PERSIST)
-	private List<Usuario> personas = new ArrayList<Usuario>();
+	@OneToMany (mappedBy = "usuario", cascade = CascadeType.PERSIST)
+	private List<Usuario> usuarios = new ArrayList<Usuario>();
 	
 	public Rol () {
 		
@@ -32,6 +32,38 @@ public class Rol {
 		this.id = id;
 		this.nombre = nombre;
 		this.descripcion = descripcion;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public List<Usuario> getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(List<Usuario> usuarios) {
+		this.usuarios = usuarios;
 	}
 	
 	
