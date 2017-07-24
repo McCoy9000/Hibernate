@@ -74,6 +74,8 @@ public class Catalogo extends HttpServlet {
 			Articulo articulo = articuloDAO.findByCodigo(codigoArticulo);
 			ArticuloCantidad orden = new ArticuloCantidad(articulo.getCodigoArticulo(), articulo.getNombre(), articulo.getDescripcion(), articulo.getImagen(), articulo.getPrecio(), articulo.getStock(), cantidad);
 			carritoDAO.insert(orden);
+			articuloDAO.restarCantidad(articulo, cantidad);
+			
 			
 			session.setAttribute("numeroArticulos", carritoDAO.findAll().size());
 			

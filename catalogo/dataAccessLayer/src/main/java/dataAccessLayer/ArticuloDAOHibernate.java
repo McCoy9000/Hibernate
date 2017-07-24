@@ -1,5 +1,6 @@
 package dataAccessLayer;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -97,4 +98,10 @@ public class ArticuloDAOHibernate extends IpartekDAOHibernate implements Articul
 		return true;
 	}
 
+	public void restarCantidad(Articulo articulo, BigInteger cantidad) {
+		EntityManager man = emf.createEntityManager();
+		man.merge(articulo);
+		articulo.setStock(articulo.getStock().subtract(cantidad));
+		man.close();
+	}
 }

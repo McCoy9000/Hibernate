@@ -6,7 +6,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 import pojos.Empresa;
-import pojos.Usuario;
 
 public class EmpresaDAOHibernate extends IpartekDAOHibernate implements EmpresaDAO {
 

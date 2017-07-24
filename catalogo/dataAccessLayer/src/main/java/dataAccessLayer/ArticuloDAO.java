@@ -1,5 +1,6 @@
 package dataAccessLayer;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import pojos.Articulo;
@@ -23,5 +24,7 @@ public interface ArticuloDAO {
 	public boolean validar(Articulo articulo);
 
 	public boolean validarCodigo(Articulo articulo);
+	
+	public void restarCantidad(Articulo articulo, BigInteger cantidad);
 
 }
