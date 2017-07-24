@@ -1,9 +1,13 @@
 package listeners;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import org.apache.log4j.PropertyConfigurator;
+
+import dataAccessLayer.UsuarioDAO;
+import dataAccessLayer.UsuarioDAOFactory;
 
 /**
  * Application Lifecycle Listener implementation class Inicio
@@ -20,7 +24,16 @@ public class Inicio implements ServletContextListener {
     }
 
    public void contextInitialized(ServletContextEvent sce)  { 
-		PropertyConfigurator.configure(Inicio.class.getClassLoader().getResource("log4j.properties"));
+		
+	   ServletContext application = sce.getServletContext();
+	   
+	   PropertyConfigurator.configure(Inicio.class.getClassLoader().getResource("log4j.properties"));
+	   
+	   UsuarioDAO usuarioDAO = UsuarioDAOFactory.getUsuarioDAO();
+	   
+	   application.setAttribute("usuarioDAO", usuarioDAO);
+	   
+	   
     }
 	
 }

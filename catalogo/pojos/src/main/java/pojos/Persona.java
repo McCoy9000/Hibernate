@@ -55,6 +55,16 @@ public class Persona implements Serializable {
 		
 	}
 
+	public Persona (String nombre, String apellidos) {
+		this.nombre = nombre;
+		this.apellidos = apellidos;
+	}
+
+	public Persona (String nombre, String apellidos, String email) {
+		this.nombre = nombre;
+		this.apellidos = apellidos;
+		this.email = email;
+	}
 
 	public Persona(String nombre, String apellidos, LocalDate fechaNacimiento,
 			String documento, String telefono, String email,
