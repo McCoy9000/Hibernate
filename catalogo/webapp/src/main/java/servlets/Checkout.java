@@ -2,6 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -39,7 +40,6 @@ public class Checkout extends HttpServlet {
 		String op = request.getParameter("op");
 
 		ArticuloDAO articuloDAO = (ArticuloDAO) application.getAttribute("productos");
-		ArticuloVendidoDAO articuloVendidoDAO = (ArticuloVendidoDAO) application.getAttribute("articuloVendidoDAO");
 		CarritoDAO carritoDAO = (CarritoDAO) application.getAttribute("carritoDAO");
 		
 		session.setAttribute("articulosCarritoArr", articuloDAO.findAll());
@@ -81,10 +81,15 @@ public class Checkout extends HttpServlet {
 			
 			
 			List<ArticuloCantidad> articulosCarrito = (List<ArticuloCantidad>) carritoDAO.findAll();
-			
+			List<ArticuloVendido> articulosFactura = new ArrayList<ArticuloVendido>();
+	
 			for (ArticuloCantidad ac: articulosCarrito) {
-				articuloVendidoDAO.insert(new ArticuloVendido(ac.getId(), ac.getCodigoArticulo(), ac.getNombre(), ac.getDescripcion(), ac.getImagen(), ac.getPrecio(), ac.getCantidad(), factura));
+				articulosFactura.add(new ArticuloVendido(ac.getCodigoArticulo(), ac.getNombre(), ac.getDescripcion(), ac.getImagen(), ac.getPrecio(), ac.getCantidad(), factura));
 			}
+	
+			factura.setArticulos(articulosFactura);
+			facturaDAO.update(factura);
+			
 			
 			session.setAttribute("factura", factura);
 			session.setAttribute("productosFactura", factura.getArticulos());

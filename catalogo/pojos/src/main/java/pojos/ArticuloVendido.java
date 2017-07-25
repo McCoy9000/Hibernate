@@ -7,6 +7,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -17,6 +19,7 @@ import javax.persistence.Table;
 public class ArticuloVendido {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_articulo")
 	private long id;
 	@Column(name = "codigo_articulo")
@@ -40,11 +43,10 @@ public class ArticuloVendido {
 		
 	}
 	
-	public ArticuloVendido(long id, String codigoArticulo, String nombre,
+	public ArticuloVendido(String codigoArticulo, String nombre,
 			String descripcion, Imagen imagen, BigDecimal precio,
 			BigInteger cantidad, Factura factura) {
 		super();
-		this.id = id;
 		this.codigoArticulo = codigoArticulo;
 		this.nombre = nombre;
 		this.descripcion = descripcion;
