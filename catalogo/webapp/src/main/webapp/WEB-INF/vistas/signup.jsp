@@ -19,8 +19,12 @@
 <input id="password2" class="form-control" name="password2" type="password" placeholder="Contraseña" maxlength="16" required="required"/>
 </fieldset>
 <fieldset class="form-group">
-<label for="nombre_completo">Nombre</label>
-<input id="nombre_completo" class="form-control" name="nombre_completo" placeholder="Nombre" maxlength="25"/>
+<label for="email">Email <span style="color:red">*</span></label>
+<input id="email" class="form-control" name="email" type="text" placeholder="email"/>
+</fieldset>
+<fieldset class="form-group">
+<label for="nombre">Nombre</label>
+<input id="nombre" class="form-control" name="nombre" placeholder="Nombre" maxlength="25"/>
 </fieldset>
 <fieldset class="form-group">
 <label for="apellidos">Apellidos</label>

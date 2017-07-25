@@ -42,8 +42,7 @@ public class Checkout extends HttpServlet {
 		ArticuloDAO articuloDAO = (ArticuloDAO) application.getAttribute("productos");
 		CarritoDAO carritoDAO = (CarritoDAO) application.getAttribute("carritoDAO");
 		
-		session.setAttribute("articulosCarritoArr", articuloDAO.findAll());
-		session.setAttribute("productosCarritoArr", carritoDAO.findAll());
+		session.setAttribute("articulosCarrito", articuloDAO.findAll());
 		session.setAttribute("numeroProductos", carritoDAO.findAll().size());
 		session.setAttribute("precioTotal", carritoDAO.getPrecioTotal());
 		

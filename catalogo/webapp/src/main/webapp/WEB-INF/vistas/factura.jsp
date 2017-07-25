@@ -35,11 +35,11 @@
 		
 	<div class="col-xs-5 col-xs-offset-2 col-md-5 col-md-offset-2" style="text-align:right">
 		<address>
-			<strong>${sessionScope.usuarioFactura.nombre_completo} ${sessionScope.usuarioFactura.apellidos}</strong><br>
-			${sessionScope.usuarioFactura.direccion}<br>
-			${sessionScope.usuarioFactura.codigoPostal}<br>
-			${sessionScope.usuarioFactura.region}, ${sessionScope.usuarioFactura.pais}<br>
-			${sessionScope.usuarioFactura.documento}<br>
+			<strong>${sessionScope.factura.comprador.nombre} ${sessionScope.factura.comprador.apellidos}</strong><br>
+			${sessionScope.factura.comprador.direccion.calle} ${sessionScope.factura.comprador.direccion.puerta} ${sessionScope.factura.comprador.direccion.piso}<br>
+			${sessionScope.factura.comprador.direccion.codigoPostal}<br>
+			${sessionScope.factura.comprador.direccion.region}, ${sessionScope.factura.comprador.direccion.pais}<br>
+			${sessionScope.factura.comprador.documento}<br>
 		</address>
 	</div>
 </div>
@@ -57,7 +57,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${sessionScope.productosFactura}" var="producto">
+						<c:forEach items="${sessionScope.articulosFactura}" var="producto">
 							<tr>
 								<td style="width:28%"></td>
 								<td>${producto.nombre}</td>

@@ -46,6 +46,17 @@
 			required="required"
 			</c:if>
 		>
+			<label for="email">Email <span style="color:red">*</span></label> 
+			<input type="text" id="email" class="form-control"
+				name="email" placeholder="Email"/>
+		</fieldset>
+		<fieldset class="form-group" <c:if test="${param.op == 'borrar'}">
+			style="display:none;"
+			</c:if>
+			<c:if test="${param.op == 'alta' or param.op =='modificar'}">
+			required="required"
+			</c:if>
+		>
 			<label for="password2">Repita la contraseña <span style="color:red">*</span></label> 
 			<input type="password" id="password2" class="form-control"
 				name="password2" placeholder="Contraseña"/>
@@ -73,8 +84,8 @@
 			style="display:none;"
 			</c:if>
 		>
-			<label for="id_roles">Permiso de administrador</label> 
-			<input type="checkbox" id="id_roles" name="id_roles" value="1" />
+			<label for="rol">Permiso de administrador</label> 
+			<input type="checkbox" id="rol" name="rol" value="Usuario" />
 		</fieldset>
 		<fieldset class="form-group">
 			<input type="submit" class="btn btn-default" style="background:#ECC007; border:none;" value="${fn:toUpperCase(param.op)}" 

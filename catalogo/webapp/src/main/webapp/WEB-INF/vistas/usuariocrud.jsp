@@ -20,13 +20,13 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach items="${applicationScope.usuariosArr}" var="usuario">
+				<c:forEach items="${applicationScope.usuarios}" var="usuario">
 					<tr>
 						<td style="vertical-align: middle;">${usuario.username}</td>	
 						<td style="vertical-align: middle;">${usuario.password}</td>
-						<td style="vertical-align: middle;">${usuario.nombre_completo}</td>
+						<td style="vertical-align: middle;">${usuario.nombre}</td>
 						<td style="vertical-align: middle;">${usuario.apellidos}</td>
-						<td style="vertical-align: middle;">${usuario.rol}</td>
+						<td style="vertical-align: middle;">${usuario.rol.nombre}</td>
 						<td style="vertical-align: middle;">
 							<a class="btn btn-success" href="${applicationScope.rutaBase}/admin/usuariocrud?op=modificar&id=${usuario.id}">Modificar</a>
 							<a class="btn btn-danger" href="${applicationScope.rutaBase}/admin/usuariocrud?op=borrar&id=${usuario.id}">Borrar</a>

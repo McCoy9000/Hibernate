@@ -13,21 +13,21 @@
 			<label for="id">Id</label> 
 			
 			<input id="id" name="id" type="number" class="form-control"
-			  required="required"  value="${producto.id}" readonly="readonly">
+			  required="required"  value="${articulo.id}" readonly="readonly">
 		</fieldset>
 		<fieldset class="form-group" 
 			<c:if test="${param.op == 'borrar' or param.op == 'modificar'}">
 				style="display:none"
 			</c:if>>
-			<label for="groupId">Grupo de productos <span style="color:red">*</span></label> 
-			<select id="groupId" name="groupId" class="form-control"
+			<label for="codigoArticulo">Codigo artículo <span style="color:red">*</span></label> 
+			<select id="codigoArticulo" name="codigoArticulo" class="form-control"
 				<c:if test="${param.op == 'modificar'}">
 					disabled="disabled"
 			  	</c:if>
 			 >
 				<option>Nuevo grupo de productos</option>
 				<c:forEach items="${applicationScope.catalogo}" var="grupo">
-				<option <c:if test="${producto.groupId == grupo.groupId}">selected="selected"</c:if>>${grupo.groupId} - ${grupo.nombre}</option>
+				<option <c:if test="${articulo.codigoArticulo == grupo.codigoArticulo}">selected="selected"</c:if>>${grupo.codigoArticulo} - ${grupo.nombre}</option>
 				</c:forEach>
 				
 			</select>
@@ -38,7 +38,7 @@
 			<input <c:if test="${param.op == 'borrar'}">
 					readonly="readonly"
 					</c:if> id="nombre" name="nombre" type="text" class="form-control"  
-				required="required" placeholder="Nombre" value="${producto.nombre}"/>
+				required="required" placeholder="Nombre" value="${articulo.nombre}"/>
 		</fieldset>
 		<fieldset class="form-group" 
 			<c:if test="${param.op == 'borrar'}">
@@ -47,7 +47,7 @@
 			<label for="descripcion">Descripción</label> 
 			
 			<textarea rows="3" id="descripcion" name="descripcion" placeholder="Descripción"
-				  class="form-control">${producto.descripcion}</textarea>
+				  class="form-control">${articulo.descripcion}</textarea>
 		</fieldset>
 		<fieldset class="form-group" 
 			<c:if test="${param.op == 'borrar'}">
@@ -56,7 +56,7 @@
 			<label for="precio">Precio</label>
 			<div class="input-group"> 
 			<div class="input-group-addon">€</div>
-			<input type="number" id="precio" name="precio" placeholder="Precio" value="${producto.precio}"
+			<input type="number" id="precio" name="precio" placeholder="Precio" value="${articulo.precio}"
 				 min="0" class="form-control"/>
 			</div>
 		</fieldset>
@@ -79,7 +79,7 @@
 			
 			
 			<input type="hidden" name="opform" value="${param.op}" />
-			<input type="hidden" name="grupo" value="${producto.groupId}" />
+			<input type="hidden" name="grupo" value="${articulo.codigoArticulo}" />
 		</fieldset>
 		
 	</form>

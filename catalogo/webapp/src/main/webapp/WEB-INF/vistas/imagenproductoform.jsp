@@ -14,11 +14,11 @@
 			<c:if test="${param.op == 'borrar'}">
 				style="display:none"
 			</c:if>>
-			<label for="groupId">Producto</label> 
-			<select id="groupId" name="groupId" class="form-control">
+			<label for="codigoArticulo">Producto</label> 
+			<select id="codigoArticulo" name="codigoArticulo" class="form-control">
 				
-				<c:forEach items="${applicationScope.catalogo}" var="grupo">
-				<option <c:if test="${producto.groupId == grupo.groupId}">selected="selected"</c:if>>${grupo.groupId} - ${grupo.nombre}</option>
+				<c:forEach items="${applicationScope.catalogo}" var="articulo">
+				<option <c:if test="${producto.codigoArticulo == grupo.groupId}">selected="selected"</c:if>>${grupo.codigoArticulo} - ${grupo.nombre}</option>
 				</c:forEach>
 				
 			</select>

@@ -16,10 +16,10 @@
 					</tr>
 			</thead>
 			<tbody>
-				<c:forEach items="${applicationScope.facturasArr}" var="factura">
+				<c:forEach items="${applicationScope.facturas}" var="factura">
 					<tr>
 						<td>${factura.numero_factura}</td>
-						<td>${factura.usuario}</td>
+						<td>${factura.comprador.nombre} ${factura.comprador.apellidos}</td>
 						<td>${factura.fecha}</td>
 						<td>
 							<a class="btn btn-success" onclick="window.open('${applicationScope.rutaBase}/admin/facturacrud?op=ver&id=${factura.id}', '_blank', 'width=400,height=400')">Ver</a>

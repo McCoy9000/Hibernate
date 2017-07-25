@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/factura")
+@WebServlet("/facturaout")
 public class FacturaOut extends HttpServlet {
 
 	private static final long serialVersionUID = -374351075129665738L;

@@ -8,46 +8,46 @@
 <div id="perfil" class="container">
 <div class="bg-info" style="margin:1em">
 <div class="row">
-	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="username">Username</label><p id="username">${sessionScope.usuarioMascara.username}</p>
+	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="username">Username</label><p id="username">${sessionScope.usuario.username}</p>
 	</div>
-	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="password">Password</label><p id="password">${sessionScope.usuarioMascara.password}</p>
+	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="password">Password</label><p id="password">${sessionScope.usuario.password}</p>
 	</div>
 </div>
 </div>
 <div  class="bg-info" style="margin:1em">
 <div class="row">
 	 
-	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="nombre">Nombre</label><p id="nombre">${sessionScope.usuarioMascara.nombre_completo}</p>
+	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="nombre">Nombre</label><p id="nombre">${sessionScope.usuario.nombre}</p>
 	</div>
-	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="apellidos">Apellidos</label><p id="apellidos">${sessionScope.usuarioMascara.apellidos}</p>
+	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="apellidos">Apellidos</label><p id="apellidos">${sessionScope.usuario.apellidos}</p>
 	</div>
 </div>
 <div class="row">
-	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="telefono">Telefono</label><p id="telefono">${sessionScope.usuarioMascara.telefono}</p>
+	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="telefono">Telefono</label><p id="telefono">${sessionScope.usuario.telefono}</p>
 	</div>
-	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="documento">Documento</label><p id="documento">${sessionScope.usuarioMascara.documento}</p>
+	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="documento">Documento</label><p id="documento">${sessionScope.usuario.documento}</p>
 	</div>
 </div>
 </div>
 <div  class="bg-info" style="margin:1em">
 <div class="row">
-	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="direccion">Dirección</label><p id="direccion">${sessionScope.usuarioMascara.direccion}</p>
+	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="direccion">Calle</label><p id="direccion">${sessionScope.usuario.direccion.calle}</p>
 	</div>
-	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="codigoPostal">Código postal</label><p id="codigoPostal">${sessionScope.usuarioMascara.codigoPostal}</p>
+	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="codigoPostal">Código postal</label><p id="codigoPostal">${sessionScope.usuario.direccion.codigoPostal}</p>
 	</div>
 </div>
 <div class ="row">
-	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="ciudad">Ciudad</label><p id="ciudad">${sessionScope.usuarioMascara.ciudad}</p>
+	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="ciudad">Ciudad</label><p id="ciudad">${sessionScope.usuario.direccion.ciudad}</p>
 	</div>
-	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="region">Región</label><p id="region">${sessionScope.usuarioMascara.region}</p>
+	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="region">Región</label><p id="region">${sessionScope.usuario.direccion.region}</p>
 	</div>
-	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="pais">País</label><p id="pais">${sessionScope.usuarioMascara.pais}</p>
+	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="pais">País</label><p id="pais">${sessionScope.usuario.direccion.pais}</p>
 	</div>
 </div>
 </div>
 <div  class="bg-info" style="margin:1em">
 <div class="row">
-	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="empresa">Empresa</label><p id="empresa">${sessionScope.usuarioMascara.empresa}</p>
+	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="empresa">Empresa</label><p id="empresa">${sessionScope.usuario.empresa.nombre}</p>
 	</div>
 </div>
 </div>

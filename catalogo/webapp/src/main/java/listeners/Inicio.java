@@ -9,6 +9,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
 import org.apache.log4j.PropertyConfigurator;
 
@@ -36,10 +37,7 @@ import dataAccessLayer.UsuarioDAO;
 import dataAccessLayer.UsuarioDAOFactory;
 import encriptacion.Encriptador;
 
-/**
- * Application Lifecycle Listener implementation class Inicio
- *
- */
+@WebListener("/inicio")
 public class Inicio implements ServletContextListener {
 
    public Inicio() {
