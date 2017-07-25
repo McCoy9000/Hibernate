@@ -21,7 +21,6 @@ import dataAccessLayer.ArticuloDAO;
 import dataAccessLayer.ArticuloVendidoDAO;
 import dataAccessLayer.CarritoDAO;
 import dataAccessLayer.CarritoDAOFactory;
-import dataAccessLayer.CompradorDAO;
 import dataAccessLayer.FacturaDAO;
 
 @WebServlet("/checkout")
@@ -41,7 +40,6 @@ public class Checkout extends HttpServlet {
 
 		ArticuloDAO articuloDAO = (ArticuloDAO) application.getAttribute("productos");
 		ArticuloVendidoDAO articuloVendidoDAO = (ArticuloVendidoDAO) application.getAttribute("articuloVendidoDAO");
-		CompradorDAO compradorDAO = (CompradorDAO) application.getAttribute("compradorDAO");
 		CarritoDAO carritoDAO = (CarritoDAO) application.getAttribute("carritoDAO");
 		
 		session.setAttribute("articulosCarritoArr", articuloDAO.findAll());
@@ -77,11 +75,8 @@ public class Checkout extends HttpServlet {
 			}
 
 			FacturaDAO facturaDAO = (FacturaDAO) application.getAttribute("facturas");
-			Comprador comprador = new Comprador (usuario.getId(), usuario.getNombre(), usuario.getApellidos(), usuario.getFechaNacimiento(), usuario.getDocumento(), usuario.getTelefono(), usuario.getEmail(), usuario.getDireccion(), usuario.getEmpresa(), usuario.getImagen());
-
-			compradorDAO.insert(comprador);
-			
-			Factura factura = new Factura(usuario, comprador, LocalDate.now());
+						
+			Factura factura = new Factura(usuario, new Comprador (usuario.getId(), usuario.getNombre(), usuario.getApellidos(), usuario.getFechaNacimiento(), usuario.getDocumento(), usuario.getTelefono(), usuario.getEmail(), usuario.getDireccion(), usuario.getEmpresa(), usuario.getImagen()), LocalDate.now());
 			facturaDAO.insert(factura);
 			
 			

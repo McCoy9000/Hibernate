@@ -6,6 +6,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,8 +21,11 @@ public class Comprador{
 	private static final long serialVersionUID = -4479395202727906913L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
 	private long id;
+	@Column(name = "id_Usuario")
+	private long idUsuario;
 	@Column(name = "nombre")
 	private String nombre;
 	@Column(name = "apellidos")
@@ -42,16 +47,18 @@ public class Comprador{
 	@OneToOne(cascade = {CascadeType.ALL})
 	@JoinColumn(name = "id_imagen")
 	private Imagen imagen;
-	
+	@OneToOne(mappedBy = "factura", fetch = FetchType.LAZY)
+	private Factura factura;
+
 
 	public Comprador() {
 		
 	}
 	
-	public Comprador(long id, String nombre, String apellidos, LocalDate fechaNacimiento,
+	public Comprador(long idUsuario, String nombre, String apellidos, LocalDate fechaNacimiento,
 			String documento, String telefono, String email, Direccion direccion,
 			Empresa empresa, Imagen imagen) {
-		this.id = id;
+		this.idUsuario = idUsuario;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.fechaNacimiento = fechaNacimiento;
@@ -141,6 +148,22 @@ public class Comprador{
 
 	public void setImagen(Imagen imagen) {
 		this.imagen = imagen;
+	}
+
+	public long getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(long idUsuario) {
+		this.idUsuario = idUsuario;
+	}
+
+	public Factura getFactura() {
+		return factura;
+	}
+
+	public void setFactura(Factura factura) {
+		this.factura = factura;
 	}
 	
 }

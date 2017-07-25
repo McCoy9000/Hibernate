@@ -73,13 +73,12 @@ public class CompradorDAOHibernate extends IpartekDAOHibernate implements Compra
 	}
 
 	@Override
-	public Comprador findByName(String username) {
+	public List<Comprador> findByIdUsuario(long idUsuario) {
 		EntityManager man = emf.createEntityManager();
 		@SuppressWarnings("unchecked")
-		List<Comprador> usuarios = (List<Comprador>)man.createQuery("FROM Comprador WHERE nombre =" + username);
-		Comprador usuario = usuarios.get(0);
+		List<Comprador> usuarios = (List<Comprador>)man.createQuery("FROM Comprador WHERE id_usuario =" + idUsuario);
 		man.close();
-		return usuario;
+		return usuarios;
 	}
 
 	@Override
@@ -91,12 +90,4 @@ public class CompradorDAOHibernate extends IpartekDAOHibernate implements Compra
 		return false;
 		return true;
 	}
-
-	@Override
-	public boolean validarNombre(Comprador usuario) {
-		if(this.findByName(usuario.getNombre()) != null)
-		return true;
-		return true;
-	}
-
 }

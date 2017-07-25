@@ -18,10 +18,8 @@ public interface CompradorDAO {
 
 	public Comprador findById(long id);
 
-	public Comprador findByName(String username);
+	public List<Comprador> findByIdUsuario(long idUsuario);
 
 	public boolean validar(Comprador comprador);
-
-	public boolean validarNombre(Comprador comprador);
 
 }
