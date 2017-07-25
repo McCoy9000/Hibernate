@@ -25,11 +25,11 @@ import org.apache.log4j.Logger;
 import dataAccessLayer.ArticuloDAO;
 import recursos.Constantes;
 
-@WebServlet("/admin/imagenproducto")
-public class ImagenProducto extends HttpServlet {
+@WebServlet("/admin/imagenarticulo")
+public class ImagenArticulo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private static Logger log = Logger.getLogger(ImagenProducto.class);
+	private static Logger log = Logger.getLogger(ImagenArticulo.class);
 
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
