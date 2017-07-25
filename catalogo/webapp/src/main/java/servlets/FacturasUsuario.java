@@ -2,6 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -45,7 +46,7 @@ public class FacturasUsuario extends HttpServlet {
 
 		if (op == null) {
 
-			List<pojos.Factura> facturasUsuario = null;
+			List<Factura> facturasUsuario = new ArrayList<Factura>();
 
 			if (usuario != null) {
 				List<Comprador> compradores = compradorDAO.findByIdUsuario(usuario.getId());
