@@ -23,6 +23,8 @@ public class Imagen {
 	private String url;
 	@OneToOne(mappedBy = "imagen", fetch = FetchType.LAZY)
 	private Persona persona;
+	@OneToOne(mappedBy = "imagen", fetch = FetchType.LAZY)
+	private Comprador comprador;
 	
 	
 	public Imagen() {

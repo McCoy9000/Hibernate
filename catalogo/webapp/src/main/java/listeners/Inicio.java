@@ -18,6 +18,10 @@ import pojos.Imagen;
 import pojos.Usuario;
 import dataAccessLayer.ArticuloDAO;
 import dataAccessLayer.ArticuloDAOFactory;
+import dataAccessLayer.ArticuloVendidoDAO;
+import dataAccessLayer.ArticuloVendidoDAOFactory;
+import dataAccessLayer.CompradorDAO;
+import dataAccessLayer.CompradorDAOFactory;
 import dataAccessLayer.DireccionDAO;
 import dataAccessLayer.DireccionDAOFactory;
 import dataAccessLayer.EmpresaDAO;
@@ -62,6 +66,8 @@ public class Inicio implements ServletContextListener {
 	   EmpresaDAO empresaDAO = EmpresaDAOFactory.getEmpresaDAO();
 	   ImagenDAO imagenDAO = ImagenDAOFactory.getImagenDAO();
 	   FacturaDAO facturaDAO = FacturaDAOFactory.getFacturaDAO();
+	   ArticuloVendidoDAO articuloVendidoDAO = ArticuloVendidoDAOFactory.getArticuloVendidoDAO();
+	   CompradorDAO compradorDAO = CompradorDAOFactory.getCompradorDAO();
 	   
 	   application.setAttribute("usuarioDAO", usuarioDAO);
 	   application.setAttribute("articuloDAO", articuloDAO);
@@ -70,7 +76,9 @@ public class Inicio implements ServletContextListener {
 	   application.setAttribute("empresaDAO", empresaDAO);
 	   application.setAttribute("imagenDAO", imagenDAO);
 	   application.setAttribute("facturaDAO", facturaDAO);
-	   
+	   application.setAttribute("articuloVendidoDAO", articuloVendidoDAO);
+	   application.setAttribute("compradorDAO", compradorDAO);
+
 	   application.setAttribute("catalogo", articuloDAO.findAll());
 	   
 	   String rawadmin = "admin", admin;

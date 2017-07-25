@@ -26,7 +26,7 @@
 	</thead>
 	
 	<tbody>
-		<c:forEach items="${sessionScope.articulosCarritoArr}" var="producto">
+		<c:forEach items="${sessionScope.articulosCarrito}" var="producto">
 			<tr id="carrito">
 				<td style="text-align:center; vertical-align: middle;">${producto.nombre}</td>
 				<td style="text-align:center; vertical-align: middle;"><img src="${applicationScope.rutaBase}/img/${producto.imagen}.jpg" height="128"/></td>

@@ -35,6 +35,8 @@ public class Direccion {
 	private Persona persona;
 	@OneToOne(mappedBy = "direccion", fetch = FetchType.LAZY)
 	private Empresa empresa;
+	@OneToOne(mappedBy = "direccion", fetch = FetchType.LAZY)
+	private Comprador comprador;
 	
 	
 	public Direccion() {

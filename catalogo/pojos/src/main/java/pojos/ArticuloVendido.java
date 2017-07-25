@@ -42,7 +42,7 @@ public class ArticuloVendido {
 	
 	public ArticuloVendido(long id, String codigoArticulo, String nombre,
 			String descripcion, Imagen imagen, BigDecimal precio,
-			BigInteger cantidad) {
+			BigInteger cantidad, Factura factura) {
 		super();
 		this.id = id;
 		this.codigoArticulo = codigoArticulo;
@@ -51,6 +51,7 @@ public class ArticuloVendido {
 		this.imagen = imagen;
 		this.precio = precio;
 		this.cantidad = cantidad;
+		this.factura = factura;
 	}
 
 	public long getId() {
@@ -109,5 +110,11 @@ public class ArticuloVendido {
 		this.cantidad = cantidad;
 	}
 
+	public Factura getFactura() {
+		return factura;
+	}
 	
+	public void setFactura(Factura factura) {
+		this.factura = factura;
+	}
 }

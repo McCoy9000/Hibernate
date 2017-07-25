@@ -31,6 +31,8 @@ public class Empresa {
 	private Direccion direccion;
 	@OneToMany (mappedBy = "empresa", cascade = CascadeType.PERSIST)
 	private List<Persona> personas = new ArrayList<Persona>();
+	@OneToMany (mappedBy = "empresa", cascade = CascadeType.PERSIST)
+	private List<Comprador> compradores = new ArrayList<Comprador>();
 	
 
 	public Empresa() {
