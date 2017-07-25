@@ -13,6 +13,7 @@ import javax.servlet.ServletContextListener;
 import org.apache.log4j.PropertyConfigurator;
 
 import pojos.Articulo;
+import pojos.Factura;
 import pojos.Imagen;
 import pojos.Usuario;
 import dataAccessLayer.ArticuloDAO;
@@ -21,6 +22,8 @@ import dataAccessLayer.DireccionDAO;
 import dataAccessLayer.DireccionDAOFactory;
 import dataAccessLayer.EmpresaDAO;
 import dataAccessLayer.EmpresaDAOFactory;
+import dataAccessLayer.FacturaDAO;
+import dataAccessLayer.FacturaDAOFactory;
 import dataAccessLayer.ImagenDAO;
 import dataAccessLayer.ImagenDAOFactory;
 import dataAccessLayer.RolDAO;
@@ -58,6 +61,7 @@ public class Inicio implements ServletContextListener {
 	   DireccionDAO direccionDAO = DireccionDAOFactory.getDireccionDAO();
 	   EmpresaDAO empresaDAO = EmpresaDAOFactory.getEmpresaDAO();
 	   ImagenDAO imagenDAO = ImagenDAOFactory.getImagenDAO();
+	   FacturaDAO facturaDAO = FacturaDAOFactory.getFacturaDAO();
 	   
 	   application.setAttribute("usuarioDAO", usuarioDAO);
 	   application.setAttribute("articuloDAO", articuloDAO);
@@ -65,6 +69,7 @@ public class Inicio implements ServletContextListener {
 	   application.setAttribute("direccionDAO", direccionDAO);
 	   application.setAttribute("empresaDAO", empresaDAO);
 	   application.setAttribute("imagenDAO", imagenDAO);
+	   application.setAttribute("facturaDAO", facturaDAO);
 	   
 	   application.setAttribute("catalogo", articuloDAO.findAll());
 	   
@@ -88,6 +93,8 @@ public class Inicio implements ServletContextListener {
 	   articuloDAO.insert(new Articulo("005", "Cobra", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
 	   articuloDAO.insert(new Articulo("006", "Eldorado", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
 
+	   Factura.setSiguienteFactura(facturaDAO.getMaxId());
+	   
     }
 	
 }
