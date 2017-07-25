@@ -161,6 +161,7 @@ public class UsuarioForm extends HttpServlet {
 					usuario.setNombre(nombre);
 					usuario.setApellidos(apellidos);
 					usuario.setRol(rol);
+					usuarioDAO.update(usuario);
 				} else {
 					session.setAttribute("errorUsuario", "Por el momento no es posible modificar el usuario 'admin'");
 					request.setAttribute("usuario", usuario);

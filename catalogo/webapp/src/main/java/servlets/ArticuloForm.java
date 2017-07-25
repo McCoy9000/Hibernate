@@ -184,6 +184,7 @@ public class ArticuloForm extends HttpServlet {
 				
 				articulo.setStock(nuevaCantidad);
 				
+				articuloDAO.update(articulo);
 				
 				
 				if (nombre == null || nombre == "") {
