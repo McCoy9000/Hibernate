@@ -58,7 +58,7 @@ public class ArticuloDAOHibernate extends IpartekDAOHibernate implements Articul
 	public List<Articulo> findAll() {
 		EntityManager man = emf.createEntityManager();
 		@SuppressWarnings("unchecked")
-		List<Articulo> articulos = (List<Articulo>)man.createQuery("FROM Articulo");
+		List<Articulo> articulos = (List<Articulo>)man.createQuery("FROM Articulo").getResultList();
 		man.close();
 		return articulos;
 	}
@@ -75,7 +75,7 @@ public class ArticuloDAOHibernate extends IpartekDAOHibernate implements Articul
 	public Articulo findByCodigo(String codigo) {
 		EntityManager man = emf.createEntityManager();
 		@SuppressWarnings("unchecked")
-		List<Articulo> articulos = (List<Articulo>)man.createQuery("FROM Articulo WHERE codigoArticulo=" + codigo);
+		List<Articulo> articulos = (List<Articulo>)man.createQuery("FROM Articulo WHERE codigoArticulo='" + codigo + "'").getResultList();
 		Articulo articulo = articulos.get(0);
 		man.close();
 		return articulo;

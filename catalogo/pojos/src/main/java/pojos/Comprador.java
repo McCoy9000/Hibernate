@@ -47,7 +47,7 @@ public class Comprador{
 	@OneToOne(cascade = {CascadeType.ALL})
 	@JoinColumn(name = "id_imagen")
 	private Imagen imagen;
-	@OneToOne(mappedBy = "factura", fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "comprador", fetch = FetchType.LAZY)
 	private Factura factura;
 
 

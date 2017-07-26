@@ -59,7 +59,7 @@ public class CompradorDAOHibernate extends IpartekDAOHibernate implements Compra
 	public List<Comprador> findAll() {
 		EntityManager man = emf.createEntityManager();
 		@SuppressWarnings("unchecked")
-		List<Comprador> usuarios = (List<Comprador>)man.createQuery("FROM Comprador");
+		List<Comprador> usuarios = (List<Comprador>)man.createQuery("FROM Comprador").getResultList();
 		man.close();
 		return usuarios;
 	}
@@ -76,7 +76,7 @@ public class CompradorDAOHibernate extends IpartekDAOHibernate implements Compra
 	public List<Comprador> findByIdUsuario(long idUsuario) {
 		EntityManager man = emf.createEntityManager();
 		@SuppressWarnings("unchecked")
-		List<Comprador> usuarios = (List<Comprador>)man.createQuery("FROM Comprador WHERE id_usuario =" + idUsuario);
+		List<Comprador> usuarios = (List<Comprador>)man.createQuery("FROM Comprador WHERE id_usuario ='" + idUsuario + "'").getResultList();
 		man.close();
 		return usuarios;
 	}

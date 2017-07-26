@@ -21,7 +21,7 @@ public class Rol {
 	String nombre;
 	@Column(name = "descripcion")
 	String descripcion;
-	@OneToMany (mappedBy = "usuario", cascade = CascadeType.PERSIST)
+	@OneToMany (mappedBy = "rol", cascade = CascadeType.ALL)
 	private List<Usuario> usuarios = new ArrayList<Usuario>();
 	
 	public Rol () {

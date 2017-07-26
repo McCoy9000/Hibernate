@@ -59,7 +59,7 @@ public class DireccionDAOHibernate extends IpartekDAOHibernate implements Direcc
 	public List<Direccion> findAll() {
 		EntityManager man = emf.createEntityManager();
 		@SuppressWarnings("unchecked")
-		List<Direccion> direcciones = (List<Direccion>)man.createQuery("FROM Direccion");
+		List<Direccion> direcciones = (List<Direccion>)man.createQuery("FROM Direccion").getResultList();
 		man.close();
 		return direcciones;
 	}

@@ -59,7 +59,7 @@ public class ImagenDAOHibernate extends IpartekDAOHibernate implements ImagenDAO
 	public List<Imagen> findAll() {
 		EntityManager man = emf.createEntityManager();
 		@SuppressWarnings("unchecked")
-		List<Imagen> imagenes = (List<Imagen>)man.createQuery("FROM Imagen");
+		List<Imagen> imagenes = (List<Imagen>)man.createQuery("FROM Imagen").getResultList();
 		man.close();
 		return imagenes;
 	}
@@ -76,7 +76,7 @@ public class ImagenDAOHibernate extends IpartekDAOHibernate implements ImagenDAO
 	public Imagen findByUrl(String url) {
 		EntityManager man = emf.createEntityManager();
 		@SuppressWarnings("unchecked")
-		List<Imagen> imagenes = (List<Imagen>)man.createQuery("FROM Imagen WHERE url=" + url);
+		List<Imagen> imagenes = (List<Imagen>)man.createQuery("FROM Imagen WHERE url='" + url + "'").getResultList();
 		Imagen imagen = imagenes.get(0);
 		man.close();
 		return imagen;

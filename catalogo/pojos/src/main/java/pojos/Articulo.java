@@ -3,11 +3,14 @@ package pojos;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -24,7 +27,8 @@ public class Articulo {
 	private String nombre;
 	@Column(name = "descripcion")
 	private String descripcion;
-	@Column(name = "imagen")
+	@OneToOne(cascade = {CascadeType.ALL})
+	@JoinColumn(name = "id_imagen")
 	private Imagen imagen;
 	@Column(name = "precio")
 	private BigDecimal precio;

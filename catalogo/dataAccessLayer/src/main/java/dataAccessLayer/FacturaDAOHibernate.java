@@ -60,7 +60,7 @@ public class FacturaDAOHibernate extends IpartekDAOHibernate implements FacturaD
 	public List<Factura> findAll() {
 		EntityManager man = emf.createEntityManager();
 		@SuppressWarnings("unchecked")
-		List<Factura> facturas = (List<Factura>)man.createQuery("FROM Factura");
+		List<Factura> facturas = (List<Factura>)man.createQuery("FROM Factura").getResultList();
 		man.close();
 		return facturas;
 	}
@@ -100,8 +100,8 @@ public class FacturaDAOHibernate extends IpartekDAOHibernate implements FacturaD
 	public long getMaxId() {
 		EntityManager man = emf.createEntityManager();
 		@SuppressWarnings("unchecked")
-		List<Factura> maxFactura = (List<Factura>) man.createQuery("From Factura WHERE factura_id = (select max(id_factura) from Factura)");
-		return maxFactura.get(0).getId();
+		List<Factura> maxFactura = (List<Factura>) man.createQuery("From Factura WHERE factura_id = (select max(id_factura) from Factura)").getResultList();
+		return maxFactura.get(0).getId() + 1;
 	}
 
 }

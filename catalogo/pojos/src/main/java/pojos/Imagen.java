@@ -25,6 +25,10 @@ public class Imagen {
 	private Persona persona;
 	@OneToOne(mappedBy = "imagen", fetch = FetchType.LAZY)
 	private Comprador comprador;
+	@OneToOne(mappedBy = "imagen", fetch = FetchType.LAZY)
+	private Articulo articulo;
+	@OneToOne(mappedBy = "imagen", fetch = FetchType.LAZY)
+	private ArticuloVendido articuloVendido;
 	
 	
 	public Imagen() {

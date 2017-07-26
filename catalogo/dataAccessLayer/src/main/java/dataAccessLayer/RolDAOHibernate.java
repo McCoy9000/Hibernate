@@ -57,7 +57,7 @@ public class RolDAOHibernate extends IpartekDAOHibernate implements RolDAO {
 	public List<Rol> findAll() {
 		EntityManager man = emf.createEntityManager();
 		@SuppressWarnings("unchecked")
-		List<Rol> roles = (List<Rol>)man.createQuery("FROM Rol");
+		List<Rol> roles = (List<Rol>)man.createQuery("FROM Rol").getResultList();
 		man.close();
 		return roles;
 	}
@@ -74,7 +74,7 @@ public class RolDAOHibernate extends IpartekDAOHibernate implements RolDAO {
 	public Rol findByName(String nombre) {
 		EntityManager man = emf.createEntityManager();
 		@SuppressWarnings("unchecked")
-		List<Rol> roles = (List<Rol>)man.createQuery("FROM Rol WHERE nombre=" + nombre);
+		List<Rol> roles = (List<Rol>)man.createQuery("FROM Rol WHERE nombre='" + nombre + "'").getResultList();
 		Rol rol = roles.get(0);
 		man.close();
 		return rol;

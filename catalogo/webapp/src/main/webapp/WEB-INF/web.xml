@@ -5,6 +5,6 @@
     <param-value>true</param-value>
   </context-param>
   <listener>
-    <listener-class>servlets.Inicio</listener-class>
+    <listener-class>listeners.Inicio</listener-class>
   </listener>
 </web-app>

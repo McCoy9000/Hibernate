@@ -59,7 +59,7 @@ public class UsuarioDAOHibernate extends IpartekDAOHibernate implements UsuarioD
 	public List<Usuario> findAll() {
 		EntityManager man = emf.createEntityManager();
 		@SuppressWarnings("unchecked")
-		List<Usuario> usuarios = (List<Usuario>)man.createQuery("FROM Usuario");
+		List<Usuario> usuarios = (List<Usuario>)man.createQuery("FROM Usuario").getResultList();
 		man.close();
 		return usuarios;
 	}
@@ -76,7 +76,7 @@ public class UsuarioDAOHibernate extends IpartekDAOHibernate implements UsuarioD
 	public Usuario findByName(String username) {
 		EntityManager man = emf.createEntityManager();
 		@SuppressWarnings("unchecked")
-		List<Usuario> usuarios = (List<Usuario>)man.createQuery("FROM Usuario WHERE username=" + username);
+		List<Usuario> usuarios = (List<Usuario>)man.createQuery("FROM Usuario WHERE username='" + username + "'").getResultList();
 		Usuario usuario = usuarios.get(0);
 		man.close();
 		return usuario;

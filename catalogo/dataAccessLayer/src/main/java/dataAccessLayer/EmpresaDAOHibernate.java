@@ -59,7 +59,7 @@ public class EmpresaDAOHibernate extends IpartekDAOHibernate implements EmpresaD
 	public List<Empresa> findAll() {
 		EntityManager man = emf.createEntityManager();
 		@SuppressWarnings("unchecked")
-		List<Empresa> empresas = (List<Empresa>)man.createQuery("FROM Empresa");
+		List<Empresa> empresas = (List<Empresa>)man.createQuery("FROM Empresa").getResultList();
 		man.close();
 		return empresas;
 	}
@@ -76,7 +76,7 @@ public class EmpresaDAOHibernate extends IpartekDAOHibernate implements EmpresaD
 	public Empresa findByName(String nombre) {
 		EntityManager man = emf.createEntityManager();
 		@SuppressWarnings("unchecked")
-		List<Empresa> empresas = (List<Empresa>)man.createQuery("FROM Empresa WHERE username=" + nombre);
+		List<Empresa> empresas = (List<Empresa>)man.createQuery("FROM Empresa WHERE username='" + nombre + "'").getResultList();
 		Empresa empresa = empresas.get(0);
 		man.close();
 		return empresa;

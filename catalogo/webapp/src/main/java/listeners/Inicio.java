@@ -11,11 +11,13 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import pojos.Articulo;
 import pojos.Factura;
 import pojos.Imagen;
+import pojos.Rol;
 import pojos.Usuario;
 import dataAccessLayer.ArticuloDAO;
 import dataAccessLayer.ArticuloDAOFactory;
@@ -40,6 +42,8 @@ import encriptacion.Encriptador;
 @WebListener("/inicio")
 public class Inicio implements ServletContextListener {
 
+	private static Logger log = Logger.getLogger(Inicio.class);
+
    public Inicio() {
         // TODO Auto-generated constructor stub
     }
@@ -56,17 +60,17 @@ public class Inicio implements ServletContextListener {
 		application.setAttribute("rutaBase", path);
 
 	   PropertyConfigurator.configure(Inicio.class.getClassLoader().getResource("log4j.properties"));
-	   
+
 	   UsuarioDAO usuarioDAO = UsuarioDAOFactory.getUsuarioDAO();
 	   ArticuloDAO articuloDAO = ArticuloDAOFactory.getArticuloDAO();
-	   RolDAO rolDAO = RolDAOFactory.getRolDAO();
 	   DireccionDAO direccionDAO = DireccionDAOFactory.getDireccionDAO();
 	   EmpresaDAO empresaDAO = EmpresaDAOFactory.getEmpresaDAO();
 	   ImagenDAO imagenDAO = ImagenDAOFactory.getImagenDAO();
 	   FacturaDAO facturaDAO = FacturaDAOFactory.getFacturaDAO();
 	   ArticuloVendidoDAO articuloVendidoDAO = ArticuloVendidoDAOFactory.getArticuloVendidoDAO();
 	   CompradorDAO compradorDAO = CompradorDAOFactory.getCompradorDAO();
-	   
+	   RolDAO rolDAO = RolDAOFactory.getRolDAO();
+	   log.info("Iniciados los DAO");
 	   application.setAttribute("usuarioDAO", usuarioDAO);
 	   application.setAttribute("articuloDAO", articuloDAO);
 	   application.setAttribute("rolDAO", rolDAO);
@@ -76,9 +80,13 @@ public class Inicio implements ServletContextListener {
 	   application.setAttribute("facturaDAO", facturaDAO);
 	   application.setAttribute("articuloVendidoDAO", articuloVendidoDAO);
 	   application.setAttribute("compradorDAO", compradorDAO);
-
-	   application.setAttribute("catalogo", articuloDAO.findAll());
-	   
+	   log.info("Guardados los DAO en application");
+	   rolDAO.insert(new Rol(1, "Administrador", "Administrador de la web"));
+	   rolDAO.insert(new Rol(2, "Usuario", "Usuario de la web"));
+	   rolDAO.insert(new Rol(3, "Departamento", "Departamento de ventas"));
+	   log.info("Creados los roles");
+	   usuarioDAO.insert(new Usuario ("DEVOLUCION", "DEVOLUCION", "DEVOLUCION", "DEVOLUCION", "DEVOLUCION", rolDAO.findByName("Departamento")));
+	   log.info("Creado el usuario DEVOLUCION");
 	   String rawadmin = "admin", admin;
 	   
 		Encriptador miEncriptador = null;
@@ -91,16 +99,19 @@ public class Inicio implements ServletContextListener {
 		admin = miEncriptador.encriptar(rawadmin);
 	   
 	   usuarioDAO.insert(new Usuario ("admin", "admin", "admin@admin.com", "admin", admin, rolDAO.findByName("Usuario")));
-	   
+	   log.info("Creado el usuario admin");
 	   articuloDAO.insert(new Articulo("001", "Mustang", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
 	   articuloDAO.insert(new Articulo("002", "Charger", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
 	   articuloDAO.insert(new Articulo("003", "Challenger", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
 	   articuloDAO.insert(new Articulo("004", "Ford GT", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
 	   articuloDAO.insert(new Articulo("005", "Cobra", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
 	   articuloDAO.insert(new Articulo("006", "Eldorado", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
-
+	   log.info("Creados 6 productos de prueba");
+	   application.setAttribute("catalogo", articuloDAO.findAll());
+	   log.info("Guardado el catalogo en application");
 	   Factura.setSiguienteFactura(facturaDAO.getMaxId());
-	   
-    }
+	   log.info("Registrado el último número de factura");
+ 
+   }
 	
 }
