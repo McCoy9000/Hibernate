@@ -51,7 +51,7 @@ public class UsuarioPerfil extends HttpServlet {
 		EmpresaDAO empresaDAO = (EmpresaDAO) application.getAttribute("empresaDAO");
 		ImagenDAO imagenDAO = (ImagenDAO) application.getAttribute("imagenDAO");
 		DireccionDAO direccionDAO = (DireccionDAO) application.getAttribute("direccionDAO");
-		
+
 		long id = ((Usuario) session.getAttribute("usuario")).getId();
 
 		String username = request.getParameter("username");
@@ -101,7 +101,7 @@ public class UsuarioPerfil extends HttpServlet {
 		String telefono = request.getParameter("telefono");
 
 		String email = request.getParameter("email");
-		
+
 		String piso = request.getParameter("piso");
 
 		String puerta = request.getParameter("puerta");
@@ -125,16 +125,20 @@ public class UsuarioPerfil extends HttpServlet {
 		String opform = request.getParameter("opform");
 
 		Usuario usuario;
-		
+
 		if (("ver").equals(op)) {
+			usuarioDAO.abrirManager();
 			usuario = usuarioDAO.findById(id);
+			usuarioDAO.cerrarManager();
 			session.setAttribute("usuario", usuario);
 			request.getRequestDispatcher(Constantes.RUTA_PERFIL_USUARIO).forward(request, response);
 			return;
 		} else {
 			switch (opform) {
 			case "formulario":
+				usuarioDAO.abrirManager();
 				usuario = usuarioDAO.findById(id);
+				usuarioDAO.cerrarManager();
 				session.setAttribute("usuario", usuario);
 
 				request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_PERFIL_USUARIO).forward(request, response);
@@ -143,9 +147,11 @@ public class UsuarioPerfil extends HttpServlet {
 			case "modificar":
 
 				usuario = new Usuario(nombre, apellidos, email, username, password, rol);
+				usuarioDAO.abrirManager();
 				boolean usuarioExistente = usuarioDAO.validarNombre(usuario) && usuario.getNombre() != nombre;
 
 				if (usuarioExistente) {
+					usuarioDAO.cerrarManager();
 					log.info("pasa por usuario existente");
 					session.setAttribute("errorPerfil", "El nombre de usuario ya existe");
 					request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_PERFIL_USUARIO).forward(request, response);
@@ -155,7 +161,7 @@ public class UsuarioPerfil extends HttpServlet {
 					usuario = usuarioDAO.findById(id);
 					Direccion direccion = direccionDAO.findById(usuario.getDireccion().getId());
 					Empresa empresa = empresaDAO.findById(usuario.getEmpresa().getId());
-					
+					usuarioDAO.iniciarTransaccion();
 					usuario.setUsername(username);
 					usuario.setPassword(password);
 					usuario.setNombre(nombre);
@@ -172,10 +178,12 @@ public class UsuarioPerfil extends HttpServlet {
 					usuario.setDireccion(direccion);
 					empresa.setNombre(nombreEmpresa);
 					usuario.setEmpresa(empresa);
-					
-					usuarioDAO.update(usuario);
 
-					usuarioDAO.findById(id);
+					// usuarioDAO.update(usuario);
+
+					// usuarioDAO.findById(id);
+					usuarioDAO.terminarTransaccion();
+					usuarioDAO.cerrarManager();
 
 					session.setAttribute("usuario", usuario);
 					session.setAttribute("usuarioFactura", usuario);
@@ -183,6 +191,7 @@ public class UsuarioPerfil extends HttpServlet {
 					request.getRequestDispatcher(Constantes.RUTA_PERFIL_USUARIO).forward(request, response);
 					return;
 				} else {
+					usuarioDAO.cerrarManager();
 					session.setAttribute("errorPerfil", "Las contraseñas no coinciden");
 					request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_PERFIL_USUARIO).forward(request, response);
 					return;

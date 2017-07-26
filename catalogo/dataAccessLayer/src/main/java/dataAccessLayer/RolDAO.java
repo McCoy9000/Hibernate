@@ -4,8 +4,8 @@ import java.util.List;
 
 import pojos.Rol;
 
-public interface RolDAO {
-	
+public interface RolDAO extends IpartekDAO {
+
 	public long insert(Rol rol);
 
 	public void update(Rol rol);
@@ -13,7 +13,7 @@ public interface RolDAO {
 	public void delete(Rol rol);
 
 	public void delete(long id);
-	
+
 	public List<Rol> findAll();
 
 	public Rol findById(int id);
@@ -23,6 +23,5 @@ public interface RolDAO {
 	public boolean validar(Rol rol);
 
 	public boolean validarNombre(Rol rol);
-
 
 }

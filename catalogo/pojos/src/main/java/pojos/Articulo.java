@@ -27,19 +27,18 @@ public class Articulo {
 	private String nombre;
 	@Column(name = "descripcion")
 	private String descripcion;
-	@OneToOne(cascade = {CascadeType.ALL})
+	@OneToOne(cascade = { CascadeType.ALL })
 	@JoinColumn(name = "id_imagen")
 	private Imagen imagen;
 	@Column(name = "precio")
 	private BigDecimal precio;
 	@Column(name = "stock")
 	private BigInteger stock;
-	
+
 	public Articulo() {
 	}
 
-	public Articulo(String codigoArticulo, String nombre, String descripcion,
-			Imagen imagen, BigDecimal precio, BigInteger stock) {
+	public Articulo(String codigoArticulo, String nombre, String descripcion, Imagen imagen, BigDecimal precio, BigInteger stock) {
 		super();
 		this.codigoArticulo = codigoArticulo;
 		this.nombre = nombre;
@@ -103,6 +102,64 @@ public class Articulo {
 
 	public void setStock(BigInteger stock) {
 		this.stock = stock;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((codigoArticulo == null) ? 0 : codigoArticulo.hashCode());
+		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
+		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((imagen == null) ? 0 : imagen.hashCode());
+		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
+		result = prime * result + ((precio == null) ? 0 : precio.hashCode());
+		result = prime * result + ((stock == null) ? 0 : stock.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Articulo other = (Articulo) obj;
+		if (codigoArticulo == null) {
+			if (other.codigoArticulo != null)
+				return false;
+		} else if (!codigoArticulo.equals(other.codigoArticulo))
+			return false;
+		if (descripcion == null) {
+			if (other.descripcion != null)
+				return false;
+		} else if (!descripcion.equals(other.descripcion))
+			return false;
+		if (id != other.id)
+			return false;
+		if (imagen == null) {
+			if (other.imagen != null)
+				return false;
+		} else if (!imagen.equals(other.imagen))
+			return false;
+		if (nombre == null) {
+			if (other.nombre != null)
+				return false;
+		} else if (!nombre.equals(other.nombre))
+			return false;
+		if (precio == null) {
+			if (other.precio != null)
+				return false;
+		} else if (!precio.equals(other.precio))
+			return false;
+		if (stock == null) {
+			if (other.stock != null)
+				return false;
+		} else if (!stock.equals(other.stock))
+			return false;
+		return true;
 	}
 
 }

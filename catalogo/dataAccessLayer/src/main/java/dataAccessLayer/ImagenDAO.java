@@ -4,7 +4,7 @@ import java.util.List;
 
 import pojos.Imagen;
 
-public interface ImagenDAO {
+public interface ImagenDAO extends IpartekDAO {
 
 	public long insert(Imagen imagen);
 
@@ -13,7 +13,7 @@ public interface ImagenDAO {
 	public void delete(Imagen imagen);
 
 	public void delete(long id);
-	
+
 	public List<Imagen> findAll();
 
 	public Imagen findById(long id);

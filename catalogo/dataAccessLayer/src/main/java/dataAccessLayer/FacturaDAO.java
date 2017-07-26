@@ -5,7 +5,7 @@ import java.util.List;
 
 import pojos.Factura;
 
-public interface FacturaDAO {
+public interface FacturaDAO extends IpartekDAO {
 
 	public long insert(Factura factura);
 
@@ -20,9 +20,9 @@ public interface FacturaDAO {
 	public Factura findById(long id);
 
 	public BigDecimal getIvaTotal(long id);
-	
+
 	public BigDecimal getPrecioTotal(long id);
-	
+
 	public long getMaxId();
 
 }

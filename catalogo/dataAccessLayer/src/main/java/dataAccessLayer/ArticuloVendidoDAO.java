@@ -4,8 +4,8 @@ import java.util.List;
 
 import pojos.ArticuloVendido;
 
-public interface ArticuloVendidoDAO {
-	
+public interface ArticuloVendidoDAO extends IpartekDAO {
+
 	public long insert(ArticuloVendido articulo);
 
 	public void update(ArticuloVendido articulo);
@@ -23,5 +23,5 @@ public interface ArticuloVendidoDAO {
 	public boolean validar(ArticuloVendido articulo);
 
 	public boolean validarCodigo(ArticuloVendido articulo);
-	
+
 }

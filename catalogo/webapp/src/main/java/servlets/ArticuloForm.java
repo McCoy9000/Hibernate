@@ -69,7 +69,7 @@ public class ArticuloForm extends HttpServlet {
 		}
 
 		String codigoArticulo;
-		
+
 		if (request.getParameter("id") != null) {
 			if (!(("Nuevo grupo de productos").equals(request.getParameter("codigoArticulo")))) {
 				try {
@@ -86,9 +86,9 @@ public class ArticuloForm extends HttpServlet {
 
 		String nombre, descripcion;
 
-		if (request.getParameter("groupId") != null) {
-			if (!(("Nuevo grupo de productos").equals(request.getParameter("groupId")))) {
-				nombre = request.getParameter("groupId").split("\\ - ")[1];
+		if (request.getParameter("codigoArticulo") != null) {
+			if (!(("Nuevo grupo de productos").equals(request.getParameter("codigoArticulo")))) {
+				nombre = request.getParameter("codigoArticulo").split("\\ - ")[1];
 			} else {
 				if (request.getParameter("nombre") != null) {
 					nombre = request.getParameter("nombre").trim();
@@ -103,7 +103,6 @@ public class ArticuloForm extends HttpServlet {
 				nombre = request.getParameter("nombre");
 			}
 		}
-
 
 		if (request.getParameter("descripcion") != null) {
 			descripcion = request.getParameter("descripcion").trim();
@@ -138,8 +137,7 @@ public class ArticuloForm extends HttpServlet {
 		}
 
 		Imagen imagen = null;
-		
-		
+
 		// Lógica del servlet según la opción elegida por el usuario y enviada por el navegador
 		// encapsulada en opform.
 		if (op == null) {
@@ -162,7 +160,11 @@ public class ArticuloForm extends HttpServlet {
 					request.setAttribute("articulo", articulo);
 					request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_PRODUCTO + "?op=alta").forward(request, response);
 				} else {
+					articuloDAO.abrirManager();
+					articuloDAO.iniciarTransaccion();
 					articuloDAO.insert(articulo);
+					articuloDAO.terminarTransaccion();
+					articuloDAO.cerrarManager();
 					session.removeAttribute("errorProducto");
 					log.info("Producto(s) dado(s) de alta");
 					rutaListado.forward(request, response);
@@ -171,22 +173,22 @@ public class ArticuloForm extends HttpServlet {
 			case "modificar":
 
 				// Aquí hay que declarar un nuevo producto con los datos recogidos del formulario. Como en el caso
-				//modificar, el campo groupId está deshabilitado y no lo envía, hay que extraerlo a través del id.
-				//Como el nombre se extrae del mismo campo, para este caso solicitamos el parametro "nombre".
+				// modificar, el campo groupId está deshabilitado y no lo envía, hay que extraerlo a través del id.
+				// Como el nombre se extrae del mismo campo, para este caso solicitamos el parametro "nombre".
+				articuloDAO.abrirManager();
 				articulo = articuloDAO.findById(id);
 				articulo.setCodigoArticulo(codigoArticulo);
 				articulo.setNombre(nombre);
 				articulo.setDescripcion(descripcion);
 				articulo.setImagen(imagen);
 				articulo.setPrecio(precio);
-				
+
 				BigInteger nuevaCantidad = articulo.getStock().add(cantidad);
-				
+
 				articulo.setStock(nuevaCantidad);
-				
-				articuloDAO.update(articulo);
-				
-				
+				articuloDAO.cerrarManager();
+				// articuloDAO.update(articulo);
+
 				if (nombre == null || nombre == "") {
 					session.setAttribute("errorProducto", "Debes introducir un nombre de producto");
 					request.setAttribute("articulo", articulo);
@@ -197,7 +199,11 @@ public class ArticuloForm extends HttpServlet {
 				}
 				break;
 			case "borrar":
+				articuloDAO.abrirManager();
+				articuloDAO.iniciarTransaccion();
 				articuloDAO.delete(id);
+				articuloDAO.terminarTransaccion();
+				articuloDAO.cerrarManager();
 				session.removeAttribute("errorProducto");
 				rutaListado.forward(request, response);
 

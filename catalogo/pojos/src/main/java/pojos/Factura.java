@@ -25,18 +25,17 @@ public class Factura {
 	private long id;
 	@Column(name = "numero_factura", unique = true)
 	private String numeroFactura;
-	@OneToOne(cascade = {CascadeType.ALL})
+	@OneToOne(cascade = { CascadeType.ALL })
 	@JoinColumn(name = "id")
 	private Usuario usuario;
-	@OneToOne(cascade = {CascadeType.ALL})
+	@OneToOne(cascade = { CascadeType.ALL })
 	@JoinColumn(name = "id_comprador")
 	private Comprador comprador;
-	@OneToMany (mappedBy = "factura", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "factura", cascade = CascadeType.PERSIST)
 	private List<ArticuloVendido> articulos = new ArrayList<ArticuloVendido>();
 	@Column(name = "fecha")
 	private LocalDate fecha;
 	private static long siguienteFactura = 0L;
-	
 
 	public Factura() {
 	}
@@ -128,6 +127,56 @@ public class Factura {
 		Factura.siguienteFactura = siguienteFactura;
 	}
 
-	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((articulos == null) ? 0 : articulos.hashCode());
+		result = prime * result + ((comprador == null) ? 0 : comprador.hashCode());
+		result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
+		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((numeroFactura == null) ? 0 : numeroFactura.hashCode());
+		result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Factura other = (Factura) obj;
+		if (articulos == null) {
+			if (other.articulos != null)
+				return false;
+		} else if (!articulos.equals(other.articulos))
+			return false;
+		if (comprador == null) {
+			if (other.comprador != null)
+				return false;
+		} else if (!comprador.equals(other.comprador))
+			return false;
+		if (fecha == null) {
+			if (other.fecha != null)
+				return false;
+		} else if (!fecha.equals(other.fecha))
+			return false;
+		if (id != other.id)
+			return false;
+		if (numeroFactura == null) {
+			if (other.numeroFactura != null)
+				return false;
+		} else if (!numeroFactura.equals(other.numeroFactura))
+			return false;
+		if (usuario == null) {
+			if (other.usuario != null)
+				return false;
+		} else if (!usuario.equals(other.usuario))
+			return false;
+		return true;
+	}
 
 }

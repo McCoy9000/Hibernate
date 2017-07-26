@@ -4,7 +4,7 @@ import java.util.List;
 
 import pojos.Usuario;
 
-public interface UsuarioDAO {
+public interface UsuarioDAO extends IpartekDAO {
 
 	public long insert(Usuario usuario);
 
@@ -13,7 +13,7 @@ public interface UsuarioDAO {
 	public void delete(Usuario usuario);
 
 	public void delete(long id);
-	
+
 	public List<Usuario> findAll();
 
 	public Usuario findById(long id);

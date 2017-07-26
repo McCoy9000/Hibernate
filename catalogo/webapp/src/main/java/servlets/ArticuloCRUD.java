@@ -40,7 +40,9 @@ public class ArticuloCRUD extends HttpServlet {
 		String op = request.getParameter("op");
 
 		if (op == null) {
+			articuloDAO.abrirManager();
 			List<Articulo> articulos = articuloDAO.findAll();
+			articuloDAO.cerrarManager();
 			application.setAttribute("articulos", articulos);
 			request.getRequestDispatcher(Constantes.RUTA_LISTADO_PRODUCTO).forward(request, response);
 			return;
@@ -49,23 +51,25 @@ public class ArticuloCRUD extends HttpServlet {
 		Articulo articulo;
 
 		switch (op) {
-			case "modificar":
-			case "borrar":
-				long id;
-				try {
-					id = Long.parseLong(request.getParameter("id"));
-				} catch (Exception e) {
-					e.printStackTrace();
-					request.getRequestDispatcher(Constantes.RUTA_LISTADO_PRODUCTO).forward(request, response);
-					break;
-				}
-					articulo = articuloDAO.findById(id);
-					request.setAttribute("articulo", articulo);
-			case "alta":
-				request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_PRODUCTO).forward(request, response);
-				break;
-			default:
+		case "modificar":
+		case "borrar":
+			long id;
+			try {
+				id = Long.parseLong(request.getParameter("id"));
+			} catch (Exception e) {
+				e.printStackTrace();
 				request.getRequestDispatcher(Constantes.RUTA_LISTADO_PRODUCTO).forward(request, response);
+				break;
+			}
+			articuloDAO.abrirManager();
+			articulo = articuloDAO.findById(id);
+			articuloDAO.cerrarManager();
+			request.setAttribute("articulo", articulo);
+		case "alta":
+			request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_PRODUCTO).forward(request, response);
+			break;
+		default:
+			request.getRequestDispatcher(Constantes.RUTA_LISTADO_PRODUCTO).forward(request, response);
 		}
 	}
 }

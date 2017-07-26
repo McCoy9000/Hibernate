@@ -15,8 +15,6 @@ import pojos.Usuario;
 import recursos.Constantes;
 import dataAccessLayer.UsuarioDAO;
 
-
-
 @WebServlet("/admin/usuariocrud")
 public class UsuarioCRUD extends HttpServlet {
 
@@ -29,7 +27,7 @@ public class UsuarioCRUD extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		ServletContext application = getServletContext();
-		
+
 		UsuarioDAO usuarioDAO = (UsuarioDAO) application.getAttribute("usuarios");
 
 		HttpSession session = request.getSession();
@@ -42,7 +40,9 @@ public class UsuarioCRUD extends HttpServlet {
 		String op = request.getParameter("op");
 
 		if (op == null) {
+			usuarioDAO.abrirManager();
 			List<Usuario> usuarios = usuarioDAO.findAll();
+			usuarioDAO.cerrarManager();
 			application.setAttribute("usuarios", usuarios);
 			request.getRequestDispatcher(Constantes.RUTA_LISTADO_USUARIO).forward(request, response);
 			return;
@@ -51,24 +51,25 @@ public class UsuarioCRUD extends HttpServlet {
 		Usuario usuario;
 
 		switch (op) {
-			case "modificar":
-			case "borrar":
-				long id;
-				try {
-					id = Long.parseLong(request.getParameter("id"));
-				} catch (Exception e) {
-					e.printStackTrace();
-					request.getRequestDispatcher(Constantes.RUTA_LISTADO_USUARIO).forward(request, response);
-					break;
-				}
-				usuario = usuarioDAO.findById(id);
-				
-				request.setAttribute("usuario", usuario);
-			case "alta":
-				request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_USUARIO).forward(request, response);
-				break;
-			default:
+		case "modificar":
+		case "borrar":
+			long id;
+			try {
+				id = Long.parseLong(request.getParameter("id"));
+			} catch (Exception e) {
+				e.printStackTrace();
 				request.getRequestDispatcher(Constantes.RUTA_LISTADO_USUARIO).forward(request, response);
+				break;
+			}
+			usuarioDAO.abrirManager();
+			usuario = usuarioDAO.findById(id);
+			usuarioDAO.cerrarManager();
+			request.setAttribute("usuario", usuario);
+		case "alta":
+			request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_USUARIO).forward(request, response);
+			break;
+		default:
+			request.getRequestDispatcher(Constantes.RUTA_LISTADO_USUARIO).forward(request, response);
 		}
 	}
 }

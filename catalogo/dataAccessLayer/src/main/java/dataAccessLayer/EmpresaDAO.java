@@ -4,7 +4,7 @@ import java.util.List;
 
 import pojos.Empresa;
 
-public interface EmpresaDAO {
+public interface EmpresaDAO extends IpartekDAO {
 
 	public long insert(Empresa empresa);
 
@@ -13,7 +13,7 @@ public interface EmpresaDAO {
 	public void delete(Empresa empresa);
 
 	public void delete(long id);
-	
+
 	public List<Empresa> findAll();
 
 	public Empresa findById(long id);

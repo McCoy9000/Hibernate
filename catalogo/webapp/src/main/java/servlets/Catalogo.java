@@ -33,11 +33,11 @@ public class Catalogo extends HttpServlet {
 
 		ServletContext application = getServletContext();
 		HttpSession session = request.getSession();
-		
+
 		ArticuloDAO articuloDAO = (ArticuloDAO) application.getAttribute("articuloDAO");
-		
+
 		application.setAttribute("catalogo", articuloDAO.findAll());
-		
+
 		CarritoDAO carritoDAO = (CarritoDAO) session.getAttribute("carritoDAO");
 
 		if (carritoDAO == null) {
@@ -56,7 +56,7 @@ public class Catalogo extends HttpServlet {
 			request.getRequestDispatcher("/WEB-INF/vistas/catalogo.jsp").forward(request, response);
 			return;
 		}
-		
+
 		switch (op) {
 
 		case "anadir":
@@ -68,24 +68,29 @@ public class Catalogo extends HttpServlet {
 				e.printStackTrace();
 				log.info("Error al parsear la cantidad. Se utilizará 1 por defecto como precaución");
 			}
-			
+
 			log.info("Cantidad recogida: " + cantidad);
-			
+			articuloDAO.abrirManager();
+			articuloDAO.iniciarTransaccion();
 			Articulo articulo = articuloDAO.findByCodigo(codigoArticulo);
-			ArticuloCantidad orden = new ArticuloCantidad(articulo.getCodigoArticulo(), articulo.getNombre(), articulo.getDescripcion(), articulo.getImagen(), articulo.getPrecio(), articulo.getStock(), cantidad);
+			ArticuloCantidad orden = new ArticuloCantidad(articulo.getCodigoArticulo(), articulo.getNombre(), articulo.getDescripcion(), articulo.getImagen(), articulo.getPrecio(),
+					articulo.getStock(), cantidad);
 			carritoDAO.insert(orden);
 			articuloDAO.restarCantidad(articulo, cantidad);
-			
-			
+			articuloDAO.terminarTransaccion();
+			articuloDAO.cerrarManager();
+
 			session.setAttribute("numeroArticulos", carritoDAO.findAll().size());
-			
+
 			request.getRequestDispatcher(Constantes.RUTA_CATALOGO).forward(request, response);
 			break;
-			
+
 		case "ver":
 			long id = Long.parseLong(request.getParameter("id"));
+			articuloDAO.abrirManager();
 			Articulo art = articuloDAO.findById(id);
 			session.setAttribute("articulo", art);
+			articuloDAO.cerrarManager();
 			request.getRequestDispatcher(Constantes.RUTA_ARTICULO).forward(request, response);
 			break;
 
@@ -93,12 +98,8 @@ public class Catalogo extends HttpServlet {
 
 			request.getRequestDispatcher(Constantes.RUTA_CATALOGO).forward(request, response);
 
-			
 		}
-			
-			
+
 	}
 
-	
 }
-

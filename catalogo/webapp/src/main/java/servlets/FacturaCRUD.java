@@ -38,12 +38,12 @@ public class FacturaCRUD extends HttpServlet {
 		session.removeAttribute("errorFactura");
 
 		String op = request.getParameter("op");
-		
+
 		if (op == null) {
 
-
+			facturaDAO.abrirManager();
 			List<Factura> facturas = facturaDAO.findAll();
-
+			facturaDAO.cerrarManager();
 			application.setAttribute("facturas", facturas);
 
 			request.getRequestDispatcher(Constantes.RUTA_LISTADO_FACTURA).forward(request, response);
@@ -69,7 +69,8 @@ public class FacturaCRUD extends HttpServlet {
 					request.getRequestDispatcher(Constantes.RUTA_ERROR_FACTURA).forward(request, response);
 					return;
 				}
-
+				facturaDAO.abrirManager();
+				facturaDAO.iniciarTransaccion();
 				factura = facturaDAO.findById(id);
 
 				productosFactura = factura.getArticulos();
@@ -79,7 +80,8 @@ public class FacturaCRUD extends HttpServlet {
 				precioFactura = facturaDAO.getPrecioTotal(id);
 
 				usuarioFactura = factura.getUsuario();
-
+				facturaDAO.terminarTransaccion();
+				facturaDAO.cerrarManager();
 				session.setAttribute("factura", factura);
 				session.setAttribute("productosFactura", productosFactura);
 				session.setAttribute("ivaFactura", ivaFactura);

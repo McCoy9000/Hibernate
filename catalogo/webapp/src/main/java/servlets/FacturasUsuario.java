@@ -36,7 +36,7 @@ public class FacturasUsuario extends HttpServlet {
 		HttpSession session = request.getSession();
 
 		session.removeAttribute("errorFactura");
-		
+
 		Usuario usuario = (Usuario) session.getAttribute("usuario");
 
 		FacturaDAO facturaDAO = (FacturaDAO) application.getAttribute("facturaDAO");
@@ -49,12 +49,13 @@ public class FacturasUsuario extends HttpServlet {
 			List<Factura> facturasUsuario = new ArrayList<Factura>();
 
 			if (usuario != null) {
+				compradorDAO.abrirManager();
 				List<Comprador> compradores = compradorDAO.findByIdUsuario(usuario.getId());
-			
-			for (Comprador c : compradores) {
-				facturasUsuario.add(c.getFactura());
-			}
-			
+				compradorDAO.cerrarManager();
+				for (Comprador c : compradores) {
+					facturasUsuario.add(c.getFactura());
+				}
+
 			}
 			session.setAttribute("facturasUsuario", facturasUsuario);
 			request.getRequestDispatcher(Constantes.RUTA_LISTADO_FACTURA_USUARIOS).forward(request, response);
@@ -80,7 +81,7 @@ public class FacturasUsuario extends HttpServlet {
 					request.getRequestDispatcher(Constantes.RUTA_ERROR_FACTURA).forward(request, response);
 					return;
 				}
-
+				facturaDAO.abrirManager();
 				factura = facturaDAO.findById(id);
 
 				articulosFactura = factura.getArticulos();
@@ -90,7 +91,7 @@ public class FacturasUsuario extends HttpServlet {
 				precioFactura = facturaDAO.getPrecioTotal(id);
 
 				usuarioFactura = factura.getUsuario();
-
+				facturaDAO.cerrarManager();
 
 				session.setAttribute("factura", factura);
 				session.setAttribute("articulosFactura", articulosFactura);

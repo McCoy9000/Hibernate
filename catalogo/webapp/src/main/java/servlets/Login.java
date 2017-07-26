@@ -22,7 +22,7 @@ import encriptacion.Encriptador;
 @WebServlet("/login")
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
 	}
@@ -34,7 +34,7 @@ public class Login extends HttpServlet {
 		ServletContext application = request.getServletContext();
 
 		UsuarioDAO usuarioDAO = (UsuarioDAO) application.getAttribute("usuarioDAO");
-		
+
 		// Borrado de errores en sesión por si llegan aquí desde los formularios CRUD
 		session.removeAttribute("errorLogin");
 		// Recogida de datos de la request
@@ -55,21 +55,20 @@ public class Login extends HttpServlet {
 			password = miEncriptador.encriptar(rawpassword);
 
 		}
-	
+
 		String op = request.getParameter("op");
-		
+
 		Usuario usuario = (Usuario) session.getAttribute("usuario");
 
 		if (usuario == null)
 			usuario = new Usuario();
-		
-		
+
 		boolean quiereSalir = ("logout").equals(op);
 		boolean yaLogueado = ("si").equals(session.getAttribute("logueado"));
 		boolean sinDatos = username == null || username == "" || password == "" || password == null;
 		boolean uInexistente = !usuarioDAO.validarNombre(usuario);
 		boolean esValido = usuarioDAO.validar(usuario);
-		
+
 		RequestDispatcher login = request.getRequestDispatcher(Constantes.RUTA_LOGIN);
 		RequestDispatcher catalogo = request.getRequestDispatcher(Constantes.RUTA_CATALOGO);
 
@@ -100,7 +99,9 @@ public class Login extends HttpServlet {
 			return;
 		}
 		if (esValido) {
+			usuarioDAO.abrirManager();
 			usuario = usuarioDAO.findByName(username);
+			usuarioDAO.cerrarManager();
 			session.removeAttribute("errorLogin");
 			session.setAttribute("logueado", "si");
 			session.setAttribute("usuario", usuario);
@@ -112,8 +113,6 @@ public class Login extends HttpServlet {
 			return;
 		}
 
-		
 	}
-	
 
 }

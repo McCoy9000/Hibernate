@@ -29,25 +29,22 @@ public class ArticuloVendido {
 	private String nombre;
 	@Column(name = "descripcion")
 	private String descripcion;
-	@OneToOne(cascade = {CascadeType.ALL})
+	@OneToOne(cascade = { CascadeType.ALL })
 	@JoinColumn(name = "id_imagen")
 	private Imagen imagen;
 	@Column(name = "precio")
 	private BigDecimal precio;
 	@Column(name = "cantidad")
 	private BigInteger cantidad;
-	@ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = { CascadeType.PERSIST }, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_factura")
 	private Factura factura;
 
-
 	public ArticuloVendido() {
-		
+
 	}
-	
-	public ArticuloVendido(String codigoArticulo, String nombre,
-			String descripcion, Imagen imagen, BigDecimal precio,
-			BigInteger cantidad, Factura factura) {
+
+	public ArticuloVendido(String codigoArticulo, String nombre, String descripcion, Imagen imagen, BigDecimal precio, BigInteger cantidad, Factura factura) {
 		super();
 		this.codigoArticulo = codigoArticulo;
 		this.nombre = nombre;
@@ -117,8 +114,73 @@ public class ArticuloVendido {
 	public Factura getFactura() {
 		return factura;
 	}
-	
+
 	public void setFactura(Factura factura) {
 		this.factura = factura;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((cantidad == null) ? 0 : cantidad.hashCode());
+		result = prime * result + ((codigoArticulo == null) ? 0 : codigoArticulo.hashCode());
+		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
+		result = prime * result + ((factura == null) ? 0 : factura.hashCode());
+		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((imagen == null) ? 0 : imagen.hashCode());
+		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
+		result = prime * result + ((precio == null) ? 0 : precio.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ArticuloVendido other = (ArticuloVendido) obj;
+		if (cantidad == null) {
+			if (other.cantidad != null)
+				return false;
+		} else if (!cantidad.equals(other.cantidad))
+			return false;
+		if (codigoArticulo == null) {
+			if (other.codigoArticulo != null)
+				return false;
+		} else if (!codigoArticulo.equals(other.codigoArticulo))
+			return false;
+		if (descripcion == null) {
+			if (other.descripcion != null)
+				return false;
+		} else if (!descripcion.equals(other.descripcion))
+			return false;
+		if (factura == null) {
+			if (other.factura != null)
+				return false;
+		} else if (!factura.equals(other.factura))
+			return false;
+		if (id != other.id)
+			return false;
+		if (imagen == null) {
+			if (other.imagen != null)
+				return false;
+		} else if (!imagen.equals(other.imagen))
+			return false;
+		if (nombre == null) {
+			if (other.nombre != null)
+				return false;
+		} else if (!nombre.equals(other.nombre))
+			return false;
+		if (precio == null) {
+			if (other.precio != null)
+				return false;
+		} else if (!precio.equals(other.precio))
+			return false;
+		return true;
+	}
+
 }

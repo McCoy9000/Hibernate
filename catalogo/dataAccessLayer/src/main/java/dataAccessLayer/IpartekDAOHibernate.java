@@ -1,14 +1,38 @@
 package dataAccessLayer;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
-public class IpartekDAOHibernate {
+public class IpartekDAOHibernate implements IpartekDAO {
 
-	EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistencia");
-	
+	protected EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistencia");
+	protected EntityManager man;
+	protected EntityTransaction trans;
+
 	public IpartekDAOHibernate() {
-		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void abrirManager() {
+		man = emf.createEntityManager();
+	}
+
+	@Override
+	public void cerrarManager() {
+		man.close();
+	}
+
+	@Override
+	public void iniciarTransaccion() {
+		trans = man.getTransaction();
+		trans.begin();
+	}
+
+	@Override
+	public void terminarTransaccion() {
+		trans.commit();
 	}
 
 }

@@ -89,7 +89,7 @@ public class UsuarioForm extends HttpServlet {
 		if (rawpassword2 != null) {
 			password2 = miEncriptador.encriptar(password2);
 		}
-		
+
 		if (request.getParameter("email") != null) {
 			email = request.getParameter("email").trim();
 		} else {
@@ -107,10 +107,9 @@ public class UsuarioForm extends HttpServlet {
 		} else {
 			apellidos = request.getParameter("apellidos");
 		}
-
+		rolDAO.abrirManager();
 		Rol rol = rolDAO.findByName("Usuario");
 
-		
 		RequestDispatcher rutaListado = request.getRequestDispatcher(Constantes.RUTA_SERVLET_LISTADO_USUARIO);
 
 		if (op == null) {
@@ -124,20 +123,23 @@ public class UsuarioForm extends HttpServlet {
 			case "alta":
 
 				usuario = new Usuario(nombre, apellidos, email, username, password, rol);
-				
+
 				if (password != null && password != "" && password.equals(password2)) {
-					if(!usuarioDAO.validarNombre(usuario)) {					
+					if (!usuarioDAO.validarNombre(usuario)) {
 						usuarioDAO.insert(usuario);
+						rolDAO.cerrarManager();
 						session.removeAttribute("errorUsuario");
 						log.info("Usuario " + usuario.getUsername() + " dado de alta");
-					session.removeAttribute("errorUsuario");
-					rutaListado.forward(request, response);
+						session.removeAttribute("errorUsuario");
+						rutaListado.forward(request, response);
 					} else {
+						rolDAO.cerrarManager();
 						session.setAttribute("errorUsuario", "El usuario ya existe");
 						request.setAttribute("usuario", usuario);
 						request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_USUARIO + "?op=alta").forward(request, response);
 					}
 				} else {
+					rolDAO.cerrarManager();
 					session.setAttribute("errorUsuario", "Las contraseñas deben ser iguales");
 					request.setAttribute("usuario", usuario);
 					request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_USUARIO + "?op=alta").forward(request, response);
@@ -146,15 +148,8 @@ public class UsuarioForm extends HttpServlet {
 
 			case "modificar":
 				usuario = usuarioDAO.findById(id);
-				
-				usuario.setUsername(username);
-				usuario.setPassword(password2);
-				usuario.setEmail(email);
-				usuario.setNombre(nombre);
-				usuario.setApellidos(apellidos);
-				usuario.setRol(rol);
-				
 				if (!("admin").equals(usuario.getUsername())) {
+					rolDAO.iniciarTransaccion();
 					usuario.setUsername(username);
 					usuario.setPassword(password2);
 					usuario.setEmail(email);
@@ -162,7 +157,10 @@ public class UsuarioForm extends HttpServlet {
 					usuario.setApellidos(apellidos);
 					usuario.setRol(rol);
 					usuarioDAO.update(usuario);
+					rolDAO.terminarTransaccion();
+					rolDAO.cerrarManager();
 				} else {
+					rolDAO.cerrarManager();
 					session.setAttribute("errorUsuario", "Por el momento no es posible modificar el usuario 'admin'");
 					request.setAttribute("usuario", usuario);
 					request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_USUARIO + "?op=modificar").forward(request, response);
@@ -172,17 +170,22 @@ public class UsuarioForm extends HttpServlet {
 			case "borrar":
 				usuario = usuarioDAO.findById(id);
 				if (!("admin").equals(usuario.getUsername())) {
+					rolDAO.iniciarTransaccion();
 					usuarioDAO.delete(id);
+					rolDAO.terminarTransaccion();
+					rolDAO.cerrarManager();
 					session.removeAttribute("errorUsuario");
 					rutaListado.forward(request, response);
 					break;
 				} else {
+					rolDAO.cerrarManager();
 					session.setAttribute("errorUsuario", "Por el momento no es posible borrar el usuario 'admin'");
 					request.setAttribute("usuario", usuario);
 					request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_USUARIO + "?op=borrar").forward(request, response);
 				}
 				break;
 			default:
+				rolDAO.cerrarManager();
 				session.removeAttribute("errorUsuario");
 				rutaListado.forward(request, response);
 			}
