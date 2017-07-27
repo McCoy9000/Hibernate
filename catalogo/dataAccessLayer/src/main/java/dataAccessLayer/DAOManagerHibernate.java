@@ -47,47 +47,47 @@ public class DAOManagerHibernate {
 
 
 	public ArticuloDAO getArticuloDAO() {
-			this.articuloDAO = new ArticuloDAOHibernate(this.man);
+			this.articuloDAO = ArticuloDAOFactory.getArticuloDAO(man);
 		
 		return this.articuloDAO;
 	}
 	public ArticuloVendidoDAO getArticuloVendidoDAO() {
-			this.articuloVendidoDAO = new ArticuloVendidoDAOHibernate(this.man);
+			this.articuloVendidoDAO = ArticuloVendidoDAOFactory.getArticuloVendidoDAO(man);
 		
 		return this.articuloVendidoDAO;
 	}
 	public CompradorDAO getCompradorDAO() {
-			this.compradorDAO = new CompradorDAOHibernate(this.man);
+			this.compradorDAO = CompradorDAOFactory.getCompradorDAO(man);
 		
 		return this.compradorDAO;
 	}
 	public DireccionDAO getDireccionDAO() {
-			this.direccionDAO = new DireccionDAOHibernate(this.man);
+			this.direccionDAO = DireccionDAOFactory.getDireccionDAO(man);
 		
 		return this.direccionDAO;
 	}
 	public EmpresaDAO getEmpresaDAO() {
-			this.empresaDAO = new EmpresaDAOHibernate(this.man);
+			this.empresaDAO = EmpresaDAOFactory.getEmpresaDAO(man);
 		
 		return this.empresaDAO;
 	}
 	public FacturaDAO getFacturaDAO() {
-			this.facturaDAO = new FacturaDAOHibernate(this.man);
+			this.facturaDAO = FacturaDAOFactory.getFacturaDAO(man);
 		
 		return this.facturaDAO;
 	}
 	public ImagenDAO getImagenDAO() {
-			this.imagenDAO = new ImagenDAOHibernate(this.man);
+			this.imagenDAO = ImagenDAOFactory.getImagenDAO(man);
 		
 		return this.imagenDAO;
 	}
 	public RolDAO getRolDAO() {
-			this.rolDAO = new RolDAOHibernate(this.man);
+			this.rolDAO = RolDAOFactory.getRolDAO(man);
 		
 		return this.rolDAO;
 	}
 	public UsuarioDAO getUsuarioDAO() {
-			this.usuarioDAO = new UsuarioDAOHibernate(this.man);
+			this.usuarioDAO = UsuarioDAOFactory.getUsuarioDAO(man);
 		
 		return this.usuarioDAO;
 	}

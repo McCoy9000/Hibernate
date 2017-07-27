@@ -26,7 +26,6 @@ import dataAccessLayer.RolDAO;
 import dataAccessLayer.UsuarioDAO;
 import encriptacion.Encriptador;
 
-
 @WebListener("/inicio")
 public class Inicio implements ServletContextListener {
 

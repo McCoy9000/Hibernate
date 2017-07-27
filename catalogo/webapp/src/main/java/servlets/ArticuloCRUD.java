@@ -32,15 +32,16 @@ public class ArticuloCRUD extends HttpServlet {
 
 		HttpSession session = request.getSession();
 		// Borrado de errores en sesión por si llegan aquí desde los formularios CRUD
-		session.removeAttribute("errorProducto");
-		session.removeAttribute("errorUsuario");
-		session.removeAttribute("errorLogin");
-		session.removeAttribute("errorSignup");
+//		session.removeAttribute("errorProducto");
+//		session.removeAttribute("errorUsuario");
+//		session.removeAttribute("errorLogin");
+//		session.removeAttribute("errorSignup");
 
 		String op = request.getParameter("op");
 
 		if (op == null) {
-			articuloDAO.abrirManager();
+//			articuloDAO.abrirManager();
+			
 			List<Articulo> articulos = articuloDAO.findAll();
 			articuloDAO.cerrarManager();
 			application.setAttribute("articulos", articulos);
