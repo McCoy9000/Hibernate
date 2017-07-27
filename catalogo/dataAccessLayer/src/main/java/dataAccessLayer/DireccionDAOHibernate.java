@@ -2,9 +2,19 @@ package dataAccessLayer;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import pojos.Direccion;
 
 public class DireccionDAOHibernate extends IpartekDAOHibernate implements DireccionDAO {
+
+	public DireccionDAOHibernate() {
+		
+	}
+	
+	public DireccionDAOHibernate(EntityManager man) {
+		this.man = man;
+	}
 
 	@Override
 	public long insert(Direccion direccion) {

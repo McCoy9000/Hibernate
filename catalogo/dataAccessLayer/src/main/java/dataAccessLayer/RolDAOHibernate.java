@@ -2,9 +2,19 @@ package dataAccessLayer;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import pojos.Rol;
 
 public class RolDAOHibernate extends IpartekDAOHibernate implements RolDAO {
+
+	public RolDAOHibernate() {
+
+	}
+
+	public RolDAOHibernate(EntityManager man) {
+		this.man = man;
+	}
 
 	@Override
 	public long insert(Rol rol) {

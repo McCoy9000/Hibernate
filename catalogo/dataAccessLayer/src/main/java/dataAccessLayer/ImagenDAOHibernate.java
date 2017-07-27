@@ -2,9 +2,19 @@ package dataAccessLayer;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import pojos.Imagen;
 
 public class ImagenDAOHibernate extends IpartekDAOHibernate implements ImagenDAO {
+
+	public ImagenDAOHibernate() {
+
+	}
+
+	public ImagenDAOHibernate(EntityManager man) {
+		this.man = man;
+	}
 
 	@Override
 	public long insert(Imagen imagen) {

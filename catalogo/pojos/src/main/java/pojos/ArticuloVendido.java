@@ -1,5 +1,6 @@
 package pojos;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
@@ -17,8 +18,10 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "ARTICULOS_VENDIDOS")
-public class ArticuloVendido {
+public class ArticuloVendido implements Serializable {
 
+	private static final long serialVersionUID = -8894436731693409575L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_articulo")

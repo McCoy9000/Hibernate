@@ -2,10 +2,21 @@ package dataAccessLayer;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import pojos.ArticuloVendido;
 
 public class ArticuloVendidoDAOHibernate extends IpartekDAOHibernate implements ArticuloVendidoDAO {
 
+	public ArticuloVendidoDAOHibernate() {
+		
+	}
+	
+	public ArticuloVendidoDAOHibernate(EntityManager man) {
+		this.man = man;
+	}
+
+	
 	@Override
 	public long insert(ArticuloVendido articulo) {
 		man.persist(articulo);

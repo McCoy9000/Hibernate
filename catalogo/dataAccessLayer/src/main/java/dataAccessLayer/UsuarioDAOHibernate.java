@@ -2,9 +2,19 @@ package dataAccessLayer;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import pojos.Usuario;
 
 public class UsuarioDAOHibernate extends IpartekDAOHibernate implements UsuarioDAO {
+
+	public UsuarioDAOHibernate() {
+
+	}
+
+	public UsuarioDAOHibernate(EntityManager man) {
+		this.man = man;
+	}
 
 	@Override
 	public long insert(Usuario usuario) {

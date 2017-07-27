@@ -20,24 +20,12 @@ import pojos.Imagen;
 import pojos.Rol;
 import pojos.Usuario;
 import dataAccessLayer.ArticuloDAO;
-import dataAccessLayer.ArticuloDAOFactory;
-import dataAccessLayer.ArticuloVendidoDAO;
-import dataAccessLayer.ArticuloVendidoDAOFactory;
-import dataAccessLayer.CompradorDAO;
-import dataAccessLayer.CompradorDAOFactory;
-import dataAccessLayer.DireccionDAO;
-import dataAccessLayer.DireccionDAOFactory;
-import dataAccessLayer.EmpresaDAO;
-import dataAccessLayer.EmpresaDAOFactory;
+import dataAccessLayer.DAOManagerHibernate;
 import dataAccessLayer.FacturaDAO;
-import dataAccessLayer.FacturaDAOFactory;
-import dataAccessLayer.ImagenDAO;
-import dataAccessLayer.ImagenDAOFactory;
 import dataAccessLayer.RolDAO;
-import dataAccessLayer.RolDAOFactory;
 import dataAccessLayer.UsuarioDAO;
-import dataAccessLayer.UsuarioDAOFactory;
 import encriptacion.Encriptador;
+
 
 @WebListener("/inicio")
 public class Inicio implements ServletContextListener {
@@ -54,41 +42,54 @@ public class Inicio implements ServletContextListener {
 
 		String path = application.getContextPath();
 		application.setAttribute("rutaBase", path);
-
+		
+		
+		
 		PropertyConfigurator.configure(Inicio.class.getClassLoader().getResource("log4j.properties"));
 
-		UsuarioDAO usuarioDAO = UsuarioDAOFactory.getUsuarioDAO();
-		ArticuloDAO articuloDAO = ArticuloDAOFactory.getArticuloDAO();
-		DireccionDAO direccionDAO = DireccionDAOFactory.getDireccionDAO();
-		EmpresaDAO empresaDAO = EmpresaDAOFactory.getEmpresaDAO();
-		ImagenDAO imagenDAO = ImagenDAOFactory.getImagenDAO();
-		FacturaDAO facturaDAO = FacturaDAOFactory.getFacturaDAO();
-		ArticuloVendidoDAO articuloVendidoDAO = ArticuloVendidoDAOFactory.getArticuloVendidoDAO();
-		CompradorDAO compradorDAO = CompradorDAOFactory.getCompradorDAO();
-		RolDAO rolDAO = RolDAOFactory.getRolDAO();
-		log.info("Iniciados los DAO");
-		application.setAttribute("usuarioDAO", usuarioDAO);
-		application.setAttribute("articuloDAO", articuloDAO);
-		application.setAttribute("rolDAO", rolDAO);
-		application.setAttribute("direccionDAO", direccionDAO);
-		application.setAttribute("empresaDAO", empresaDAO);
-		application.setAttribute("imagenDAO", imagenDAO);
-		application.setAttribute("facturaDAO", facturaDAO);
-		application.setAttribute("articuloVendidoDAO", articuloVendidoDAO);
-		application.setAttribute("compradorDAO", compradorDAO);
-		log.info("Guardados los DAO en application");
+//		UsuarioDAO usuarioDAO = UsuarioDAOFactory.getUsuarioDAO();
+//		ArticuloDAO articuloDAO = ArticuloDAOFactory.getArticuloDAO();
+//		DireccionDAO direccionDAO = DireccionDAOFactory.getDireccionDAO();
+//		EmpresaDAO empresaDAO = EmpresaDAOFactory.getEmpresaDAO();
+//		ImagenDAO imagenDAO = ImagenDAOFactory.getImagenDAO();
+//		FacturaDAO facturaDAO = FacturaDAOFactory.getFacturaDAO();
+//		ArticuloVendidoDAO articuloVendidoDAO = ArticuloVendidoDAOFactory.getArticuloVendidoDAO();
+//		CompradorDAO compradorDAO = CompradorDAOFactory.getCompradorDAO();
+//		RolDAO rolDAO = RolDAOFactory.getRolDAO();
+//		log.info("Iniciados los DAO");
+//		application.setAttribute("usuarioDAO", usuarioDAO);
+//		application.setAttribute("articuloDAO", articuloDAO);
+//		application.setAttribute("rolDAO", rolDAO);
+//		application.setAttribute("direccionDAO", direccionDAO);
+//		application.setAttribute("empresaDAO", empresaDAO);
+//		application.setAttribute("imagenDAO", imagenDAO);
+//		application.setAttribute("facturaDAO", facturaDAO);
+//		application.setAttribute("articuloVendidoDAO", articuloVendidoDAO);
+//		application.setAttribute("compradorDAO", compradorDAO);
+//		log.info("Guardados los DAO en application");
+		DAOManagerHibernate daoManager = new DAOManagerHibernate();
+		daoManager.abrir();
+		RolDAO rolDAO = daoManager.getRolDAO();
+		UsuarioDAO usuarioDAO = daoManager.getUsuarioDAO();
+		ArticuloDAO articuloDAO = daoManager.getArticuloDAO();
+		FacturaDAO facturaDAO = daoManager.getFacturaDAO();
 
-		rolDAO.abrirManager();
-		rolDAO.iniciarTransaccion();
+		daoManager.iniciarTransaccion();
+		
+//		rolDAO.abrirManager();
+//		rolDAO.iniciarTransaccion();
 		rolDAO.insert(new Rol(1, "Administrador", "Administrador de la web"));
 		rolDAO.insert(new Rol(2, "Usuario", "Usuario de la web"));
 		rolDAO.insert(new Rol(3, "Departamento", "Departamento de ventas"));
 		log.info("Creados los roles");
 		usuarioDAO.insert(new Usuario("DEVOLUCION", "DEVOLUCION", "DEVOLUCION", "DEVOLUCION", "DEVOLUCION", rolDAO.findByName("Departamento")));
 		log.info("Creado el usuario DEVOLUCION");
-		rolDAO.terminarTransaccion();
-		rolDAO.cerrarManager();
+//		rolDAO.terminarTransaccion();
+//		rolDAO.cerrarManager();
+		
+		
 		String rawadmin = "admin", admin;
+		
 
 		Encriptador miEncriptador = null;
 		try {
@@ -98,8 +99,8 @@ public class Inicio implements ServletContextListener {
 		}
 
 		admin = miEncriptador.encriptar(rawadmin);
-		usuarioDAO.abrirManager();
-		usuarioDAO.iniciarTransaccion();
+//		usuarioDAO.abrirManager();
+//		usuarioDAO.iniciarTransaccion();
 		usuarioDAO.insert(new Usuario("admin", "admin", "admin@admin.com", "admin", admin, rolDAO.findByName("Usuario")));
 		log.info("Creado el usuario admin");
 		articuloDAO.insert(new Articulo("001", "Mustang", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
@@ -109,12 +110,14 @@ public class Inicio implements ServletContextListener {
 		articuloDAO.insert(new Articulo("005", "Cobra", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
 		articuloDAO.insert(new Articulo("006", "Eldorado", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
 		log.info("Creados 6 productos de prueba");
-		usuarioDAO.terminarTransaccion();
+//		usuarioDAO.terminarTransaccion();
 		application.setAttribute("catalogo", articuloDAO.findAll());
 		log.info("Guardado el catalogo en application");
 		Factura.setSiguienteFactura(facturaDAO.getMaxId());
-		log.info("Registrado el último número de factura");
-		usuarioDAO.cerrarManager();
+		log.info("Registrado el último número de factura: " + Factura.getSiguienteFactura());
+//		usuarioDAO.cerrarManager();
+		daoManager.terminarTransaccion();
+		daoManager.cerrar();
 
 	}
 

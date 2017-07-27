@@ -3,12 +3,22 @@ package dataAccessLayer;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import pojos.ArticuloVendido;
 import pojos.Factura;
 import recursos.Constantes;
 
 public class FacturaDAOHibernate extends IpartekDAOHibernate implements FacturaDAO {
 
+	public FacturaDAOHibernate() {
+
+	}
+
+	public FacturaDAOHibernate(EntityManager man) {
+		this.man = man;
+	}
+	
 	@Override
 	public long insert(Factura factura) {
 		man.persist(factura);
@@ -71,9 +81,14 @@ public class FacturaDAOHibernate extends IpartekDAOHibernate implements FacturaD
 
 	@Override
 	public long getMaxId() {
-		@SuppressWarnings("unchecked")
-		List<Factura> maxFactura = (List<Factura>) man.createQuery("From Factura WHERE factura_id = (select max(id_factura) from Factura)").getResultList();
-		return maxFactura.get(0).getId() + 1;
+		long maxFactura = 0L;
+				try {
+					maxFactura = (long) man.createQuery("SELECT max(f.id) from Factura f").getSingleResult();
+				} catch (NullPointerException e) {
+					maxFactura = 0L;
+				}
+
+		return maxFactura + 1L;
 	}
 
 }

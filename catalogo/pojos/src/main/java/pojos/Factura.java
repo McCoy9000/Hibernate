@@ -1,5 +1,6 @@
 package pojos;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +18,10 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "FACTURAS")
-public class Factura {
+public class Factura implements Serializable {
 
+	private static final long serialVersionUID = -536150810066408871L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_factura", unique = true)

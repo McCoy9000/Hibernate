@@ -3,9 +3,19 @@ package dataAccessLayer;
 import java.math.BigInteger;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import pojos.Articulo;
 
 public class ArticuloDAOHibernate extends IpartekDAOHibernate implements ArticuloDAO {
+
+	public ArticuloDAOHibernate() {
+		
+	}
+	
+	public ArticuloDAOHibernate(EntityManager man) {
+		this.man = man;
+	}
 
 	@Override
 	public long insert(Articulo articulo) {

@@ -1,10 +1,13 @@
 package pojos;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
-public class Carrito {
+public class Carrito implements Serializable {
+
+	private static final long serialVersionUID = -1977919344319664515L;
 
 	private static Logger log = Logger.getLogger(Carrito.class);
 

@@ -1,5 +1,7 @@
 package pojos;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,7 +13,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "DIRECCIONES")
-public class Direccion {
+public class Direccion implements Serializable {
+
+	private static final long serialVersionUID = -2552617591759152168L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

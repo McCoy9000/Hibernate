@@ -1,5 +1,6 @@
 package pojos;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import javax.persistence.CascadeType;
@@ -16,10 +17,10 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "COMPRADORES")
-public class Comprador {
+public class Comprador implements Serializable {
 
-	private static final long serialVersionUID = -4479395202727906913L;
-
+	private static final long serialVersionUID = -6560554015670763910L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")

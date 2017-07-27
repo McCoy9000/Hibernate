@@ -7,16 +7,20 @@ import javax.persistence.Persistence;
 
 public class IpartekDAOHibernate implements IpartekDAO {
 
-	protected EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistencia");
-	protected EntityManager man;
-	protected EntityTransaction trans;
-
+//	protected EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistencia");
+	protected EntityManager man = null;
+	protected EntityTransaction trans = null;
+//
 	public IpartekDAOHibernate() {
 	}
 
+	public IpartekDAOHibernate(EntityManager man) {
+		this.man = man;
+	}
+	
 	@Override
 	public void abrirManager() {
-		man = emf.createEntityManager();
+//		man = emf.createEntityManager();
 	}
 
 	@Override

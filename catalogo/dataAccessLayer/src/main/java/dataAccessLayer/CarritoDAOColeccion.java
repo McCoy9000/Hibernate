@@ -1,6 +1,7 @@
 package dataAccessLayer;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class CarritoDAOColeccion implements CarritoDAO {
 
 	@Override
 	public List<ArticuloCantidad> findAll() {
-		return (List<ArticuloCantidad>) carrito.getListaArticulos().values();
+		return new ArrayList<ArticuloCantidad>(carrito.getListaArticulos().values());
 	}
 
 	@Override
@@ -74,7 +75,7 @@ public class CarritoDAOColeccion implements CarritoDAO {
 
 	@Override
 	public boolean validarCodigo(String codigo) {
-		for (ArticuloCantidad articulo: carrito.getListaArticulos().values()) {
+		for (ArticuloCantidad articulo: new ArrayList<ArticuloCantidad>(carrito.getListaArticulos().values())) {
 			if (articulo.getCodigoArticulo() == codigo)
 				return true;
 		}		

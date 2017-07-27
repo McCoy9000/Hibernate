@@ -1,5 +1,6 @@
 package pojos;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +13,10 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "ROLES")
-public class Rol {
+public class Rol implements Serializable {
 
+	private static final long serialVersionUID = -1078668164926429410L;
+	
 	@Id
 	@Column(name = "id_rol")
 	long id;

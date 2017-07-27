@@ -73,7 +73,7 @@
 				</div>
 			
 			
-			<div class="col-xs-1 col-xs-offset-1 col-md-1 col-lg-1" <c:if test="${sessionScope.usuario.id_roles != '1'}">
+			<div class="col-xs-1 col-xs-offset-1 col-md-1 col-lg-1" <c:if test="${sessionScope.usuario.rol.nombre != 'Administrador'}">
 						 style="display:none;"
 					</c:if>>
 				<div class="dropdown">

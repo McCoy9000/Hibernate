@@ -19,6 +19,7 @@ import recursos.Constantes;
 import dataAccessLayer.ArticuloDAO;
 import dataAccessLayer.CarritoDAO;
 import dataAccessLayer.CarritoDAOFactory;
+import dataAccessLayer.DAOManagerHibernate;
 
 @WebServlet("/catalogo")
 public class Catalogo extends HttpServlet {
@@ -34,8 +35,10 @@ public class Catalogo extends HttpServlet {
 		ServletContext application = getServletContext();
 		HttpSession session = request.getSession();
 
-		ArticuloDAO articuloDAO = (ArticuloDAO) application.getAttribute("articuloDAO");
-
+//		ArticuloDAO articuloDAO = (ArticuloDAO) application.getAttribute("articuloDAO");
+		DAOManagerHibernate daoManager = new DAOManagerHibernate();
+		daoManager.abrir();
+		ArticuloDAO articuloDAO = daoManager.getArticuloDAO();
 		application.setAttribute("catalogo", articuloDAO.findAll());
 
 		CarritoDAO carritoDAO = (CarritoDAO) session.getAttribute("carritoDAO");
@@ -70,16 +73,19 @@ public class Catalogo extends HttpServlet {
 			}
 
 			log.info("Cantidad recogida: " + cantidad);
-			articuloDAO.abrirManager();
-			articuloDAO.iniciarTransaccion();
+//			articuloDAO.abrirManager();
+//			articuloDAO.iniciarTransaccion();
+			
 			Articulo articulo = articuloDAO.findByCodigo(codigoArticulo);
 			ArticuloCantidad orden = new ArticuloCantidad(articulo.getCodigoArticulo(), articulo.getNombre(), articulo.getDescripcion(), articulo.getImagen(), articulo.getPrecio(),
 					articulo.getStock(), cantidad);
 			carritoDAO.insert(orden);
+			daoManager.iniciarTransaccion();
 			articuloDAO.restarCantidad(articulo, cantidad);
-			articuloDAO.terminarTransaccion();
-			articuloDAO.cerrarManager();
-
+//			articuloDAO.terminarTransaccion();
+//			articuloDAO.cerrarManager();
+			daoManager.terminarTransaccion();
+			daoManager.cerrar();
 			session.setAttribute("numeroArticulos", carritoDAO.findAll().size());
 
 			request.getRequestDispatcher(Constantes.RUTA_CATALOGO).forward(request, response);
@@ -87,10 +93,12 @@ public class Catalogo extends HttpServlet {
 
 		case "ver":
 			long id = Long.parseLong(request.getParameter("id"));
-			articuloDAO.abrirManager();
+//			articuloDAO.abrirManager();
+			
 			Articulo art = articuloDAO.findById(id);
 			session.setAttribute("articulo", art);
-			articuloDAO.cerrarManager();
+//			articuloDAO.cerrarManager();
+			daoManager.cerrar();
 			request.getRequestDispatcher(Constantes.RUTA_ARTICULO).forward(request, response);
 			break;
 
