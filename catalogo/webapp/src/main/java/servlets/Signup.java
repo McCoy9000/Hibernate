@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import pojos.Usuario;
 import recursos.Constantes;
+import dataAccessLayer.DAOManagerHibernate;
 import dataAccessLayer.RolDAO;
 import dataAccessLayer.UsuarioDAO;
 import encriptacion.Encriptador;
@@ -33,9 +34,12 @@ public class Signup extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		ServletContext application = request.getServletContext();
-		UsuarioDAO usuarioDAO = (UsuarioDAO) application.getAttribute("usuarioDAO");
-		RolDAO rolDAO = (RolDAO) application.getAttribute("rolDAO");
-
+//		UsuarioDAO usuarioDAO = (UsuarioDAO) application.getAttribute("usuarioDAO");
+//		RolDAO rolDAO = (RolDAO) application.getAttribute("rolDAO");
+		DAOManagerHibernate daoManager = new DAOManagerHibernate();
+		UsuarioDAO usuarioDAO = daoManager.getUsuarioDAO();
+		RolDAO rolDAO = daoManager.getRolDAO();
+		
 		HttpSession session = request.getSession();
 		session.removeAttribute("errorSignup");
 
@@ -66,9 +70,10 @@ public class Signup extends HttpServlet {
 		if (request.getParameter("password2") != null) {
 			rawpassword2 = request.getParameter("password2").trim();
 		}
-		rolDAO.abrirManager();
+		daoManager.abrir();
+		daoManager.iniciarTransaccion();
 		Usuario usuario = new Usuario(nombre, apellidos, email, username, password, rolDAO.findByName("Usuario"));
-
+		daoManager.terminarTransaccion();
 		boolean sinDatos = username == null || rawpassword == null || rawpassword2 == null;
 		boolean nombreLargo = username.length() > 20;
 		boolean passDistintas = rawpassword != null && rawpassword.equals(rawpassword2);
@@ -87,37 +92,45 @@ public class Signup extends HttpServlet {
 		RequestDispatcher rutaSignup = request.getRequestDispatcher(Constantes.RUTA_SIGNUP);
 
 		if (sinDatos) {
-			rolDAO.cerrarManager();
+//			rolDAO.cerrarManager();
+			daoManager.cerrar();
 			rutaSignup.forward(request, response);
 			return;
 		}
 		if (nombreLargo) {
-			rolDAO.cerrarManager();
+//			rolDAO.cerrarManager();
+			daoManager.cerrar();
 			session.setAttribute("errorSignup", "El username debe tener un máximo de 20 caracteres");
 			rutaSignup.forward(request, response);
 			return;
 		}
 		if (passDistintas) {
-			rolDAO.cerrarManager();
+//			rolDAO.cerrarManager();
+			daoManager.cerrar();
 			session.setAttribute("errorSignup", "Las contraseñas deben ser iguales");
 			rutaSignup.forward(request, response);
 			return;
 		}
 		if (emailNoValido) {
-			rolDAO.cerrarManager();
+//			rolDAO.cerrarManager();
+			daoManager.cerrar();
 			session.setAttribute("errorSignup", "El email no es válido");
 			rutaSignup.forward(request, response);
 			return;
 		}
 		if (userExiste) {
-			rolDAO.cerrarManager();
+//			rolDAO.cerrarManager();
+			daoManager.cerrar();
 			session.setAttribute("errorSignup", "Ya existe un usuario con ese username");
 			rutaSignup.forward(request, response);
 			return;
 		}
 
+		daoManager.iniciarTransaccion();
 		usuarioDAO.insert(usuario);
-		rolDAO.cerrarManager();
+		daoManager.terminarTransaccion();
+//		rolDAO.cerrarManager();
+		daoManager.cerrar();
 
 		rutaLogin.forward(request, response);
 	}

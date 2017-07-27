@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 
 import recursos.Constantes;
 import dataAccessLayer.ArticuloDAO;
+import dataAccessLayer.DAOManagerHibernate;
 
 @WebServlet("/admin/imagenarticulo")
 public class ImagenArticulo extends HttpServlet {
@@ -42,10 +43,16 @@ public class ImagenArticulo extends HttpServlet {
 
 		session.removeAttribute("errorImagen");
 
-		ArticuloDAO articuloDAO = (ArticuloDAO) application.getAttribute("articuloDAO");
-		articuloDAO.abrirManager();
+		DAOManagerHibernate daomanager = new DAOManagerHibernate();
+//		ArticuloDAO articuloDAO = (ArticuloDAO) application.getAttribute("articuloDAO");
+//		articuloDAO.abrirManager();
+		ArticuloDAO articuloDAO = daomanager.getArticuloDAO();
+		daomanager.abrir();
+		daomanager.iniciarTransaccion();
 		application.setAttribute("catalogo", articuloDAO.findAll());
-		articuloDAO.cerrarManager();
+//		articuloDAO.cerrarManager();
+		daomanager.terminarTransaccion();
+		daomanager.cerrar();
 		String realPath = application.getRealPath("/img/");
 		String op = request.getParameter("op");
 

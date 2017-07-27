@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import pojos.Usuario;
 import recursos.Constantes;
+import dataAccessLayer.DAOManagerHibernate;
 import dataAccessLayer.UsuarioDAO;
 import encriptacion.Encriptador;
 
@@ -33,7 +34,9 @@ public class Login extends HttpServlet {
 		HttpSession session = request.getSession();
 		ServletContext application = request.getServletContext();
 
-		UsuarioDAO usuarioDAO = (UsuarioDAO) application.getAttribute("usuarioDAO");
+//		UsuarioDAO usuarioDAO = (UsuarioDAO) application.getAttribute("usuarioDAO");
+		DAOManagerHibernate daoManager = new DAOManagerHibernate();
+		UsuarioDAO usuarioDAO = daoManager.getUsuarioDAO();
 
 		// Borrado de errores en sesión por si llegan aquí desde los formularios CRUD
 		session.removeAttribute("errorLogin");
@@ -66,14 +69,17 @@ public class Login extends HttpServlet {
 		boolean quiereSalir = ("logout").equals(op);
 		boolean yaLogueado = ("si").equals(session.getAttribute("logueado"));
 		boolean sinDatos = username == null || username == "" || password == "" || password == null;
+		daoManager.abrir();
+		daoManager.iniciarTransaccion();
 		boolean uInexistente = !usuarioDAO.validarNombre(usuario);
 		boolean esValido = usuarioDAO.validar(usuario);
-
+		daoManager.terminarTransaccion();
 		RequestDispatcher login = request.getRequestDispatcher(Constantes.RUTA_LOGIN);
 		RequestDispatcher catalogo = request.getRequestDispatcher(Constantes.RUTA_CATALOGO);
 
 		if (quiereSalir) {
 			// Se invalida la sesión y se le envía al catálogo que es el punto de partida de la aplicación
+			daoManager.cerrar();
 			session.invalidate();
 			session = request.getSession();
 			catalogo.forward(request, response);
@@ -81,6 +87,7 @@ public class Login extends HttpServlet {
 		}
 		if (yaLogueado) {
 			// Si ya está logueado el login le deja pasar directamente a la página principal, el catálogo
+			daoManager.cerrar();
 			session.removeAttribute("errorLogin");
 			catalogo.forward(request, response);
 			return;
@@ -89,25 +96,31 @@ public class Login extends HttpServlet {
 			// Si no se rellenan los datos se le envía al jsp del login con el mensaje de error. Da el fallo de que un usuario
 			// que entra por primera vez a esta página no ha podido rellenar aún ningún dato por lo que se le mostrará el mensaje
 			// de error sin que haya interactuado con la página.
+			daoManager.cerrar();
 			login.forward(request, response);
 			return;
 		}
 		if (uInexistente) {
 			// Si el username no existe en la base de datos se le reenvía a la jsp de login con el correspondiente mensaje de error
+			daoManager.cerrar();
 			session.setAttribute("errorLogin", "Usuario no encontrado");
 			login.forward(request, response);
 			return;
 		}
 		if (esValido) {
-			usuarioDAO.abrirManager();
+			daoManager.iniciarTransaccion();
+//			usuarioDAO.abrirManager();
 			usuario = usuarioDAO.findByName(username);
-			usuarioDAO.cerrarManager();
+//			usuarioDAO.cerrarManager();
+			daoManager.terminarTransaccion();
+			daoManager.cerrar();
 			session.removeAttribute("errorLogin");
 			session.setAttribute("logueado", "si");
 			session.setAttribute("usuario", usuario);
 			// Se le envía al catálogo
 			catalogo.forward(request, response);
 		} else {
+			daoManager.cerrar();
 			session.setAttribute("errorLogin", "Contraseña incorrecta");
 			login.forward(request, response);
 			return;

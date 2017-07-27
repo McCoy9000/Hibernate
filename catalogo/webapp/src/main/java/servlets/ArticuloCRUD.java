@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import pojos.Articulo;
 import recursos.Constantes;
 import dataAccessLayer.ArticuloDAO;
+import dataAccessLayer.DAOManagerHibernate;
 
 @WebServlet("/admin/articulocrud")
 public class ArticuloCRUD extends HttpServlet {
@@ -28,7 +29,7 @@ public class ArticuloCRUD extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		ServletContext application = getServletContext();
-		ArticuloDAO articuloDAO = (ArticuloDAO) application.getAttribute("articuloDAO");
+//		ArticuloDAO articuloDAO = (ArticuloDAO) application.getAttribute("articuloDAO");
 
 		HttpSession session = request.getSession();
 		// Borrado de errores en sesión por si llegan aquí desde los formularios CRUD
@@ -38,12 +39,15 @@ public class ArticuloCRUD extends HttpServlet {
 //		session.removeAttribute("errorSignup");
 
 		String op = request.getParameter("op");
-
+		DAOManagerHibernate daomanager = new DAOManagerHibernate();
+		ArticuloDAO articuloDAO = daomanager.getArticuloDAO();
+		
 		if (op == null) {
 //			articuloDAO.abrirManager();
 			
 			List<Articulo> articulos = articuloDAO.findAll();
-			articuloDAO.cerrarManager();
+//			articuloDAO.cerrarManager();
+			daomanager.cerrar();
 			application.setAttribute("articulos", articulos);
 			request.getRequestDispatcher(Constantes.RUTA_LISTADO_PRODUCTO).forward(request, response);
 			return;
@@ -62,9 +66,10 @@ public class ArticuloCRUD extends HttpServlet {
 				request.getRequestDispatcher(Constantes.RUTA_LISTADO_PRODUCTO).forward(request, response);
 				break;
 			}
-			articuloDAO.abrirManager();
+//			articuloDAO.abrirManager();
 			articulo = articuloDAO.findById(id);
-			articuloDAO.cerrarManager();
+//			articuloDAO.cerrarManager();
+			daomanager.cerrar();
 			request.setAttribute("articulo", articulo);
 		case "alta":
 			request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_PRODUCTO).forward(request, response);

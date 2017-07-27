@@ -4,9 +4,13 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.apache.log4j.Logger;
+
 import pojos.Usuario;
 
 public class UsuarioDAOHibernate extends IpartekDAOHibernate implements UsuarioDAO {
+
+	private static Logger log = Logger.getLogger(UsuarioDAOHibernate.class);
 
 	public UsuarioDAOHibernate() {
 
@@ -55,25 +59,32 @@ public class UsuarioDAOHibernate extends IpartekDAOHibernate implements UsuarioD
 
 	@Override
 	public Usuario findByName(String username) {
-		@SuppressWarnings("unchecked")
-		List<Usuario> usuarios = (List<Usuario>) man.createQuery("FROM Usuario WHERE username='" + username + "'").getResultList();
-		Usuario usuario = usuarios.get(0);
+		Usuario usuario = null;
+		try {
+		usuario = (Usuario) man.createQuery("FROM Usuario WHERE username='" + username + "'").getSingleResult();
+		} catch (NullPointerException npe) {
+			log.info("usuario = null en Usuario.findByName()");
+		}
 		return usuario;
 	}
 
 	@Override
 	public boolean validar(Usuario usuario) {
-		Usuario user = man.find(Usuario.class, usuario.getId());
-		if (user == null)
-			return false;
-		return true;
+		Usuario user = null;
+		if(usuario != null) {
+		user = man.find(Usuario.class, usuario.getId());
+		}
+		if (user != null)
+			return true;
+		return false;
 	}
 
 	@Override
 	public boolean validarNombre(Usuario usuario) {
-		if (this.findByName(usuario.getUsername()) != null)
-			return true;
-		return true;
+		if (usuario != null)
+			if (this.findByName(usuario.getUsername()) != null)
+				return true;
+		return false;
 	}
 
 }

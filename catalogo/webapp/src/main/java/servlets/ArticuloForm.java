@@ -19,6 +19,7 @@ import pojos.Articulo;
 import pojos.Imagen;
 import recursos.Constantes;
 import dataAccessLayer.ArticuloDAO;
+import dataAccessLayer.DAOManagerHibernate;
 
 @WebServlet("/admin/productoform")
 public class ArticuloForm extends HttpServlet {
@@ -41,7 +42,7 @@ public class ArticuloForm extends HttpServlet {
 		// Borrar los errores que puedan venir en sesión
 		session.removeAttribute("errorProducto");
 
-		ArticuloDAO articuloDAO = (ArticuloDAO) application.getAttribute("productos");
+//		ArticuloDAO articuloDAO = (ArticuloDAO) application.getAttribute("productos");
 
 		// Recoger la opción elegida por el usuario en el formulario enviada por url
 		String op = request.getParameter("opform");
@@ -144,6 +145,7 @@ public class ArticuloForm extends HttpServlet {
 			articulo = new Articulo(codigoArticulo, nombre, descripcion, imagen, precio, cantidad);
 			session.removeAttribute("errorProducto");
 			request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_PRODUCTO + "?op=alta").forward(request, response);
+			//TODO aquí arriba por qué declaro un artículo y porqué el forward con op alta
 		} else {
 
 			switch (op) {
@@ -160,11 +162,16 @@ public class ArticuloForm extends HttpServlet {
 					request.setAttribute("articulo", articulo);
 					request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_PRODUCTO + "?op=alta").forward(request, response);
 				} else {
-					articuloDAO.abrirManager();
-					articuloDAO.iniciarTransaccion();
+//					articuloDAO.abrirManager();
+//					articuloDAO.iniciarTransaccion();
+					DAOManagerHibernate daomanager = new DAOManagerHibernate();
+					ArticuloDAO articuloDAO = daomanager.getArticuloDAO();
+					daomanager.iniciarTransaccion();
 					articuloDAO.insert(articulo);
-					articuloDAO.terminarTransaccion();
-					articuloDAO.cerrarManager();
+					daomanager.terminarTransaccion();
+//					articuloDAO.terminarTransaccion();
+//					articuloDAO.cerrarManager();
+					daomanager.cerrar();
 					session.removeAttribute("errorProducto");
 					log.info("Producto(s) dado(s) de alta");
 					rutaListado.forward(request, response);
@@ -175,7 +182,11 @@ public class ArticuloForm extends HttpServlet {
 				// Aquí hay que declarar un nuevo producto con los datos recogidos del formulario. Como en el caso
 				// modificar, el campo groupId está deshabilitado y no lo envía, hay que extraerlo a través del id.
 				// Como el nombre se extrae del mismo campo, para este caso solicitamos el parametro "nombre".
-				articuloDAO.abrirManager();
+//				articuloDAO.abrirManager();
+				DAOManagerHibernate daomanager = new DAOManagerHibernate();
+				ArticuloDAO articuloDAO = daomanager.getArticuloDAO();
+				daomanager.abrir();
+				daomanager.iniciarTransaccion();
 				articulo = articuloDAO.findById(id);
 				articulo.setCodigoArticulo(codigoArticulo);
 				articulo.setNombre(nombre);
@@ -186,7 +197,9 @@ public class ArticuloForm extends HttpServlet {
 				BigInteger nuevaCantidad = articulo.getStock().add(cantidad);
 
 				articulo.setStock(nuevaCantidad);
-				articuloDAO.cerrarManager();
+				daomanager.terminarTransaccion();
+				daomanager.cerrar();
+//				articuloDAO.cerrarManager();
 				// articuloDAO.update(articulo);
 
 				if (nombre == null || nombre == "") {
@@ -199,11 +212,17 @@ public class ArticuloForm extends HttpServlet {
 				}
 				break;
 			case "borrar":
-				articuloDAO.abrirManager();
-				articuloDAO.iniciarTransaccion();
-				articuloDAO.delete(id);
-				articuloDAO.terminarTransaccion();
-				articuloDAO.cerrarManager();
+//				articuloDAO.abrirManager();
+//				articuloDAO.iniciarTransaccion();
+				DAOManagerHibernate daoman = new DAOManagerHibernate();
+				ArticuloDAO artDAO = daoman.getArticuloDAO();
+				daoman.abrir();
+				daoman.iniciarTransaccion();
+				artDAO.delete(id);
+//				artDAO.terminarTransaccion();
+//				artDAO.cerrarManager();
+				daoman.terminarTransaccion();
+				daoman.cerrar();
 				session.removeAttribute("errorProducto");
 				rutaListado.forward(request, response);
 
