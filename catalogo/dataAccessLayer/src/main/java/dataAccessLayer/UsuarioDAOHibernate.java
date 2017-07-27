@@ -61,8 +61,9 @@ public class UsuarioDAOHibernate extends IpartekDAOHibernate implements UsuarioD
 	public Usuario findByName(String username) {
 		Usuario usuario = null;
 		try {
-		usuario = (Usuario) man.createQuery("FROM Usuario WHERE username='" + username + "'").getSingleResult();
-		} catch (NullPointerException npe) {
+			usuario = (Usuario) man.createQuery("FROM Usuario u WHERE u.username='" + username + "'").getSingleResult();
+		} catch (Exception e) {
+			e.printStackTrace();
 			log.info("usuario = null en Usuario.findByName()");
 		}
 		return usuario;
@@ -71,11 +72,12 @@ public class UsuarioDAOHibernate extends IpartekDAOHibernate implements UsuarioD
 	@Override
 	public boolean validar(Usuario usuario) {
 		Usuario user = null;
-		if(usuario != null) {
-		user = man.find(Usuario.class, usuario.getId());
+		if (usuario != null) {
+			user = this.findByName(usuario.getUsername());
+			if (usuario.getUsername() != null && usuario.getPassword() != null)
+				if (usuario.getUsername().equals(user.getUsername()) && usuario.getPassword().equals(user.getPassword()))
+					return true;
 		}
-		if (user != null)
-			return true;
 		return false;
 	}
 

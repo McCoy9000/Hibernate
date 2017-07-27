@@ -9,7 +9,7 @@
 		
 <nav class="container" style="margin-top:2em">
 	<ul class="list-inline">
-	<li><a class="btn btn-default" style="background:#ECC007; border:#ECC007;" href="${applicationScope.rutaBase}/checkout"><strong>CHECKOUT &#128722; (${sessionScope.numeroProductos})</strong></a></li>
+	<li><a class="btn btn-default" style="background:#ECC007; border:#ECC007;" href="${applicationScope.rutaBase}/checkout"><strong>CHECKOUT &#128722; (${sessionScope.numeroArticulos})</strong></a></li>
 	</ul>
 </nav>
 <div class="container">
@@ -35,7 +35,7 @@
 				<td style="text-align:center; vertical-align: middle;">${articulo.precio} €</td>
 				<td style="text-align:center; vertical-align: middle;">${articulo.stock}</td>
 				<td id="anadir" style="text-align:center; vertical-align:middle;">
-					<form action="${applicationScope.rutaBase}/catalogo#${articulo.id}" method="post">
+					<form action="${applicationScope.rutaBase}/catalogo#${articulo.codigoArticulo}" method="post">
 						<input type="number" max="${articulo.stock}" min="1" id="cantidad" name="cantidad" value="1"/>
 						<input type="hidden" id ="id" name="id" value="${articulo.id}"/>
 						<input type="hidden" id="op" name="op" value="anadir"/>

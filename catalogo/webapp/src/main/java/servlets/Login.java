@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import pojos.Usuario;
 import recursos.Constantes;
 import dataAccessLayer.DAOManagerHibernate;
@@ -23,6 +25,8 @@ import encriptacion.Encriptador;
 @WebServlet("/login")
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
+	private static Logger log = Logger.getLogger(Login.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
@@ -34,8 +38,9 @@ public class Login extends HttpServlet {
 		HttpSession session = request.getSession();
 		ServletContext application = request.getServletContext();
 
-//		UsuarioDAO usuarioDAO = (UsuarioDAO) application.getAttribute("usuarioDAO");
+		// UsuarioDAO usuarioDAO = (UsuarioDAO) application.getAttribute("usuarioDAO");
 		DAOManagerHibernate daoManager = new DAOManagerHibernate();
+		daoManager.abrir();
 		UsuarioDAO usuarioDAO = daoManager.getUsuarioDAO();
 
 		// Borrado de errores en sesión por si llegan aquí desde los formularios CRUD
@@ -63,14 +68,17 @@ public class Login extends HttpServlet {
 
 		Usuario usuario = (Usuario) session.getAttribute("usuario");
 
-		if (usuario == null)
+		if (usuario == null) {
 			usuario = new Usuario();
+			usuario.setUsername(username);
+			usuario.setPassword(password);
+		}
 
 		boolean quiereSalir = ("logout").equals(op);
 		boolean yaLogueado = ("si").equals(session.getAttribute("logueado"));
 		boolean sinDatos = username == null || username == "" || password == "" || password == null;
-		daoManager.abrir();
 		daoManager.iniciarTransaccion();
+		log.info(username);
 		boolean uInexistente = !usuarioDAO.validarNombre(usuario);
 		boolean esValido = usuarioDAO.validar(usuario);
 		daoManager.terminarTransaccion();
@@ -109,9 +117,9 @@ public class Login extends HttpServlet {
 		}
 		if (esValido) {
 			daoManager.iniciarTransaccion();
-//			usuarioDAO.abrirManager();
+			// usuarioDAO.abrirManager();
 			usuario = usuarioDAO.findByName(username);
-//			usuarioDAO.cerrarManager();
+			// usuarioDAO.cerrarManager();
 			daoManager.terminarTransaccion();
 			daoManager.cerrar();
 			session.removeAttribute("errorLogin");

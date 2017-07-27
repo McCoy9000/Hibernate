@@ -10,9 +10,9 @@ import pojos.Articulo;
 public class ArticuloDAOHibernate extends IpartekDAOHibernate implements ArticuloDAO {
 
 	public ArticuloDAOHibernate() {
-		
+
 	}
-	
+
 	public ArticuloDAOHibernate(EntityManager man) {
 		this.man = man;
 	}
@@ -56,9 +56,7 @@ public class ArticuloDAOHibernate extends IpartekDAOHibernate implements Articul
 
 	@Override
 	public Articulo findByCodigo(String codigo) {
-		@SuppressWarnings("unchecked")
-		List<Articulo> articulos = (List<Articulo>) man.createQuery("FROM Articulo WHERE codigoArticulo='" + codigo + "'").getResultList();
-		Articulo articulo = articulos.get(0);
+		Articulo articulo = (Articulo) man.createQuery("FROM Articulo WHERE codigoArticulo='" + codigo + "'").getSingleResult();
 		return articulo;
 	}
 

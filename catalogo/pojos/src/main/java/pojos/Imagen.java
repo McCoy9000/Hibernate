@@ -16,7 +16,7 @@ import javax.persistence.Table;
 public class Imagen implements Serializable {
 
 	private static final long serialVersionUID = -7360393809608650040L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_imagen", unique = true)
@@ -78,12 +78,8 @@ public class Imagen implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((articulo == null) ? 0 : articulo.hashCode());
-		result = prime * result + ((articuloVendido == null) ? 0 : articuloVendido.hashCode());
-		result = prime * result + ((comprador == null) ? 0 : comprador.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
-		result = prime * result + ((persona == null) ? 0 : persona.hashCode());
 		result = prime * result + ((url == null) ? 0 : url.hashCode());
 		return result;
 	}
@@ -97,32 +93,12 @@ public class Imagen implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Imagen other = (Imagen) obj;
-		if (articulo == null) {
-			if (other.articulo != null)
-				return false;
-		} else if (!articulo.equals(other.articulo))
-			return false;
-		if (articuloVendido == null) {
-			if (other.articuloVendido != null)
-				return false;
-		} else if (!articuloVendido.equals(other.articuloVendido))
-			return false;
-		if (comprador == null) {
-			if (other.comprador != null)
-				return false;
-		} else if (!comprador.equals(other.comprador))
-			return false;
 		if (id != other.id)
 			return false;
 		if (nombre == null) {
 			if (other.nombre != null)
 				return false;
 		} else if (!nombre.equals(other.nombre))
-			return false;
-		if (persona == null) {
-			if (other.persona != null)
-				return false;
-		} else if (!persona.equals(other.persona))
 			return false;
 		if (url == null) {
 			if (other.url != null)

@@ -35,17 +35,18 @@ public class Catalogo extends HttpServlet {
 		ServletContext application = getServletContext();
 		HttpSession session = request.getSession();
 
-//		ArticuloDAO articuloDAO = (ArticuloDAO) application.getAttribute("articuloDAO");
+		// ArticuloDAO articuloDAO = (ArticuloDAO) application.getAttribute("articuloDAO");
 		DAOManagerHibernate daoManager = new DAOManagerHibernate();
 		daoManager.abrir();
 		ArticuloDAO articuloDAO = daoManager.getArticuloDAO();
 		application.setAttribute("catalogo", articuloDAO.findAll());
-
 		CarritoDAO carritoDAO = (CarritoDAO) session.getAttribute("carritoDAO");
 
 		if (carritoDAO == null) {
 			carritoDAO = CarritoDAOFactory.getCarritoDAO();
 		}
+
+		long id;
 
 		String op = request.getParameter("op");
 
@@ -63,6 +64,7 @@ public class Catalogo extends HttpServlet {
 		switch (op) {
 
 		case "anadir":
+			id = Long.parseLong(request.getParameter("id"));
 			String codigoArticulo = request.getParameter("codigoArticulo");
 			BigInteger cantidad = BigInteger.ONE;
 			try {
@@ -73,31 +75,31 @@ public class Catalogo extends HttpServlet {
 			}
 
 			log.info("Cantidad recogida: " + cantidad);
-//			articuloDAO.abrirManager();
-//			articuloDAO.iniciarTransaccion();
-			
-			Articulo articulo = articuloDAO.findByCodigo(codigoArticulo);
+			// articuloDAO.abrirManager();
+			// articuloDAO.iniciarTransaccion();
+
+			Articulo articulo = articuloDAO.findById(id);
 			ArticuloCantidad orden = new ArticuloCantidad(articulo.getCodigoArticulo(), articulo.getNombre(), articulo.getDescripcion(), articulo.getImagen(), articulo.getPrecio(),
 					articulo.getStock(), cantidad);
 			carritoDAO.insert(orden);
-			daoManager.iniciarTransaccion();
-			articuloDAO.restarCantidad(articulo, cantidad);
-//			articuloDAO.terminarTransaccion();
-//			articuloDAO.cerrarManager();
-			daoManager.terminarTransaccion();
-			daoManager.cerrar();
+			// daoManager.iniciarTransaccion();
+			// articuloDAO.restarCantidad(articulo, cantidad);
+			// articuloDAO.terminarTransaccion();
+			// articuloDAO.cerrarManager();
+			// daoManager.terminarTransaccion();
+			// daoManager.cerrar();
 			session.setAttribute("numeroArticulos", carritoDAO.findAll().size());
 
 			request.getRequestDispatcher(Constantes.RUTA_CATALOGO).forward(request, response);
 			break;
 
 		case "ver":
-			long id = Long.parseLong(request.getParameter("id"));
-//			articuloDAO.abrirManager();
-			
+			id = Long.parseLong(request.getParameter("id"));
+			// articuloDAO.abrirManager();
+
 			Articulo art = articuloDAO.findById(id);
 			session.setAttribute("articulo", art);
-//			articuloDAO.cerrarManager();
+			// articuloDAO.cerrarManager();
 			daoManager.cerrar();
 			request.getRequestDispatcher(Constantes.RUTA_ARTICULO).forward(request, response);
 			break;

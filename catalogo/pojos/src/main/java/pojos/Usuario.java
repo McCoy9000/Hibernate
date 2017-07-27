@@ -1,6 +1,8 @@
 package pojos;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -8,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -17,12 +20,14 @@ public class Usuario extends Persona {
 	private static final long serialVersionUID = 2671695361728068311L;
 
 	@Column(name = "username", nullable = false)
-	String username;
+	private String username;
 	@Column(name = "password", nullable = false)
-	String password;
-	@ManyToOne(cascade = { CascadeType.PERSIST }, fetch = FetchType.LAZY)
+	private String password;
+	@ManyToOne(cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_rol")
-	Rol rol;
+	private Rol rol;
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.PERSIST)
+	private List<Factura> facturas = new ArrayList<Factura>();
 
 	public Usuario() {
 	}
