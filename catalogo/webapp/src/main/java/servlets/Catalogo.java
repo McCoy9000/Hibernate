@@ -88,7 +88,8 @@ public class Catalogo extends HttpServlet {
 			// articuloDAO.cerrarManager();
 			// daoManager.terminarTransaccion();
 			// daoManager.cerrar();
-			session.setAttribute("numeroArticulos", carritoDAO.findAll().size());
+
+			session.setAttribute("numeroArticulos", carritoDAO.getTotalArticulos());
 
 			request.getRequestDispatcher(Constantes.RUTA_CATALOGO).forward(request, response);
 			break;

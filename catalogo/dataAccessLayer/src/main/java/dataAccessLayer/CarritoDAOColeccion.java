@@ -1,6 +1,7 @@
 package dataAccessLayer;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,7 +60,7 @@ public class CarritoDAOColeccion implements CarritoDAO {
 
 	@Override
 	public ArticuloCantidad findByCodigo(String codigo) {
-		for (ArticuloCantidad articulo: carrito.getListaArticulos().values()) {
+		for (ArticuloCantidad articulo : carrito.getListaArticulos().values()) {
 			if (articulo.getCodigoArticulo() == codigo)
 				return articulo;
 		}
@@ -75,10 +76,10 @@ public class CarritoDAOColeccion implements CarritoDAO {
 
 	@Override
 	public boolean validarCodigo(String codigo) {
-		for (ArticuloCantidad articulo: new ArrayList<ArticuloCantidad>(carrito.getListaArticulos().values())) {
+		for (ArticuloCantidad articulo : new ArrayList<ArticuloCantidad>(carrito.getListaArticulos().values())) {
 			if (articulo.getCodigoArticulo() == codigo)
 				return true;
-		}		
+		}
 		return false;
 	}
 
@@ -90,10 +91,19 @@ public class CarritoDAOColeccion implements CarritoDAO {
 
 			precioTotal = precioTotal.add(a.getPrecio().multiply(new BigDecimal(a.getCantidad())));
 		}
-		
+
 		precioTotalMasIva = precioTotal.multiply(Constantes.IVA.add(BigDecimal.ONE)).setScale(2, BigDecimal.ROUND_HALF_EVEN);
-				
+
 		return precioTotalMasIva;
+	}
+
+	public BigInteger getTotalArticulos() {
+		BigInteger totalArticulos = BigInteger.ZERO;
+		for (ArticuloCantidad ac : this.findAll()) {
+			totalArticulos = totalArticulos.add(ac.getCantidad());
+		}
+
+		return totalArticulos;
 	}
 
 }

@@ -1,12 +1,13 @@
 package dataAccessLayer;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 import pojos.ArticuloCantidad;
 
 public interface CarritoDAO {
-	
+
 	public long insert(ArticuloCantidad articulo);
 
 	public void update(ArticuloCantidad articulo);
@@ -24,7 +25,9 @@ public interface CarritoDAO {
 	public boolean validar(ArticuloCantidad articulo);
 
 	public boolean validarCodigo(String codigo);
-	
+
 	public BigDecimal getPrecioTotal();
+
+	public BigInteger getTotalArticulos();
 
 }
