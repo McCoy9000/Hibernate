@@ -111,6 +111,9 @@ public class Factura implements Serializable {
 
 	public void setArticulos(List<ArticuloVendido> articulos) {
 		this.articulos = articulos;
+		for(ArticuloVendido av : articulos) {
+			av.setFactura(this);
+		}
 	}
 
 	public LocalDate getFecha() {

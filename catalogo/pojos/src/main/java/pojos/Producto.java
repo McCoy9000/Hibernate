@@ -6,13 +6,14 @@ import java.math.BigDecimal;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -30,7 +31,7 @@ public abstract class Producto implements Serializable {
 	private String nombre;
 	@Column(name = "descripcion")
 	private String descripcion;
-	@OneToOne(cascade = { CascadeType.ALL })
+	@ManyToOne(cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_imagen")
 	private Imagen imagen;
 	@Column(name = "precio")

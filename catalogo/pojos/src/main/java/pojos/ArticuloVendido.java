@@ -29,7 +29,7 @@ public class ArticuloVendido extends Producto implements Serializable {
 	}
 
 	public ArticuloVendido(String codigoArticulo, String nombre, String descripcion, Imagen imagen, BigDecimal precio, BigInteger cantidad, Factura factura) {
-		super();
+		super(codigoArticulo, nombre, descripcion, imagen, precio);
 		this.cantidad = cantidad;
 		this.factura = factura;
 	}

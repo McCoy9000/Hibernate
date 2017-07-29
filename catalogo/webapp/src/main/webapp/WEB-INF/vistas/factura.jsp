@@ -17,7 +17,7 @@
 <div id="factura" class="container">
 
 <div class="row">
-<div class="col-xs-5 col-md-5">Factura ${factura.numero_factura}</div><div class="col-xs-5 col-xs-offset-2 col-md-5 col-md-offset-2" style="text-align:right">${factura.fecha}</div>
+<div class="col-xs-5 col-md-5">Factura ${factura.numeroFactura}</div><div class="col-xs-5 col-xs-offset-2 col-md-5 col-md-offset-2" style="text-align:right">${factura.fecha}</div>
 </div>
 <br>
 <div class="row">
@@ -51,26 +51,30 @@
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th style="width:28%"></th>
+							<th style="width:25%"></th>
 							<th>Producto</th>
-							<th style="text-align:right">Precio</th>
+							<th>Unidades</th>
+							<th style="text-align:right">Importe</th>
 						</tr>
 					</thead>
 					<tbody>
 						<c:forEach items="${sessionScope.articulosFactura}" var="producto">
 							<tr>
-								<td style="width:28%"></td>
+								<td style="width:25%"></td>
 								<td>${producto.nombre}</td>
-								<td style="text-align:right">${producto.precio} €</td>
+								<td>${producto.cantidad}</td>
+								<td style="text-align:right">${producto.precio * producto.cantidad} €</td>
 							</tr>
 						</c:forEach>
 						<tr>
-							<td style="width:28%">IVA: </td>
+							<td style="width:25%">IVA: </td>
+							<td></td>
 							<td></td>
 							<td style="text-align:right">${sessionScope.ivaFactura} €</td>
 						</tr>
 						<tr>
-							<td style="width:28%"><strong>Total: </strong></td>
+							<td style="width:25%"><strong>Total: </strong></td>
+							<td></td>
 							<td></td>
 							<td style="text-align:right"><strong>${sessionScope.precioFactura} €</strong></td>
 						</tr>

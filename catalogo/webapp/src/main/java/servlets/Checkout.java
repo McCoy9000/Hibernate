@@ -23,6 +23,9 @@ import dataAccessLayer.CarritoDAO;
 import dataAccessLayer.CarritoDAOFactory;
 import dataAccessLayer.DAOManagerHibernate;
 import dataAccessLayer.FacturaDAO;
+import dataAccessLayer.ImagenDAO;
+import dataAccessLayer.UsuarioDAO;
+import factories.ProductoFactory;
 
 @WebServlet("/checkout")
 public class Checkout extends HttpServlet {
@@ -44,21 +47,21 @@ public class Checkout extends HttpServlet {
 		// ArticuloStockDAO articuloDAO = (ArticuloStockDAO) application.getAttribute("productos");
 		CarritoDAO carritoDAO = (CarritoDAO) session.getAttribute("carritoDAO");
 		// articuloDAO.abrirManager();
-		DAOManagerHibernate daomanager = new DAOManagerHibernate();
-		daomanager.abrir();
+		DAOManagerHibernate daoManager = new DAOManagerHibernate();
+		daoManager.abrir();
 		session.setAttribute("articulosCarrito", carritoDAO.findAll());
 		// articuloDAO.cerrarManager();
 		session.setAttribute("numeroProductos", carritoDAO.findAll().size());
 		session.setAttribute("precioTotal", carritoDAO.getPrecioTotal());
 
 		if (carritoDAO.findAll().size() == 0) {
-			daomanager.cerrar();
+			daoManager.cerrar();
 			request.getRequestDispatcher("/catalogo").forward(request, response);
 			return;
 		}
 
 		if (op == null) {
-			daomanager.cerrar();
+			daoManager.cerrar();
 			request.getRequestDispatcher("/WEB-INF/vistas/checkout.jsp").forward(request, response);
 			return;
 		}
@@ -67,7 +70,7 @@ public class Checkout extends HttpServlet {
 
 		case "vaciarcarrito":
 			carritoDAO = CarritoDAOFactory.getCarritoDAO();
-			daomanager.cerrar();
+			daoManager.cerrar();
 			session.setAttribute("carritoDAO", carritoDAO);
 			session.setAttribute("numeroProductos", carritoDAO.findAll().size());
 			request.getRequestDispatcher("/catalogo").forward(request, response);
@@ -75,41 +78,43 @@ public class Checkout extends HttpServlet {
 
 		case "pagar":
 			Usuario usuario = (Usuario) session.getAttribute("usuario");
-
+			
 			if (usuario == null) {
 				request.getRequestDispatcher("/login").forward(request, response);
 				return;
 			}
-
-			// FacturaDAO facturaDAO = (FacturaDAO) application.getAttribute("facturas");
-			FacturaDAO facturaDAO = daomanager.getFacturaDAO();
-			daomanager.iniciarTransaccion();
+			
+			UsuarioDAO usuarioDAO = daoManager.getUsuarioDAO();
+			usuario = usuarioDAO.findById(usuario.getId());
+			FacturaDAO facturaDAO = daoManager.getFacturaDAO();
+			daoManager.iniciarTransaccion();
 			Factura factura = new Factura(usuario, new Comprador(usuario.getId(), usuario.getNombre(), usuario.getApellidos(), usuario.getFechaNacimiento(), usuario.getDocumento(),
-					usuario.getTelefono(), usuario.getEmail(), usuario.getDireccion(), usuario.getEmpresa(), usuario.getImagen()), LocalDate.now());
-			// facturaDAO.abrirManager();
-			// facturaDAO.iniciarTransaccion();
+					usuario.getTelefono(), usuario.getEmail(), usuario.getDireccion(), usuario.getEmpresa()), LocalDate.now());
 			facturaDAO.insert(factura);
 
 			List<ArticuloCantidad> articulosCarrito = carritoDAO.findAll();
 			List<ArticuloVendido> articulosFactura = new ArrayList<ArticuloVendido>();
-
+			
 			for (ArticuloCantidad ac : articulosCarrito) {
-				articulosFactura.add(new ArticuloVendido(ac.getCodigoArticulo(), ac.getNombre(), ac.getDescripcion(), ac.getImagen(), ac.getPrecio(), ac.getCantidad(), factura));
+				articulosFactura.add(ProductoFactory.getArticuloVendido(ac, ac.getCantidad(), factura));
 			}
-
+			ImagenDAO imagenDAO = daoManager.getImagenDAO();
+			for (ArticuloVendido av: articulosFactura) {
+				av.setImagen(imagenDAO.findById(av.getImagen().getId()));
+				
+			}
 			factura.setArticulos(articulosFactura);
-			// facturaDAO.update(factura);
+
 
 			session.setAttribute("factura", factura);
-			session.setAttribute("productosFactura", factura.getArticulos());
+			session.setAttribute("articulosFactura", factura.getArticulos());
 			session.setAttribute("ivaFactura", facturaDAO.getIvaTotal(factura.getId()));
 			session.setAttribute("precioFactura", facturaDAO.getPrecioTotal(factura.getId()));
 			session.setAttribute("usuarioFactura", factura.getComprador());
-			daomanager.terminarTransaccion();
-			daomanager.cerrar();
-			// facturaDAO.terminarTransaccion();
-			// facturaDAO.cerrarManager();
-			session.setAttribute("carrito", CarritoDAOFactory.getCarritoDAO());
+			daoManager.terminarTransaccion();
+			daoManager.cerrar();
+			
+			session.setAttribute("carritoDAO", CarritoDAOFactory.getCarritoDAO());
 			session.setAttribute("articulosCarrito", carritoDAO.findAll());
 			session.setAttribute("numeroProductos", carritoDAO.findAll().size());
 			session.setAttribute("precioTotal", carritoDAO.getPrecioTotal());
@@ -134,7 +139,7 @@ public class Checkout extends HttpServlet {
 			if (carritoDAO.validar(articulo)) {
 				carritoDAO.delete(id, cantidad);
 			}
-			daomanager.cerrar();
+			daoManager.cerrar();
 			session.setAttribute("carritoDAO", carritoDAO);
 			session.setAttribute("articulosCarrito", carritoDAO.findAll());
 			session.setAttribute("numeroProductos", carritoDAO.findAll().size());
@@ -147,7 +152,7 @@ public class Checkout extends HttpServlet {
 			request.getRequestDispatcher("/WEB-INF/vistas/checkout.jsp").forward(request, response);
 			break;
 		default:
-			daomanager.cerrar();
+			daoManager.cerrar();
 			request.getRequestDispatcher("/WEB-INF/vistas/checkout.jsp").forward(request, response);
 		}
 	}

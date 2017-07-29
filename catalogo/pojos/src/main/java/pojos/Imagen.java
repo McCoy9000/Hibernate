@@ -1,13 +1,17 @@
 package pojos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -27,12 +31,11 @@ public class Imagen implements Serializable {
 	private String url;
 	@OneToOne(mappedBy = "imagen", fetch = FetchType.LAZY)
 	private Persona persona;
-	@OneToOne(mappedBy = "imagen", fetch = FetchType.LAZY)
-	private Comprador comprador;
-	@OneToOne(mappedBy = "imagen", fetch = FetchType.LAZY)
-	private Producto producto;
-	@OneToOne(mappedBy = "imagen", fetch = FetchType.LAZY)
-	private ArticuloVendido articuloVendido;
+//	@OneToOne(mappedBy = "imagen", fetch = FetchType.LAZY)
+//	private Comprador comprador;
+	@OneToMany(mappedBy = "imagen", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<Producto> productos = new ArrayList<Producto>();
+
 
 	public Imagen() {
 

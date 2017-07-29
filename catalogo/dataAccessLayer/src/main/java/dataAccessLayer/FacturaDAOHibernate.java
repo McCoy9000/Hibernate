@@ -60,7 +60,7 @@ public class FacturaDAOHibernate extends IpartekDAOHibernate implements FacturaD
 	public BigDecimal getIvaTotal(long id) {
 		BigDecimal ivaTotal = BigDecimal.ZERO;
 		for (ArticuloVendido a : this.findById(id).getArticulos()) {
-			ivaTotal = ivaTotal.add(a.getPrecio().multiply(Constantes.IVA));
+			ivaTotal = ivaTotal.add(a.getPrecio().multiply(new BigDecimal(a.getCantidad().intValue())).multiply(Constantes.IVA));
 
 		}
 		ivaTotal = ivaTotal.setScale(2, BigDecimal.ROUND_HALF_EVEN);
@@ -72,7 +72,7 @@ public class FacturaDAOHibernate extends IpartekDAOHibernate implements FacturaD
 		BigDecimal precioTotalSinIva = BigDecimal.ZERO;
 		BigDecimal precioTotal = BigDecimal.ZERO;
 		for (ArticuloVendido a : this.findById(id).getArticulos()) {
-			precioTotalSinIva = precioTotalSinIva.add(a.getPrecio());
+			precioTotalSinIva = precioTotalSinIva.add(a.getPrecio().multiply(new BigDecimal(a.getCantidad().intValue())));
 		}
 		precioTotal = precioTotalSinIva.add(this.getIvaTotal(id));
 		precioTotal = precioTotal.setScale(2, BigDecimal.ROUND_HALF_EVEN);

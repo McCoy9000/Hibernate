@@ -82,7 +82,7 @@ public class DevolucionForm extends HttpServlet {
 		daomanager.terminarTransaccion();
 //		usuarioDAO.cerrarManager();
 		Factura factura = new Factura(usuario, new Comprador(usuario.getId(), usuario.getNombre(), usuario.getApellidos(), usuario.getFechaNacimiento(), usuario.getDocumento(), usuario.getTelefono(),
-				usuario.getEmail(), usuario.getDireccion(), usuario.getEmpresa(), usuario.getImagen()), LocalDate.now());
+				usuario.getEmail(), usuario.getDireccion(), usuario.getEmpresa()), LocalDate.now());
 
 		ArticuloVendido devolucion = new ArticuloVendido("DEVOLUCION", mensaje, "", new Imagen(), importe, BigInteger.ONE, factura);
 
