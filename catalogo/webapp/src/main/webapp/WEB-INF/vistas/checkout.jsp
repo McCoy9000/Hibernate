@@ -32,7 +32,12 @@
 				<td style="text-align:center; vertical-align: middle;"><object data="${applicationScope.rutaBase}/img/${producto.imagen.url}" height="128" type="image/png"><img src="${applicationScope.rutaBase}/img/${producto.imagen}.jpg" height="128"/></object></td>
 				<td style="text-align:center; vertical-align: middle;">${producto.precio} €</td>
 				<td style="text-align:center; vertical-align: middle;">${producto.cantidad}</td>
-				<td style="text-align:center; vertical-align: middle;"><a class="btn btn-default" href="?op=quitar&id=${producto.id}#carrito">Quitar</a></td>
+				<td style="text-align:center; vertical-align: middle;"><form action="${applicationScope.rutaBase}/checkout#${articulo.codigoArticulo}" method="post">
+						<input type="number" max="${producto.cantidad}" min="1" id="cantidad" name="cantidad" value="1"/>
+						<input type="hidden" id ="id" name="id" value="${producto.id}"/>
+						<input type="hidden" id="op" name="op" value="quitar"/>
+						<input type="submit" class="btn btn-default" style="background:#ECC007; border:none;" value="Quitar"/>
+					</form></td>
 			</tr>
 		</c:forEach>
 			<tr id="total">

@@ -1,6 +1,7 @@
 package servlets;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,9 @@ public class Checkout extends HttpServlet {
 		HttpSession session = request.getSession();
 
 		String op = request.getParameter("op");
-
+		BigInteger cantidad = null;
+		if(request.getParameter("cantidad") != null)
+			cantidad = new BigInteger(request.getParameter("cantidad"));
 		// ArticuloStockDAO articuloDAO = (ArticuloStockDAO) application.getAttribute("productos");
 		CarritoDAO carritoDAO = (CarritoDAO) session.getAttribute("carritoDAO");
 		// articuloDAO.abrirManager();
@@ -129,10 +132,10 @@ public class Checkout extends HttpServlet {
 			ArticuloCantidad articulo = carritoDAO.findById(id);
 
 			if (carritoDAO.validar(articulo)) {
-				carritoDAO.delete(id);
+				carritoDAO.delete(id, cantidad);
 			}
 			daomanager.cerrar();
-			session.setAttribute("carrito", CarritoDAOFactory.getCarritoDAO());
+			session.setAttribute("carritoDAO", carritoDAO);
 			session.setAttribute("articulosCarrito", carritoDAO.findAll());
 			session.setAttribute("numeroProductos", carritoDAO.findAll().size());
 			session.setAttribute("precioTotal", carritoDAO.getPrecioTotal());

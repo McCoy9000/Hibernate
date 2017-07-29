@@ -41,16 +41,17 @@ public class CarritoDAOColeccion implements CarritoDAO {
 	}
 
 	@Override
-	public void delete(ArticuloCantidad articulo) {
+	public void delete(ArticuloCantidad articulo, BigInteger cantidad) {
 		long id = articulo.getId();
-		this.delete(id);
+		this.delete(id, cantidad);
 	}
 
 	@Override
-	public void delete(long id) {
+	public void delete(long id, BigInteger cantidad) {
 		ArticuloCantidad articulo = carrito.getListaArticulos().get(id);
-		articulo.setCantidad(articulo.getCantidad().subtract(BigInteger.ONE));;
-
+		articulo.setCantidad(articulo.getCantidad().subtract(cantidad));;
+		if (articulo.getCantidad().compareTo(BigInteger.ZERO) <= 0)
+			carrito.getListaArticulos().remove(id);
 	}
 
 	@Override

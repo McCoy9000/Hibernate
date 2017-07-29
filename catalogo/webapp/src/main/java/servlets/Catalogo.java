@@ -36,8 +36,8 @@ public class Catalogo extends HttpServlet {
 		ServletContext application = getServletContext();
 		HttpSession session = request.getSession();
 
-		// ArticuloStockDAO articuloDAO = (ArticuloStockDAO) application.getAttribute("articuloDAO");
 		DAOManagerHibernate daoManager = new DAOManagerHibernate();
+
 		daoManager.abrir();
 		ArticuloStockDAO articuloStockDAO = daoManager.getArticuloStockDAO();
 		application.setAttribute("catalogo", articuloStockDAO.findAll());
@@ -76,18 +76,13 @@ public class Catalogo extends HttpServlet {
 			}
 
 			log.info("Cantidad recogida: " + cantidad);
-			// articuloDAO.abrirManager();
-			// articuloDAO.iniciarTransaccion();
-
-			ArticuloStock articulo = articuloStockDAO.findById(id);
-			ArticuloCantidad orden = ProductoFactory.getArticuloCantidad(articulo, cantidad);
-			carritoDAO.insert(orden);
-			// daoManager.iniciarTransaccion();
-			// articuloDAO.restarCantidad(articulo, cantidad);
-			// articuloDAO.terminarTransaccion();
-			// articuloDAO.cerrarManager();
-			// daoManager.terminarTransaccion();
-			// daoManager.cerrar();
+			
+			daoManager.iniciarTransaccion();
+			ArticuloStock as = articuloStockDAO.findById(id);
+			ArticuloCantidad ac = ProductoFactory.getArticuloCantidad(as, cantidad);
+			carritoDAO.insert(ac);
+			daoManager.terminarTransaccion();
+			daoManager.cerrar();
 
 			session.setAttribute("numeroArticulos", carritoDAO.getTotalArticulos());
 
@@ -96,17 +91,16 @@ public class Catalogo extends HttpServlet {
 
 		case "ver":
 			id = Long.parseLong(request.getParameter("id"));
-			// articuloDAO.abrirManager();
 
 			ArticuloStock art = articuloStockDAO.findById(id);
 			session.setAttribute("articulo", art);
-			// articuloDAO.cerrarManager();
 			daoManager.cerrar();
 			request.getRequestDispatcher(Constantes.RUTA_ARTICULO).forward(request, response);
 			break;
 
 		default:
-
+			daoManager.cerrar();
+			session.setAttribute("numeroArticulos", carritoDAO.getTotalArticulos());
 			request.getRequestDispatcher(Constantes.RUTA_CATALOGO).forward(request, response);
 
 		}

@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ARTICULOS")
+@Table(name = "ARTICULOS_STOCK")
 public class ArticuloStock extends Producto implements Serializable {
 
 	private static final long serialVersionUID = 2702580752722330560L;
@@ -21,7 +21,7 @@ public class ArticuloStock extends Producto implements Serializable {
 	}
 
 	public ArticuloStock(String codigoArticulo, String nombre, String descripcion, Imagen imagen, BigDecimal precio, BigInteger stock) {
-		super();
+		super(codigoArticulo, nombre, descripcion, imagen, precio);
 		this.stock = stock;
 	}
 
@@ -32,6 +32,4 @@ public class ArticuloStock extends Producto implements Serializable {
 	public void setStock(BigInteger stock) {
 		this.stock = stock;
 	}
-
-
 }

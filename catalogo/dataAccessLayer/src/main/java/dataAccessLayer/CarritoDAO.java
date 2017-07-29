@@ -12,9 +12,9 @@ public interface CarritoDAO {
 
 	public void update(ArticuloCantidad articulo);
 
-	public void delete(ArticuloCantidad articulo);
+	public void delete(ArticuloCantidad articulo, BigInteger cantidad);
 
-	public void delete(long id);
+	public void delete(long id, BigInteger cantidad);
 
 	public List<ArticuloCantidad> findAll();
 
