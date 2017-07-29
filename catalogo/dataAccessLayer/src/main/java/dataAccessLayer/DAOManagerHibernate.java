@@ -10,7 +10,7 @@ public class DAOManagerHibernate {
 	protected EntityManager man = null;
 	protected EntityTransaction trans = null;
 	
-	protected ArticuloDAO articuloDAO = null;
+	protected ArticuloStockDAO articuloDAO = null;
 	protected ArticuloVendidoDAO articuloVendidoDAO = null;
 	protected CompradorDAO compradorDAO = null;
 	protected DireccionDAO direccionDAO = null;
@@ -46,8 +46,8 @@ public class DAOManagerHibernate {
 	}
 
 
-	public ArticuloDAO getArticuloDAO() {
-			this.articuloDAO = ArticuloDAOFactory.getArticuloDAO(man);
+	public ArticuloStockDAO getArticuloStockDAO() {
+			this.articuloDAO = ArticuloStockDAOFactory.getArticuloStockDAO(man);
 		
 		return this.articuloDAO;
 	}

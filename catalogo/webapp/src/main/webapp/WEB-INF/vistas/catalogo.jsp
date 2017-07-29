@@ -5,7 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <jsp:useBean id="articulo" scope="application"
-		class="pojos.Articulo" />
+		class="pojos.ArticuloStock" />
 		
 <nav class="container" style="margin-top:2em">
 	<ul class="list-inline">

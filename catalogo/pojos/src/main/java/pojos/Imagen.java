@@ -30,7 +30,7 @@ public class Imagen implements Serializable {
 	@OneToOne(mappedBy = "imagen", fetch = FetchType.LAZY)
 	private Comprador comprador;
 	@OneToOne(mappedBy = "imagen", fetch = FetchType.LAZY)
-	private Articulo articulo;
+	private Producto producto;
 	@OneToOne(mappedBy = "imagen", fetch = FetchType.LAZY)
 	private ArticuloVendido articuloVendido;
 

@@ -15,10 +15,10 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import pojos.Articulo;
+import pojos.ArticuloStock;
 import pojos.Imagen;
 import recursos.Constantes;
-import dataAccessLayer.ArticuloDAO;
+import dataAccessLayer.ArticuloStockDAO;
 import dataAccessLayer.DAOManagerHibernate;
 
 @WebServlet("/admin/productoform")
@@ -42,7 +42,7 @@ public class ArticuloForm extends HttpServlet {
 		// Borrar los errores que puedan venir en sesión
 		session.removeAttribute("errorProducto");
 
-//		ArticuloDAO articuloDAO = (ArticuloDAO) application.getAttribute("productos");
+//		ArticuloStockDAO articuloDAO = (ArticuloStockDAO) application.getAttribute("productos");
 
 		// Recoger la opción elegida por el usuario en el formulario enviada por url
 		String op = request.getParameter("opform");
@@ -55,7 +55,7 @@ public class ArticuloForm extends HttpServlet {
 		// Declaración de las variables para construir el objeto con el que se trabajará e iniciarlas con los valores recogidos
 		// del formulario
 
-		Articulo articulo;
+		ArticuloStock articulo;
 
 		long id;
 
@@ -142,7 +142,7 @@ public class ArticuloForm extends HttpServlet {
 		// Lógica del servlet según la opción elegida por el usuario y enviada por el navegador
 		// encapsulada en opform.
 		if (op == null) {
-			articulo = new Articulo(codigoArticulo, nombre, descripcion, imagen, precio, cantidad);
+			articulo = new ArticuloStock(codigoArticulo, nombre, descripcion, imagen, precio, cantidad);
 			session.removeAttribute("errorProducto");
 			request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_PRODUCTO + "?op=alta").forward(request, response);
 			//TODO aquí arriba por qué declaro un artículo y porqué el forward con op alta
@@ -151,7 +151,7 @@ public class ArticuloForm extends HttpServlet {
 			switch (op) {
 			case "alta":
 
-				articulo = new Articulo(codigoArticulo, nombre, descripcion, imagen, precio, cantidad);
+				articulo = new ArticuloStock(codigoArticulo, nombre, descripcion, imagen, precio, cantidad);
 
 				if (nombre == null || nombre == "") {
 					session.setAttribute("errorProducto", "Debes introducir un nombre de producto");
@@ -165,9 +165,9 @@ public class ArticuloForm extends HttpServlet {
 //					articuloDAO.abrirManager();
 //					articuloDAO.iniciarTransaccion();
 					DAOManagerHibernate daomanager = new DAOManagerHibernate();
-					ArticuloDAO articuloDAO = daomanager.getArticuloDAO();
+					ArticuloStockDAO articuloStockDAO = daomanager.getArticuloStockDAO();
 					daomanager.iniciarTransaccion();
-					articuloDAO.insert(articulo);
+					articuloStockDAO.insert(articulo);
 					daomanager.terminarTransaccion();
 //					articuloDAO.terminarTransaccion();
 //					articuloDAO.cerrarManager();
@@ -184,7 +184,7 @@ public class ArticuloForm extends HttpServlet {
 				// Como el nombre se extrae del mismo campo, para este caso solicitamos el parametro "nombre".
 //				articuloDAO.abrirManager();
 				DAOManagerHibernate daomanager = new DAOManagerHibernate();
-				ArticuloDAO articuloDAO = daomanager.getArticuloDAO();
+				ArticuloStockDAO articuloDAO = daomanager.getArticuloStockDAO();
 				daomanager.abrir();
 				daomanager.iniciarTransaccion();
 				articulo = articuloDAO.findById(id);
@@ -215,7 +215,7 @@ public class ArticuloForm extends HttpServlet {
 //				articuloDAO.abrirManager();
 //				articuloDAO.iniciarTransaccion();
 				DAOManagerHibernate daoman = new DAOManagerHibernate();
-				ArticuloDAO artDAO = daoman.getArticuloDAO();
+				ArticuloStockDAO artDAO = daoman.getArticuloStockDAO();
 				daoman.abrir();
 				daoman.iniciarTransaccion();
 				artDAO.delete(id);

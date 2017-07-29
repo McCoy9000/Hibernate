@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import pojos.Articulo;
+import pojos.ArticuloStock;
 import recursos.Constantes;
-import dataAccessLayer.ArticuloDAO;
+import dataAccessLayer.ArticuloStockDAO;
 import dataAccessLayer.DAOManagerHibernate;
 
 @WebServlet("/admin/articulocrud")
@@ -29,7 +29,7 @@ public class ArticuloCRUD extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		ServletContext application = getServletContext();
-//		ArticuloDAO articuloDAO = (ArticuloDAO) application.getAttribute("articuloDAO");
+//		ArticuloStockDAO articuloDAO = (ArticuloStockDAO) application.getAttribute("articuloDAO");
 
 		HttpSession session = request.getSession();
 		// Borrado de errores en sesión por si llegan aquí desde los formularios CRUD
@@ -40,12 +40,12 @@ public class ArticuloCRUD extends HttpServlet {
 
 		String op = request.getParameter("op");
 		DAOManagerHibernate daomanager = new DAOManagerHibernate();
-		ArticuloDAO articuloDAO = daomanager.getArticuloDAO();
+		ArticuloStockDAO articuloStockDAO = daomanager.getArticuloStockDAO();
 		
 		if (op == null) {
 //			articuloDAO.abrirManager();
 			
-			List<Articulo> articulos = articuloDAO.findAll();
+			List<ArticuloStock> articulos = articuloStockDAO.findAll();
 //			articuloDAO.cerrarManager();
 			daomanager.cerrar();
 			application.setAttribute("articulos", articulos);
@@ -53,7 +53,7 @@ public class ArticuloCRUD extends HttpServlet {
 			return;
 		}
 
-		Articulo articulo;
+		ArticuloStock articulo;
 
 		switch (op) {
 		case "modificar":
@@ -67,7 +67,7 @@ public class ArticuloCRUD extends HttpServlet {
 				break;
 			}
 //			articuloDAO.abrirManager();
-			articulo = articuloDAO.findById(id);
+			articulo = articuloStockDAO.findById(id);
 //			articuloDAO.cerrarManager();
 			daomanager.cerrar();
 			request.setAttribute("articulo", articulo);

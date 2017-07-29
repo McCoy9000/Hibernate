@@ -13,13 +13,14 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import pojos.Articulo;
+import pojos.ArticuloStock;
 import pojos.ArticuloCantidad;
 import recursos.Constantes;
-import dataAccessLayer.ArticuloDAO;
+import dataAccessLayer.ArticuloStockDAO;
 import dataAccessLayer.CarritoDAO;
 import dataAccessLayer.CarritoDAOFactory;
 import dataAccessLayer.DAOManagerHibernate;
+import factories.ProductoFactory;
 
 @WebServlet("/catalogo")
 public class Catalogo extends HttpServlet {
@@ -35,11 +36,11 @@ public class Catalogo extends HttpServlet {
 		ServletContext application = getServletContext();
 		HttpSession session = request.getSession();
 
-		// ArticuloDAO articuloDAO = (ArticuloDAO) application.getAttribute("articuloDAO");
+		// ArticuloStockDAO articuloDAO = (ArticuloStockDAO) application.getAttribute("articuloDAO");
 		DAOManagerHibernate daoManager = new DAOManagerHibernate();
 		daoManager.abrir();
-		ArticuloDAO articuloDAO = daoManager.getArticuloDAO();
-		application.setAttribute("catalogo", articuloDAO.findAll());
+		ArticuloStockDAO articuloStockDAO = daoManager.getArticuloStockDAO();
+		application.setAttribute("catalogo", articuloStockDAO.findAll());
 		CarritoDAO carritoDAO = (CarritoDAO) session.getAttribute("carritoDAO");
 
 		if (carritoDAO == null) {
@@ -55,7 +56,7 @@ public class Catalogo extends HttpServlet {
 			// Si se llega al catálogo sin opciones, el carrito se empaqueta
 			// en el objeto sesión
 			session.setAttribute("carritoDAO", carritoDAO);
-			session.setAttribute("numeroProductos", carritoDAO.findAll().size());
+			session.setAttribute("numeroArticulos", carritoDAO.getTotalArticulos());
 
 			request.getRequestDispatcher("/WEB-INF/vistas/catalogo.jsp").forward(request, response);
 			return;
@@ -78,9 +79,8 @@ public class Catalogo extends HttpServlet {
 			// articuloDAO.abrirManager();
 			// articuloDAO.iniciarTransaccion();
 
-			Articulo articulo = articuloDAO.findById(id);
-			ArticuloCantidad orden = new ArticuloCantidad(articulo.getCodigoArticulo(), articulo.getNombre(), articulo.getDescripcion(), articulo.getImagen(), articulo.getPrecio(),
-					articulo.getStock(), cantidad);
+			ArticuloStock articulo = articuloStockDAO.findById(id);
+			ArticuloCantidad orden = ProductoFactory.getArticuloCantidad(articulo, cantidad);
 			carritoDAO.insert(orden);
 			// daoManager.iniciarTransaccion();
 			// articuloDAO.restarCantidad(articulo, cantidad);
@@ -98,7 +98,7 @@ public class Catalogo extends HttpServlet {
 			id = Long.parseLong(request.getParameter("id"));
 			// articuloDAO.abrirManager();
 
-			Articulo art = articuloDAO.findById(id);
+			ArticuloStock art = articuloStockDAO.findById(id);
 			session.setAttribute("articulo", art);
 			// articuloDAO.cerrarManager();
 			daoManager.cerrar();

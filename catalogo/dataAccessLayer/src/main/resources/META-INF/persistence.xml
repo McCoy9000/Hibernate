@@ -11,7 +11,7 @@
 	<class>pojos.Direccion</class>
 	<class>pojos.Imagen</class>
 	<class>pojos.Empresa</class>  
-    <class>pojos.Articulo</class>
+    <class>pojos.ArticuloStock</class>
     <class>pojos.Rol</class>
     <class>pojos.ArticuloCantidad</class>
     <class>pojos.ArticuloVendido</class>

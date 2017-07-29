@@ -14,12 +14,12 @@ import javax.servlet.annotation.WebListener;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
-import pojos.Articulo;
+import pojos.ArticuloStock;
 import pojos.Factura;
 import pojos.Imagen;
 import pojos.Rol;
 import pojos.Usuario;
-import dataAccessLayer.ArticuloDAO;
+import dataAccessLayer.ArticuloStockDAO;
 import dataAccessLayer.DAOManagerHibernate;
 import dataAccessLayer.FacturaDAO;
 import dataAccessLayer.RolDAO;
@@ -45,7 +45,7 @@ public class Inicio implements ServletContextListener {
 		PropertyConfigurator.configure(Inicio.class.getClassLoader().getResource("log4j.properties"));
 
 		// UsuarioDAO usuarioDAO = UsuarioDAOFactory.getUsuarioDAO();
-		// ArticuloDAO articuloDAO = ArticuloDAOFactory.getArticuloDAO();
+		// ArticuloStockDAO articuloDAO = ArticuloStockDAOFactory.getArticuloDAO();
 		// DireccionDAO direccionDAO = DireccionDAOFactory.getDireccionDAO();
 		// EmpresaDAO empresaDAO = EmpresaDAOFactory.getEmpresaDAO();
 		// ImagenDAO imagenDAO = ImagenDAOFactory.getImagenDAO();
@@ -68,7 +68,7 @@ public class Inicio implements ServletContextListener {
 		daoManager.abrir();
 		RolDAO rolDAO = daoManager.getRolDAO();
 		UsuarioDAO usuarioDAO = daoManager.getUsuarioDAO();
-		ArticuloDAO articuloDAO = daoManager.getArticuloDAO();
+		ArticuloStockDAO articuloStockDAO = daoManager.getArticuloStockDAO();
 		FacturaDAO facturaDAO = daoManager.getFacturaDAO();
 
 		daoManager.iniciarTransaccion();
@@ -98,15 +98,15 @@ public class Inicio implements ServletContextListener {
 		// usuarioDAO.iniciarTransaccion();
 		usuarioDAO.insert(new Usuario("admin", "admin", "admin@admin.com", "admin", admin, rolDAO.findByName("Usuario")));
 		log.info("Creado el usuario admin");
-		articuloDAO.insert(new Articulo("001", "Mustang", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
-		articuloDAO.insert(new Articulo("002", "Charger", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
-		articuloDAO.insert(new Articulo("003", "Challenger", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
-		articuloDAO.insert(new Articulo("004", "Ford GT", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
-		articuloDAO.insert(new Articulo("005", "Cobra", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
-		articuloDAO.insert(new Articulo("006", "Eldorado", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
+		articuloStockDAO.insert(new ArticuloStock("001", "Mustang", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
+		articuloStockDAO.insert(new ArticuloStock("002", "Charger", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
+		articuloStockDAO.insert(new ArticuloStock("003", "Challenger", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
+		articuloStockDAO.insert(new ArticuloStock("004", "Ford GT", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
+		articuloStockDAO.insert(new ArticuloStock("005", "Cobra", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
+		articuloStockDAO.insert(new ArticuloStock("006", "Eldorado", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
 		log.info("Creados 6 productos de prueba");
 		// usuarioDAO.terminarTransaccion();
-		application.setAttribute("catalogo", articuloDAO.findAll());
+		application.setAttribute("catalogo", articuloStockDAO.findAll());
 		log.info("Guardado el catalogo en application");
 		Factura.setSiguienteFactura(facturaDAO.getMaxId());
 		log.info("Registrado el último número de factura: " + Factura.getSiguienteFactura());

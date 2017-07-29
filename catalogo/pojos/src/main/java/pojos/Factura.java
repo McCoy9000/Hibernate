@@ -56,7 +56,6 @@ public class Factura implements Serializable {
 		this.numeroFactura = numeroFactura;
 		this.usuario = usuario;
 		this.fecha = fecha;
-		siguienteFactura++;
 	}
 
 	public Factura(Usuario usuario, LocalDate fecha) {

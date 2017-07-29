@@ -23,7 +23,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 
 import recursos.Constantes;
-import dataAccessLayer.ArticuloDAO;
+import dataAccessLayer.ArticuloStockDAO;
 import dataAccessLayer.DAOManagerHibernate;
 
 @WebServlet("/admin/imagenarticulo")
@@ -44,9 +44,9 @@ public class ImagenArticulo extends HttpServlet {
 		session.removeAttribute("errorImagen");
 
 		DAOManagerHibernate daomanager = new DAOManagerHibernate();
-//		ArticuloDAO articuloDAO = (ArticuloDAO) application.getAttribute("articuloDAO");
+//		ArticuloStockDAO articuloDAO = (ArticuloStockDAO) application.getAttribute("articuloDAO");
 //		articuloDAO.abrirManager();
-		ArticuloDAO articuloDAO = daomanager.getArticuloDAO();
+		ArticuloStockDAO articuloDAO = daomanager.getArticuloStockDAO();
 		daomanager.abrir();
 		daomanager.iniciarTransaccion();
 		application.setAttribute("catalogo", articuloDAO.findAll());

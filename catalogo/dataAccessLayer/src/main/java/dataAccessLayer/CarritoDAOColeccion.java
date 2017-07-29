@@ -28,7 +28,11 @@ public class CarritoDAOColeccion implements CarritoDAO {
 
 	@Override
 	public long insert(ArticuloCantidad articulo) {
-		carrito.getListaArticulos().put(articulo.getId(), articulo);
+		if(carrito.getListaArticulos().containsKey(articulo.getId())) {
+			carrito.getListaArticulos().get(articulo.getId()).setCantidad(carrito.getListaArticulos().get(articulo.getId()).getCantidad().add(articulo.getCantidad()));
+		} else {
+			carrito.getListaArticulos().put(articulo.getId(), articulo);
+		}
 		return articulo.getId();
 	}
 
@@ -39,12 +43,13 @@ public class CarritoDAOColeccion implements CarritoDAO {
 	@Override
 	public void delete(ArticuloCantidad articulo) {
 		long id = articulo.getId();
-		carrito.getListaArticulos().remove(id);
+		this.delete(id);
 	}
 
 	@Override
 	public void delete(long id) {
-		carrito.getListaArticulos().remove(id);
+		ArticuloCantidad articulo = carrito.getListaArticulos().get(id);
+		articulo.setCantidad(articulo.getCantidad().subtract(BigInteger.ONE));;
 
 	}
 
@@ -99,10 +104,10 @@ public class CarritoDAOColeccion implements CarritoDAO {
 
 	public BigInteger getTotalArticulos() {
 		BigInteger totalArticulos = BigInteger.ZERO;
+		if(carrito.getListaArticulos().keySet().size() > 0)
 		for (ArticuloCantidad ac : this.findAll()) {
 			totalArticulos = totalArticulos.add(ac.getCantidad());
 		}
-
 		return totalArticulos;
 	}
 

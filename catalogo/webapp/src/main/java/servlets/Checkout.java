@@ -38,7 +38,7 @@ public class Checkout extends HttpServlet {
 
 		String op = request.getParameter("op");
 
-		// ArticuloDAO articuloDAO = (ArticuloDAO) application.getAttribute("productos");
+		// ArticuloStockDAO articuloDAO = (ArticuloStockDAO) application.getAttribute("productos");
 		CarritoDAO carritoDAO = (CarritoDAO) session.getAttribute("carritoDAO");
 		// articuloDAO.abrirManager();
 		DAOManagerHibernate daomanager = new DAOManagerHibernate();
@@ -122,14 +122,14 @@ public class Checkout extends HttpServlet {
 			try {
 				id = Long.parseLong(request.getParameter("id"));
 			} catch (NumberFormatException nfe) {
-				request.getRequestDispatcher("/WEB-INF/vistas/checkout.jsp").forward(request, response);
+				request.getRequestDispatcher("/catalogo").forward(request, response);
 				break;
 			}
-
+			
 			ArticuloCantidad articulo = carritoDAO.findById(id);
 
-			if (articulo != null) {
-				carritoDAO.delete(articulo);
+			if (carritoDAO.validar(articulo)) {
+				carritoDAO.delete(id);
 			}
 			daomanager.cerrar();
 			session.setAttribute("carrito", CarritoDAOFactory.getCarritoDAO());
@@ -141,7 +141,8 @@ public class Checkout extends HttpServlet {
 				request.getRequestDispatcher("/catalogo").forward(request, response);
 				break;
 			}
-
+			request.getRequestDispatcher("/WEB-INF/vistas/checkout.jsp").forward(request, response);
+			break;
 		default:
 			daomanager.cerrar();
 			request.getRequestDispatcher("/WEB-INF/vistas/checkout.jsp").forward(request, response);
