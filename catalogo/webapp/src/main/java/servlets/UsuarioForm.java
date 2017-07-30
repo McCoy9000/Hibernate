@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import pojos.Rol;
 import pojos.Usuario;
 import recursos.Constantes;
+import dataAccessLayer.DAOManagerHibernate;
 import dataAccessLayer.RolDAO;
 import dataAccessLayer.UsuarioDAO;
 import encriptacion.Encriptador;
@@ -40,9 +41,12 @@ public class UsuarioForm extends HttpServlet {
 
 		session.removeAttribute("errorUsuario");
 
-		UsuarioDAO usuarioDAO = (UsuarioDAO) application.getAttribute("usuarioDAO");
-		RolDAO rolDAO = (RolDAO) application.getAttribute("rolDAO");
-
+		DAOManagerHibernate daoManager = new DAOManagerHibernate();
+		daoManager.abrir();
+		UsuarioDAO usuarioDAO = daoManager.getUsuarioDAO();
+		RolDAO rolDAO = daoManager.getRolDAO();
+		
+		
 		String op = request.getParameter("opform");
 
 		Usuario usuario;
@@ -107,13 +111,14 @@ public class UsuarioForm extends HttpServlet {
 		} else {
 			apellidos = request.getParameter("apellidos");
 		}
-		rolDAO.abrirManager();
+		
 		Rol rol = rolDAO.findByName("Usuario");
 
 		RequestDispatcher rutaListado = request.getRequestDispatcher(Constantes.RUTA_SERVLET_LISTADO_USUARIO);
 
 		if (op == null) {
 			usuario = new Usuario(nombre, apellidos, email, username, password, rol);
+			daoManager.cerrar();
 			session.removeAttribute("errorUsuario");
 			request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_USUARIO + "?op=alta").forward(request, response);
 		} else {
@@ -127,19 +132,19 @@ public class UsuarioForm extends HttpServlet {
 				if (password != null && password != "" && password.equals(password2)) {
 					if (!usuarioDAO.validarNombre(usuario)) {
 						usuarioDAO.insert(usuario);
-						rolDAO.cerrarManager();
+						daoManager.cerrar();
 						session.removeAttribute("errorUsuario");
 						log.info("Usuario " + usuario.getUsername() + " dado de alta");
 						session.removeAttribute("errorUsuario");
 						rutaListado.forward(request, response);
 					} else {
-						rolDAO.cerrarManager();
+						daoManager.cerrar();
 						session.setAttribute("errorUsuario", "El usuario ya existe");
 						request.setAttribute("usuario", usuario);
 						request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_USUARIO + "?op=alta").forward(request, response);
 					}
 				} else {
-					rolDAO.cerrarManager();
+					daoManager.cerrar();
 					session.setAttribute("errorUsuario", "Las contraseñas deben ser iguales");
 					request.setAttribute("usuario", usuario);
 					request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_USUARIO + "?op=alta").forward(request, response);
@@ -147,20 +152,19 @@ public class UsuarioForm extends HttpServlet {
 				break;
 
 			case "modificar":
+				daoManager.iniciarTransaccion();
 				usuario = usuarioDAO.findById(id);
 				if (!("admin").equals(usuario.getUsername())) {
-					rolDAO.iniciarTransaccion();
 					usuario.setUsername(username);
 					usuario.setPassword(password2);
 					usuario.setEmail(email);
 					usuario.setNombre(nombre);
 					usuario.setApellidos(apellidos);
 					usuario.setRol(rol);
-					usuarioDAO.update(usuario);
-					rolDAO.terminarTransaccion();
-					rolDAO.cerrarManager();
+					daoManager.terminarTransaccion();
+					daoManager.cerrar();
 				} else {
-					rolDAO.cerrarManager();
+					daoManager.cerrar();
 					session.setAttribute("errorUsuario", "Por el momento no es posible modificar el usuario 'admin'");
 					request.setAttribute("usuario", usuario);
 					request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_USUARIO + "?op=modificar").forward(request, response);
@@ -168,24 +172,24 @@ public class UsuarioForm extends HttpServlet {
 				break;
 
 			case "borrar":
+				daoManager.iniciarTransaccion();
 				usuario = usuarioDAO.findById(id);
 				if (!("admin").equals(usuario.getUsername())) {
-					rolDAO.iniciarTransaccion();
 					usuarioDAO.delete(id);
-					rolDAO.terminarTransaccion();
-					rolDAO.cerrarManager();
+					daoManager.terminarTransaccion();
+					daoManager.cerrar();
 					session.removeAttribute("errorUsuario");
 					rutaListado.forward(request, response);
 					break;
 				} else {
-					rolDAO.cerrarManager();
+					daoManager.cerrar();
 					session.setAttribute("errorUsuario", "Por el momento no es posible borrar el usuario 'admin'");
 					request.setAttribute("usuario", usuario);
 					request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_USUARIO + "?op=borrar").forward(request, response);
 				}
 				break;
 			default:
-				rolDAO.cerrarManager();
+				daoManager.cerrar();
 				session.removeAttribute("errorUsuario");
 				rutaListado.forward(request, response);
 			}

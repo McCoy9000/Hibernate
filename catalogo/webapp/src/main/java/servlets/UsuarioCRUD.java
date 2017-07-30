@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import pojos.Usuario;
 import recursos.Constantes;
+import dataAccessLayer.DAOManagerHibernate;
 import dataAccessLayer.UsuarioDAO;
 
 @WebServlet("/admin/usuariocrud")
@@ -28,8 +29,10 @@ public class UsuarioCRUD extends HttpServlet {
 
 		ServletContext application = getServletContext();
 
-		UsuarioDAO usuarioDAO = (UsuarioDAO) application.getAttribute("usuarios");
-
+		DAOManagerHibernate daoManager = new DAOManagerHibernate();
+		daoManager.abrir();
+		UsuarioDAO usuarioDAO = daoManager.getUsuarioDAO();
+		
 		HttpSession session = request.getSession();
 		// Borrado de errores en sesión por si llegan aquí desde los formularios CRUD
 		session.removeAttribute("errorProducto");
@@ -40,9 +43,8 @@ public class UsuarioCRUD extends HttpServlet {
 		String op = request.getParameter("op");
 
 		if (op == null) {
-			usuarioDAO.abrirManager();
 			List<Usuario> usuarios = usuarioDAO.findAll();
-			usuarioDAO.cerrarManager();
+			daoManager.cerrar();
 			application.setAttribute("usuarios", usuarios);
 			request.getRequestDispatcher(Constantes.RUTA_LISTADO_USUARIO).forward(request, response);
 			return;
@@ -61,14 +63,15 @@ public class UsuarioCRUD extends HttpServlet {
 				request.getRequestDispatcher(Constantes.RUTA_LISTADO_USUARIO).forward(request, response);
 				break;
 			}
-			usuarioDAO.abrirManager();
+			
 			usuario = usuarioDAO.findById(id);
-			usuarioDAO.cerrarManager();
 			request.setAttribute("usuario", usuario);
 		case "alta":
+			daoManager.cerrar();;
 			request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_USUARIO).forward(request, response);
 			break;
 		default:
+			daoManager.cerrar();
 			request.getRequestDispatcher(Constantes.RUTA_LISTADO_USUARIO).forward(request, response);
 		}
 	}

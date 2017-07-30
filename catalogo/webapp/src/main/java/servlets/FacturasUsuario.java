@@ -43,6 +43,7 @@ public class FacturasUsuario extends HttpServlet {
 //		FacturaDAO facturaDAO = (FacturaDAO) application.getAttribute("facturaDAO");
 //		CompradorDAO compradorDAO = (CompradorDAO) application.getAttribute("compradorDAO");
 		DAOManagerHibernate daomanager = new DAOManagerHibernate();
+		daomanager.abrir();
 		FacturaDAO facturaDAO = daomanager.getFacturaDAO();
 		CompradorDAO compradorDAO = daomanager.getCompradorDAO();
 		String op = request.getParameter("op");

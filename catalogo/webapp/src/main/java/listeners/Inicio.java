@@ -96,7 +96,7 @@ public class Inicio implements ServletContextListener {
 		admin = miEncriptador.encriptar(rawadmin);
 		// usuarioDAO.abrirManager();
 		// usuarioDAO.iniciarTransaccion();
-		usuarioDAO.insert(new Usuario("admin", "admin", "admin@admin.com", "admin", admin, rolDAO.findByName("Usuario")));
+		usuarioDAO.insert(new Usuario("admin", "admin", "admin@admin.com", "admin", admin, rolDAO.findByName("Administrador")));
 		log.info("Creado el usuario admin");
 		articuloStockDAO.insert(new ArticuloStock("001", "Mustang", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
 		articuloStockDAO.insert(new ArticuloStock("002", "Charger", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
