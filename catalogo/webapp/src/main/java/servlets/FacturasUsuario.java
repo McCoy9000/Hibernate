@@ -21,6 +21,7 @@ import recursos.Constantes;
 import dataAccessLayer.CompradorDAO;
 import dataAccessLayer.DAOManagerHibernate;
 import dataAccessLayer.FacturaDAO;
+import dataAccessLayer.UsuarioDAO;
 
 @WebServlet("/facturasusuario")
 public class FacturasUsuario extends HttpServlet {
@@ -40,12 +41,14 @@ public class FacturasUsuario extends HttpServlet {
 
 		Usuario usuario = (Usuario) session.getAttribute("usuario");
 
-//		FacturaDAO facturaDAO = (FacturaDAO) application.getAttribute("facturaDAO");
-//		CompradorDAO compradorDAO = (CompradorDAO) application.getAttribute("compradorDAO");
-		DAOManagerHibernate daomanager = new DAOManagerHibernate();
-		daomanager.abrir();
-		FacturaDAO facturaDAO = daomanager.getFacturaDAO();
-		CompradorDAO compradorDAO = daomanager.getCompradorDAO();
+		DAOManagerHibernate daoManager = new DAOManagerHibernate();
+		daoManager.abrir();
+		FacturaDAO facturaDAO = daoManager.getFacturaDAO();
+		CompradorDAO compradorDAO = daoManager.getCompradorDAO();
+		UsuarioDAO usuarioDAO = daoManager.getUsuarioDAO();
+		
+		usuario = usuarioDAO.findById(usuario.getId());
+		
 		String op = request.getParameter("op");
 
 		if (op == null) {
@@ -53,18 +56,15 @@ public class FacturasUsuario extends HttpServlet {
 			List<Factura> facturasUsuario = new ArrayList<Factura>();
 
 			if (usuario != null) {
-//				compradorDAO.abrirManager();
-				daomanager.abrir();
-				daomanager.iniciarTransaccion();
+				daoManager.iniciarTransaccion();
 				List<Comprador> compradores = compradorDAO.findByIdUsuario(usuario.getId());
-//				compradorDAO.cerrarManager();
-				daomanager.terminarTransaccion();
-				daomanager.cerrar();
 				for (Comprador c : compradores) {
 					facturasUsuario.add(c.getFactura());
 				}
-
+				daoManager.terminarTransaccion();
 			}
+
+			daoManager.cerrar();
 			session.setAttribute("facturasUsuario", facturasUsuario);
 			request.getRequestDispatcher(Constantes.RUTA_LISTADO_FACTURA_USUARIOS).forward(request, response);
 			return;
@@ -90,9 +90,7 @@ public class FacturasUsuario extends HttpServlet {
 					return;
 				}
 				
-//				facturaDAO.abrirManager();
-				daomanager.abrir();
-				daomanager.iniciarTransaccion();
+				daoManager.iniciarTransaccion();
 				factura = facturaDAO.findById(id);
 
 				articulosFactura = factura.getArticulos();
@@ -102,9 +100,8 @@ public class FacturasUsuario extends HttpServlet {
 				precioFactura = facturaDAO.getPrecioTotal(id);
 
 				usuarioFactura = factura.getUsuario();
-//				facturaDAO.cerrarManager();
-				daomanager.terminarTransaccion();
-				daomanager.cerrar();
+				daoManager.terminarTransaccion();
+				daoManager.cerrar();
 				session.setAttribute("factura", factura);
 				session.setAttribute("articulosFactura", articulosFactura);
 				session.setAttribute("ivaFactura", ivaFactura);

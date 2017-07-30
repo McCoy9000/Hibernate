@@ -44,13 +44,10 @@ public class ImagenArticulo extends HttpServlet {
 		session.removeAttribute("errorImagen");
 
 		DAOManagerHibernate daomanager = new DAOManagerHibernate();
-//		ArticuloStockDAO articuloDAO = (ArticuloStockDAO) application.getAttribute("articuloDAO");
-//		articuloDAO.abrirManager();
-		ArticuloStockDAO articuloDAO = daomanager.getArticuloStockDAO();
 		daomanager.abrir();
+		ArticuloStockDAO articuloDAO = daomanager.getArticuloStockDAO();
 		daomanager.iniciarTransaccion();
 		application.setAttribute("catalogo", articuloDAO.findAll());
-//		articuloDAO.cerrarManager();
 		daomanager.terminarTransaccion();
 		daomanager.cerrar();
 		String realPath = application.getRealPath("/img/");

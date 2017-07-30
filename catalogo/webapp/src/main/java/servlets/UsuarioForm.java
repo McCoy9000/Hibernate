@@ -113,12 +113,16 @@ public class UsuarioForm extends HttpServlet {
 		}
 		
 		Rol rol = rolDAO.findByName("Usuario");
+		if (("Administrador").equals(request.getParameter("rol"))) {
+			rol = rolDAO.findByName("Administrador");
+		}
 
 		RequestDispatcher rutaListado = request.getRequestDispatcher(Constantes.RUTA_SERVLET_LISTADO_USUARIO);
 
 		if (op == null) {
 			usuario = new Usuario(nombre, apellidos, email, username, password, rol);
 			daoManager.cerrar();
+			request.setAttribute("usuario", usuario);
 			session.removeAttribute("errorUsuario");
 			request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_USUARIO + "?op=alta").forward(request, response);
 		} else {

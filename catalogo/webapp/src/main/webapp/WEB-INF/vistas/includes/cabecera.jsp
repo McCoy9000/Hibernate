@@ -87,9 +87,9 @@
 					<li><a href="${applicationScope.rutaBase}/admin/usuarioform">Alta</a></li>
 				<li role="separator" class="divider"></li>
 				<li class="dropdown-header">PRODUCTOS</li>
-					<li><a href="${applicationScope.rutaBase}/admin/productocrud">Mantenimiento</a></li>
-					<li><a href="${applicationScope.rutaBase}/admin/productoform">Alta</a></li>
-					<li><a href="${applicationScope.rutaBase}/admin/imagenproducto?op=subir">Subir imagen</a></li>
+					<li><a href="${applicationScope.rutaBase}/admin/articulocrud">Mantenimiento</a></li>
+					<li><a href="${applicationScope.rutaBase}/admin/articuloform">Alta</a></li>
+					<li><a href="${applicationScope.rutaBase}/admin/imagenarticulo?op=subir">Subir imagen</a></li>
 				<li role="separator" class="divider"></li>
 				<li class="dropdown-header">FACTURAS</li>
 					<li><a href="${applicationScope.rutaBase}/admin/facturacrud">Mantenimiento</a></li>

@@ -23,10 +23,10 @@
 						<td style="text-align:center; vertical-align: middle;"><object data="${applicationScope.rutaBase}/img/${producto.imagen.url}" height="128" type="image/png">
 							<img src="${applicationScope.rutaBase}/img/0.jpg" class="img-thumbnail" height="128" width="128"/></object></td>
 						<td style="text-align:center; vertical-align: middle;">${producto.precio} €</td>
-						<td style="text-align:center; vertical-align: middle;">${producto.cantidad}</td>
+						<td style="text-align:center; vertical-align: middle;">${producto.stock}</td>
 						<td style="text-align:center; vertical-align: middle;">
-							<a class="btn btn-success" href="${applicationScope.rutaBase}/admin/productocrud?op=modificar&id=${producto.id}">Modificar</a>
-							<a class="btn btn-danger" href="${applicationScope.rutaBase}/admin/productocrud?op=borrar&id=${producto.id}">Borrar</a>
+							<a class="btn btn-success" href="${applicationScope.rutaBase}/admin/articulocrud?op=modificar&id=${producto.id}">Modificar</a>
+							<a class="btn btn-danger" href="${applicationScope.rutaBase}/admin/articulocrud?op=borrar&id=${producto.id}">Borrar</a>
 						</td>
 					</tr>
 				</c:forEach>

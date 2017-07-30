@@ -21,7 +21,7 @@ import recursos.Constantes;
 import dataAccessLayer.ArticuloStockDAO;
 import dataAccessLayer.DAOManagerHibernate;
 
-@WebServlet("/admin/productoform")
+@WebServlet("/admin/articuloform")
 public class ArticuloForm extends HttpServlet {
 
 	private static final long serialVersionUID = 3997952646417125446L;

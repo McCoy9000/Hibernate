@@ -20,7 +20,7 @@
 			<label for="username">Nombre de usuario <span style="color:red">*</span></label> 
 			
 			<input id="username" name="username" class="form-control"
-			  required="required" placeholder="Nombre de usuario" value="${usuario.username}" 
+			  required="required" placeholder="Username" value="${usuario.username}" 
 			  
 			  <c:if test="${param.op == 'borrar'}">
 			  	readonly="readonly"
@@ -46,9 +46,9 @@
 			required="required"
 			</c:if>
 		>
-			<label for="email">Email <span style="color:red">*</span></label> 
-			<input type="text" id="email" class="form-control"
-				name="email" placeholder="Email"/>
+			<label for="password2">Repita la contraseña <span style="color:red">*</span></label> 
+			<input type="password" id="password2" class="form-control"
+				name="password2" placeholder="Contraseña"/>
 		</fieldset>
 		<fieldset class="form-group" <c:if test="${param.op == 'borrar'}">
 			style="display:none;"
@@ -57,9 +57,9 @@
 			required="required"
 			</c:if>
 		>
-			<label for="password2">Repita la contraseña <span style="color:red">*</span></label> 
-			<input type="password" id="password2" class="form-control"
-				name="password2" placeholder="Contraseña"/>
+			<label for="email">Email</label> 
+			<input type="text" id="email" class="form-control"
+				name="email" placeholder="myemail@myemail.mail"/>
 		</fieldset>
 		<fieldset class="form-group" <c:if test="${param.op == 'borrar'}">
 			style="display:none;"
@@ -85,7 +85,7 @@
 			</c:if>
 		>
 			<label for="rol">Permiso de administrador</label> 
-			<input type="checkbox" id="rol" name="rol" value="Usuario" />
+			<input type="checkbox" id="rol" name="rol" value="Administrador" />
 		</fieldset>
 		<fieldset class="form-group">
 			<input type="submit" class="btn btn-default" style="background:#ECC007; border:none;" value="${fn:toUpperCase(param.op)}" 

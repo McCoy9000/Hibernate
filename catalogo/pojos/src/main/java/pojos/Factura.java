@@ -34,7 +34,7 @@ public class Factura implements Serializable {
 	@OneToOne(cascade = { CascadeType.ALL })
 	@JoinColumn(name = "id_comprador")
 	private Comprador comprador;
-	@OneToMany(mappedBy = "factura", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "factura", cascade = CascadeType.ALL)
 	private List<ArticuloVendido> articulos = new ArrayList<ArticuloVendido>();
 	@Column(name = "fecha")
 	private LocalDate fecha;
