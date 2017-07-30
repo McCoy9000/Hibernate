@@ -18,7 +18,6 @@ import pojos.Usuario;
 import recursos.Constantes;
 import dataAccessLayer.DAOManagerHibernate;
 import dataAccessLayer.FacturaDAO;
-import dataAccessLayer.FacturaDAOFactory;
 
 @WebServlet("/admin/facturacrud")
 public class FacturaCRUD extends HttpServlet {
@@ -33,10 +32,9 @@ public class FacturaCRUD extends HttpServlet {
 
 		ServletContext application = getServletContext();
 
-//		FacturaDAO facturaDAO = (FacturaDAO) application.getAttribute("facturaDAO");
-		DAOManagerHibernate daomanager = new DAOManagerHibernate();
-		FacturaDAO facturaDAO = daomanager.getFacturaDAO();
-		daomanager.abrir();
+		DAOManagerHibernate daoManager = new DAOManagerHibernate();
+		daoManager.abrir();
+		FacturaDAO facturaDAO = daoManager.getFacturaDAO();
 
 		HttpSession session = request.getSession();
 
@@ -46,11 +44,10 @@ public class FacturaCRUD extends HttpServlet {
 
 		if (op == null) {
 
-//			facturaDAO.abrirManager();
-			daomanager.iniciarTransaccion();
+			daoManager.iniciarTransaccion();
 			List<Factura> facturas = facturaDAO.findAll();
-//			facturaDAO.cerrarManager();
-			daomanager.terminarTransaccion();
+			daoManager.terminarTransaccion();
+			daoManager.cerrar();
 			application.setAttribute("facturas", facturas);
 
 			request.getRequestDispatcher(Constantes.RUTA_LISTADO_FACTURA).forward(request, response);
@@ -72,27 +69,24 @@ public class FacturaCRUD extends HttpServlet {
 				try {
 					id = Long.parseLong(request.getParameter("id"));
 				} catch (Exception e) {
-					daomanager.cerrar();
+					daoManager.cerrar();
 					session.setAttribute("errorFactura", "Error al recuperar la factura. Inténtelo de nuevo");
 					request.getRequestDispatcher(Constantes.RUTA_ERROR_FACTURA).forward(request, response);
 					return;
 				}
-//				facturaDAO.abrirManager();
-//				facturaDAO.iniciarTransaccion();
-				daomanager.iniciarTransaccion();
+				daoManager.iniciarTransaccion();
 				factura = facturaDAO.findById(id);
 
 				productosFactura = factura.getArticulos();
-
+				productosFactura.size();
+				
 				ivaFactura = facturaDAO.getIvaTotal(id);
 
 				precioFactura = facturaDAO.getPrecioTotal(id);
 
 				usuarioFactura = factura.getUsuario();
-//				facturaDAO.terminarTransaccion();
-//				facturaDAO.cerrarManager();
-				daomanager.terminarTransaccion();
-				daomanager.cerrar();
+				daoManager.terminarTransaccion();
+				daoManager.cerrar();
 				session.setAttribute("factura", factura);
 				session.setAttribute("productosFactura", productosFactura);
 				session.setAttribute("ivaFactura", ivaFactura);
@@ -101,7 +95,7 @@ public class FacturaCRUD extends HttpServlet {
 				request.getRequestDispatcher(Constantes.RUTA_FACTURA_FACTURA).forward(request, response);
 				break;
 			case "devolucion":
-				daomanager.cerrar();
+				daoManager.cerrar();
 				request.getRequestDispatcher("/WEB-INF/vistas/devolucionform.jsp").forward(request, response);
 				break;
 

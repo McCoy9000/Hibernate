@@ -41,10 +41,10 @@ public class Imagen implements Serializable {
 
 	}
 
-	public Imagen(String nombre) {
-		this.nombre = nombre;
+	public Imagen(String url) {
+		this.url = url;
 	}
-
+	
 	public long getId() {
 		return id;
 	}

@@ -44,6 +44,11 @@ public class UsuarioCRUD extends HttpServlet {
 
 		if (op == null) {
 			List<Usuario> usuarios = usuarioDAO.findAll();
+			for (Usuario u : usuarios) {
+				if (u.getRol().getId() == 1) {
+					usuarios.remove(u);
+				}
+			}
 			daoManager.cerrar();
 			application.setAttribute("usuarios", usuarios);
 			request.getRequestDispatcher(Constantes.RUTA_LISTADO_USUARIO).forward(request, response);

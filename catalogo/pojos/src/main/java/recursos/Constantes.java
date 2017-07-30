@@ -32,5 +32,5 @@ public class Constantes {
 	public static final String RUTA_ERROR_FACTURA = "/WEB-INF/errorfactura.jsp";
 
 	public static final String 	RUTA_LISTADO_FACTURA_USUARIOS = "/WEB-INF/vistas/facturasusuario.jsp";
-	
+	public static final String RUTA_DEVOLUCION = "/WEB-INF/vistas/devolucionform.jsp";
 }

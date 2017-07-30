@@ -22,9 +22,12 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 
+import pojos.ArticuloStock;
+import pojos.Imagen;
 import recursos.Constantes;
 import dataAccessLayer.ArticuloStockDAO;
 import dataAccessLayer.DAOManagerHibernate;
+import dataAccessLayer.ImagenDAO;
 
 @WebServlet("/admin/imagenarticulo")
 public class ImagenArticulo extends HttpServlet {
@@ -49,18 +52,19 @@ public class ImagenArticulo extends HttpServlet {
 		daomanager.iniciarTransaccion();
 		application.setAttribute("catalogo", articuloDAO.findAll());
 		daomanager.terminarTransaccion();
-		daomanager.cerrar();
 		String realPath = application.getRealPath("/img/");
 		String op = request.getParameter("op");
 
 		String codigoArticulo = null;
 		if (("subir").equals(op)) {
+			daomanager.cerrar();
 			request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_IMAGEN_PRODUCTOS).forward(request, response);
 			return;
 		} else {
 			try {
 				List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
 				if (items == null) {
+					daomanager.cerrar();
 					request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_IMAGEN_PRODUCTOS + "?op=subir").forward(request, response);
 					return;
 				} else {
@@ -88,6 +92,11 @@ public class ImagenArticulo extends HttpServlet {
 								// método sin errores.
 								outStream.write(buffer);
 								log.info("Imagen cargada con éxito.");
+								ImagenDAO imagenDAO = daomanager.getImagenDAO();
+								Imagen imagen = new Imagen("/img/" + codigoArticulo + ".jpg");
+								imagenDAO.insert(imagen);
+								ArticuloStock articulo = articuloDAO.findByCodigo(codigoArticulo);
+								articulo.setImagen(imagen);
 							} catch (FileNotFoundException fnfe) {
 								fnfe.printStackTrace();
 								log.info("Error al sobreescribir el archivo de imagen. Esperando al garbage collector.");
@@ -112,6 +121,7 @@ public class ImagenArticulo extends HttpServlet {
 				e.printStackTrace();
 				return;
 			}
+			daomanager.cerrar();
 			request.getRequestDispatcher(Constantes.RUTA_LISTADO_PRODUCTO).forward(request, response);
 		}
 	}

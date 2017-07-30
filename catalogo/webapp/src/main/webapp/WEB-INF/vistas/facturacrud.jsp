@@ -18,7 +18,7 @@
 			<tbody>
 				<c:forEach items="${applicationScope.facturas}" var="factura">
 					<tr>
-						<td>${factura.numero_factura}</td>
+						<td>${factura.numeroFactura}</td>
 						<td>${factura.comprador.nombre} ${factura.comprador.apellidos}</td>
 						<td>${factura.fecha}</td>
 						<td>

@@ -6,7 +6,6 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.NoSuchPaddingException;
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -36,9 +35,7 @@ public class Login extends HttpServlet {
 
 		// RECOPILACIÓN DE LOS OBJETOS A ANALIZAR Y UTILIZAR
 		HttpSession session = request.getSession();
-		ServletContext application = request.getServletContext();
 
-		// UsuarioDAO usuarioDAO = (UsuarioDAO) application.getAttribute("usuarioDAO");
 		DAOManagerHibernate daoManager = new DAOManagerHibernate();
 		daoManager.abrir();
 		UsuarioDAO usuarioDAO = daoManager.getUsuarioDAO();
@@ -78,12 +75,11 @@ public class Login extends HttpServlet {
 		boolean yaLogueado = ("si").equals(session.getAttribute("logueado"));
 		boolean sinDatos = username == null || username == "" || password == "" || password == null;
 		daoManager.iniciarTransaccion();
-		log.info(username);
 		boolean uInexistente = !usuarioDAO.validarNombre(usuario);
 		boolean esValido = usuarioDAO.validar(usuario);
 		daoManager.terminarTransaccion();
 		RequestDispatcher login = request.getRequestDispatcher(Constantes.RUTA_LOGIN);
-		RequestDispatcher catalogo = request.getRequestDispatcher(Constantes.RUTA_CATALOGO);
+		RequestDispatcher catalogo = request.getRequestDispatcher("/catalogo");
 
 		if (quiereSalir) {
 			// Se invalida la sesión y se le envía al catálogo que es el punto de partida de la aplicación
@@ -117,9 +113,7 @@ public class Login extends HttpServlet {
 		}
 		if (esValido) {
 			daoManager.iniciarTransaccion();
-			// usuarioDAO.abrirManager();
 			usuario = usuarioDAO.findByName(username);
-			// usuarioDAO.cerrarManager();
 			daoManager.terminarTransaccion();
 			daoManager.cerrar();
 			session.removeAttribute("errorLogin");
