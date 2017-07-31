@@ -60,6 +60,14 @@ public abstract class Producto implements Serializable {
 		this.imagen = imagen;
 		this.precio = precio;
 	}
+	
+	public Producto(String codigoArticulo, String nombre, String descripcion, BigDecimal precio) {
+		this.codigoArticulo = codigoArticulo;
+		this.nombre = nombre;
+		this.imagen = new Imagen(codigoArticulo, "/img/" + codigoArticulo + ".jpg");
+		this.descripcion = descripcion;
+		this.precio = precio;
+	}
 
 	public long getId() {
 		return id;

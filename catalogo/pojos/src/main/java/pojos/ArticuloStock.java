@@ -25,6 +25,11 @@ public class ArticuloStock extends Producto implements Serializable {
 		this.stock = stock;
 	}
 
+	public ArticuloStock(String codigoArticulo, String nombre, String descripcion, BigDecimal precio, BigInteger stock) {
+		super(codigoArticulo, nombre, descripcion, precio);
+		this.stock = stock;
+	}
+
 	public BigInteger getStock() {
 		return stock;
 	}

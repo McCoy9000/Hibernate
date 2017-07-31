@@ -47,7 +47,13 @@ public class FacturasUsuario extends HttpServlet {
 		CompradorDAO compradorDAO = daoManager.getCompradorDAO();
 		UsuarioDAO usuarioDAO = daoManager.getUsuarioDAO();
 		
-		usuario = usuarioDAO.findById(usuario.getId());
+		if(usuario != null) {
+			usuario = usuarioDAO.findById(usuario.getId());
+		} else {
+			daoManager.cerrar();
+			request.getRequestDispatcher(Constantes.RUTA_LOGIN).forward(request, response);
+			return;
+		}
 		
 		String op = request.getParameter("op");
 

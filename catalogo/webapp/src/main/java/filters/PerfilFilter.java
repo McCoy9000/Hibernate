@@ -19,7 +19,7 @@ import recursos.Constantes;
 				DispatcherType.REQUEST, 
 				DispatcherType.FORWARD
 		}
-					, urlPatterns = { "/usuarioperfil" })
+					, urlPatterns = { "/usuarioperfil", "/facturasusuario" })
 public class PerfilFilter implements Filter {
 
 public PerfilFilter() {

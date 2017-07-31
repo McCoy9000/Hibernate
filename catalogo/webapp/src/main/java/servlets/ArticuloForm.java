@@ -134,12 +134,10 @@ public class ArticuloForm extends HttpServlet {
 			cantidad = BigInteger.ONE;
 		}
 
-		Imagen imagen = null;
-
 		// Lógica del servlet según la opción elegida por el usuario y enviada por el navegador
 		// encapsulada en opform.
 		if (op == null) {
-			articulo = new ArticuloStock(codigoArticulo, nombre, descripcion, imagen, precio, cantidad);
+			articulo = new ArticuloStock(codigoArticulo, nombre, descripcion, precio, cantidad);
 			session.removeAttribute("errorProducto");
 			request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_PRODUCTO + "?op=alta").forward(request, response);
 			//TODO aquí arriba por qué declaro un artículo y porqué el forward con op alta
@@ -148,7 +146,7 @@ public class ArticuloForm extends HttpServlet {
 			switch (op) {
 			case "alta":
 
-				articulo = new ArticuloStock(codigoArticulo, nombre, descripcion, imagen, precio, cantidad);
+				articulo = new ArticuloStock(codigoArticulo, nombre, descripcion, precio, cantidad);
 
 				if (nombre == null || nombre == "") {
 					session.setAttribute("errorProducto", "Debes introducir un nombre de producto");
@@ -177,34 +175,36 @@ public class ArticuloForm extends HttpServlet {
 				break;
 			case "modificar":
 
-				// Aquí hay que declarar un nuevo producto con los datos recogidos del formulario. Como en el caso
-				// modificar, el campo groupId está deshabilitado y no lo envía, hay que extraerlo a través del id.
-				// Como el nombre se extrae del mismo campo, para este caso solicitamos el parametro "nombre".
 				DAOManagerHibernate daomanager = new DAOManagerHibernate();
 				daomanager.abrir();
 				ArticuloStockDAO articuloDAO = daomanager.getArticuloStockDAO();
 				daomanager.iniciarTransaccion();
 				articulo = articuloDAO.findById(id);
-				articulo.setCodigoArticulo(codigoArticulo);
-				articulo.setNombre(nombre);
-				articulo.setDescripcion(descripcion);
-				articulo.setImagen(imagen);
-				articulo.setPrecio(precio);
-
-				BigInteger nuevaCantidad = articulo.getStock().add(cantidad);
-
-				articulo.setStock(nuevaCantidad);
 				daomanager.terminarTransaccion();
-				daomanager.cerrar();
-
+				
 				if (nombre == null || nombre == "") {
+					
 					session.setAttribute("errorProducto", "Debes introducir un nombre de producto");
 					request.setAttribute("articulo", articulo);
 					request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_PRODUCTO + "?op=modificar").forward(request, response);
-				} else {
-					session.removeAttribute("errorProducto");
-					rutaListado.forward(request, response);
+					break;
 				}
+				// Aquí hay que declarar un nuevo producto con los datos recogidos del formulario. Como en el caso
+				// modificar, el campo groupId está deshabilitado y no lo envía, hay que extraerlo a través del id.
+				// Como el nombre se extrae del mismo campo, para este caso solicitamos el parametro "nombre".
+			
+				daomanager.iniciarTransaccion();
+				articulo.setCodigoArticulo(codigoArticulo);
+				articulo.setNombre(nombre);
+				articulo.setDescripcion(descripcion);
+				articulo.setPrecio(precio);
+				articulo.setStock(cantidad);
+				
+				daomanager.terminarTransaccion();
+				daomanager.cerrar();
+				 
+				session.removeAttribute("errorProducto");
+				rutaListado.forward(request, response);
 				break;
 			case "borrar":
 				DAOManagerHibernate daoman = new DAOManagerHibernate();

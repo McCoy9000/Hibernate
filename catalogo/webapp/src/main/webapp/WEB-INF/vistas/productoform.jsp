@@ -9,11 +9,14 @@
 <div class="row">
 <div class="col-md-6">
 	<form action="${applicationScope.rutaBase}/admin/articuloform" method="post">
-		<fieldset class="form-group" style="display:none;">
-			<label for="id">Id</label> 
+		<fieldset class="form-group"
+			<c:if test="${param.op == 'borrar' or param.op == 'alta'}">
+				style="display:none" disabled="disabled"
+			</c:if>>
+			<label for="codigoArticulo">Codigo de producto</label> 
 			
-			<input id="id" name="id" type="number" class="form-control"
-			  required="required"  value="${articulo.id}" readonly="readonly">
+			<input id="codigoArticulo" name="codigoArticulo" type="text" class="form-control"
+			  required="required"  value="${articulo.codigoArticulo} - ${articulo.nombre}" readonly="readonly">
 		</fieldset>
 		<fieldset class="form-group" 
 			<c:if test="${param.op == 'borrar' or param.op == 'modificar'}">
@@ -22,7 +25,7 @@
 			<label for="codigoArticulo">Codigo artículo <span style="color:red">*</span></label> 
 			<select id="codigoArticulo" name="codigoArticulo" class="form-control"
 				<c:if test="${param.op == 'modificar'}">
-					disabled="disabled"
+					; disabled = "disabled"
 			  	</c:if>
 			 >
 				<option>Nuevo grupo de productos</option>
@@ -61,7 +64,7 @@
 			</div>
 		</fieldset>
 		<fieldset class="form-group"
-			<c:if test="${param.op == 'modificar'}">
+			<c:if test="${param.op == 'borrar'}">
 				style="display:none;"
 			</c:if>>
 			<label for="cantidad">Cantidad</label>
@@ -79,7 +82,7 @@
 			
 			
 			<input type="hidden" name="opform" value="${param.op}" />
-			<input type="hidden" name="grupo" value="${articulo.codigoArticulo}" />
+			<input type="hidden" name="id" value="${articulo.id}" />
 		</fieldset>
 		
 	</form>

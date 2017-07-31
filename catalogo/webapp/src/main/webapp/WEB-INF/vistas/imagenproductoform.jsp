@@ -8,7 +8,7 @@
 <div class="container" style="margin-top:2em">
 <div class="row">
 <div class="col-md-6">
-	<form action="${applicationScope.rutaBase}/admin/imagenproducto" method="post" enctype="multipart/form-data">
+	<form action="${applicationScope.rutaBase}/admin/imagenarticulo" method="post" enctype="multipart/form-data">
 		
 		<fieldset class="form-group" 
 			<c:if test="${param.op == 'borrar'}">
@@ -18,7 +18,7 @@
 			<select id="codigoArticulo" name="codigoArticulo" class="form-control">
 				
 				<c:forEach items="${applicationScope.catalogo}" var="articulo">
-				<option <c:if test="${producto.codigoArticulo == grupo.groupId}">selected="selected"</c:if>>${grupo.codigoArticulo} - ${grupo.nombre}</option>
+				<option>${articulo.codigoArticulo} - ${articulo.nombre}</option>
 				</c:forEach>
 				
 			</select>

@@ -1,6 +1,7 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -44,11 +45,13 @@ public class UsuarioCRUD extends HttpServlet {
 
 		if (op == null) {
 			List<Usuario> usuarios = usuarioDAO.findAll();
-			for (Usuario u : usuarios) {
-				if (u.getRol().getId() == 1) {
-					usuarios.remove(u);
-				}
-			}
+			Iterator<Usuario> it = usuarios.iterator();
+			do {
+				Usuario usuario = it.next();
+				if (usuario.getRol().getId() == 3)
+					it.remove();;
+			} while (it.hasNext());
+
 			daoManager.cerrar();
 			application.setAttribute("usuarios", usuarios);
 			request.getRequestDispatcher(Constantes.RUTA_LISTADO_USUARIO).forward(request, response);

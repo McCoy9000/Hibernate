@@ -72,12 +72,12 @@ public class Inicio implements ServletContextListener {
 		admin = miEncriptador.encriptar(rawadmin);
 		usuarioDAO.insert(new Usuario("admin", "admin", "admin@admin.com", "admin", admin, rolDAO.findByName("Administrador")));
 		log.info("Creado el usuario admin");
-		articuloStockDAO.insert(new ArticuloStock("1", "Mustang", "Descripción", new Imagen("/img/1.jpg"), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
-		articuloStockDAO.insert(new ArticuloStock("2", "Charger", "Descripción", new Imagen("/img/2.jpg"), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
-		articuloStockDAO.insert(new ArticuloStock("3", "Challenger", "Descripción", new Imagen("/img/3.jpg"), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
-		articuloStockDAO.insert(new ArticuloStock("4", "Ford GT", "Descripción", new Imagen("/img/4.jpg"), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
-		articuloStockDAO.insert(new ArticuloStock("5", "Cobra", "Descripción", new Imagen("/img/5.jpg"), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
-		articuloStockDAO.insert(new ArticuloStock("6", "Eldorado", "Descripción", new Imagen("/img/6.jpg"), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
+		articuloStockDAO.insert(new ArticuloStock("1", "Mustang", "Descripción", new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
+		articuloStockDAO.insert(new ArticuloStock("2", "Charger", "Descripción", new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
+		articuloStockDAO.insert(new ArticuloStock("3", "Challenger", "Descripción", new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
+		articuloStockDAO.insert(new ArticuloStock("4", "Ford GT", "Descripción", new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
+		articuloStockDAO.insert(new ArticuloStock("5", "Cobra", "Descripción", new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
+		articuloStockDAO.insert(new ArticuloStock("6", "Eldorado", "Descripción", new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
 		log.info("Creados 6 productos de prueba");
 		// usuarioDAO.terminarTransaccion();
 		application.setAttribute("catalogo", articuloStockDAO.findAll());

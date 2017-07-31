@@ -15,10 +15,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import pojos.ArticuloCantidad;
+import pojos.ArticuloStock;
 import pojos.ArticuloVendido;
 import pojos.Comprador;
 import pojos.Factura;
 import pojos.Usuario;
+import dataAccessLayer.ArticuloStockDAO;
 import dataAccessLayer.CarritoDAO;
 import dataAccessLayer.CarritoDAOFactory;
 import dataAccessLayer.DAOManagerHibernate;
@@ -41,16 +43,15 @@ public class Checkout extends HttpServlet {
 		HttpSession session = request.getSession();
 
 		String op = request.getParameter("op");
+		
 		BigInteger cantidad = null;
 		if(request.getParameter("cantidad") != null)
 			cantidad = new BigInteger(request.getParameter("cantidad"));
-		// ArticuloStockDAO articuloDAO = (ArticuloStockDAO) application.getAttribute("productos");
+
 		CarritoDAO carritoDAO = (CarritoDAO) session.getAttribute("carritoDAO");
-		// articuloDAO.abrirManager();
 		DAOManagerHibernate daoManager = new DAOManagerHibernate();
 		daoManager.abrir();
 		session.setAttribute("articulosCarrito", carritoDAO.findAll());
-		// articuloDAO.cerrarManager();
 		session.setAttribute("numeroProductos", carritoDAO.findAll().size());
 		session.setAttribute("precioTotal", carritoDAO.getPrecioTotal());
 
@@ -84,6 +85,7 @@ public class Checkout extends HttpServlet {
 				return;
 			}
 			
+			ArticuloStockDAO articuloStockDAO = daoManager.getArticuloStockDAO();
 			UsuarioDAO usuarioDAO = daoManager.getUsuarioDAO();
 			usuario = usuarioDAO.findById(usuario.getId());
 			FacturaDAO facturaDAO = daoManager.getFacturaDAO();
@@ -97,7 +99,11 @@ public class Checkout extends HttpServlet {
 			
 			for (ArticuloCantidad ac : articulosCarrito) {
 				articulosFactura.add(ProductoFactory.getArticuloVendido(ac, ac.getCantidad(), factura));
+				ArticuloStock as = articuloStockDAO.findById(ac.getId());
+				as.setStock(as.getStock().subtract(ac.getCantidad()));
 			}
+			
+			
 			ImagenDAO imagenDAO = daoManager.getImagenDAO();
 			for (ArticuloVendido av: articulosFactura) {
 				av.setImagen(imagenDAO.findById(av.getImagen().getId()));

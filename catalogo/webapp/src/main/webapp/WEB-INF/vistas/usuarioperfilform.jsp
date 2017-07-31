@@ -82,7 +82,7 @@
 			<label for="codigoPostal">Código postal</label> 
 			
 			<input id="codigoPostal" name="codigoPostal" type="text" class="form-control"  
-				placeholder="Código postal" value="${sessionScope.usuario.codigoPostal}"/>
+				placeholder="Código postal" value="${sessionScope.usuario.direccion.codigoPostal}"/>
 		</fieldset>
 		<fieldset class="form-group">
 			<label for="ciudad">Ciudad</label> 

@@ -54,8 +54,8 @@ public class ImagenArticulo extends HttpServlet {
 		daomanager.terminarTransaccion();
 		String realPath = application.getRealPath("/img/");
 		String op = request.getParameter("op");
-
 		String codigoArticulo = null;
+
 		if (("subir").equals(op)) {
 			daomanager.cerrar();
 			request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_IMAGEN_PRODUCTOS).forward(request, response);
@@ -93,7 +93,7 @@ public class ImagenArticulo extends HttpServlet {
 								outStream.write(buffer);
 								log.info("Imagen cargada con éxito.");
 								ImagenDAO imagenDAO = daomanager.getImagenDAO();
-								Imagen imagen = new Imagen("/img/" + codigoArticulo + ".jpg");
+								Imagen imagen = new Imagen(codigoArticulo, "/img/" + codigoArticulo + ".jpg");
 								imagenDAO.insert(imagen);
 								ArticuloStock articulo = articuloDAO.findByCodigo(codigoArticulo);
 								articulo.setImagen(imagen);
