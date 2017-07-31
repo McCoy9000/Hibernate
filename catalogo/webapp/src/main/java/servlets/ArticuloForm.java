@@ -84,23 +84,12 @@ public class ArticuloForm extends HttpServlet {
 
 		String nombre, descripcion;
 
-		if (request.getParameter("codigoArticulo") != null) {
-			if (!(("Nuevo grupo de productos").equals(request.getParameter("codigoArticulo")))) {
-				nombre = request.getParameter("codigoArticulo").split("\\ - ")[1];
-			} else {
-				if (request.getParameter("nombre") != null) {
-					nombre = request.getParameter("nombre").trim();
-				} else {
-					nombre = request.getParameter("nombre");
-				}
-			}
+		if (request.getParameter("nombre") != null) {
+			nombre = request.getParameter("nombre").trim();
 		} else {
-			if (request.getParameter("nombre") != null) {
-				nombre = request.getParameter("nombre").trim();
-			} else {
-				nombre = request.getParameter("nombre");
-			}
+			nombre = request.getParameter("nombre");
 		}
+ 
 
 		if (request.getParameter("descripcion") != null) {
 			descripcion = request.getParameter("descripcion").trim();

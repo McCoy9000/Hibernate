@@ -35,6 +35,17 @@
 				
 			</select>
 		</fieldset>
+		<fieldset class="form-group" 
+			<c:if test="${param.op == 'borrar' or param.op == 'modificar'}">
+				style="display:none"
+			</c:if>>
+			<label for="nuevoCodigoArticulo">Nuevo Código de Articulo</label> 
+			
+			<input <c:if test="${param.op == 'borrar'}">
+					readonly="readonly"
+					</c:if> id="nuevoCodigoArticulo" name="nuevoCodigoArticulo" type="text" class="form-control"  
+				required="required" placeholder="Codigo Articulo" value="${articulo.nombre}"/>
+		</fieldset>
 		<fieldset class="form-group">
 			<label for="nombre">Nombre</label> 
 			
