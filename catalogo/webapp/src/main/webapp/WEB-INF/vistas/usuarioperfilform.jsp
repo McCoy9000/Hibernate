@@ -61,9 +61,9 @@
 				placeholder="Teléfono" value="${sessionScope.usuario.telefono}"/>
 		</fieldset>
 		<fieldset class="form-group">
-			<label for="direccion">Calle</label> 
+			<label for="calle">Calle</label> 
 			
-			<input id="direccion" name="direccion" type="text" class="form-control"  
+			<input id="calle" name="calle" type="text" class="form-control"  
 				placeholder="Calle" value="${sessionScope.usuario.direccion.calle}"/>
 		</fieldset>
 		<fieldset class="form-group">

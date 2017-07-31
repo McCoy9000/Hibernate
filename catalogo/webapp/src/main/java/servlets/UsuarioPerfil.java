@@ -136,7 +136,7 @@ public class UsuarioPerfil extends HttpServlet {
 		} else {
 			switch (opform) {
 			case "formulario":
-				daoManager.abrir();
+				
 				daoManager.iniciarTransaccion();
 				usuario = usuarioDAO.findById(id);
 				daoManager.terminarTransaccion();
@@ -149,7 +149,7 @@ public class UsuarioPerfil extends HttpServlet {
 			case "modificar":
 
 				usuario = new Usuario(nombre, apellidos, email, username, password, rol);
-				daoManager.abrir();
+				
 				log.info(usuarioDAO.findById(id).getUsername());
 				log.info(usuario.getUsername());
 				boolean usuarioExistente = usuarioDAO.validarNombre(usuario) && !usuario.getUsername().equals(usuarioDAO.findById(id).getUsername());
@@ -163,24 +163,26 @@ public class UsuarioPerfil extends HttpServlet {
 				} else if (password != null && password != "" && password.equals(password2)) {
 					daoManager.iniciarTransaccion();
 					usuario = usuarioDAO.findById(id);
+					daoManager.terminarTransaccion();
+					daoManager.iniciarTransaccion();
 					Direccion direccion = null;
 					if(usuario.getDireccion() != null) {
 						direccion = direccionDAO.findById(usuario.getDireccion().getId());
 					} else {
 						direccion = new Direccion();
+						direccionDAO.insert(direccion);
 					}
+					daoManager.terminarTransaccion();
+					daoManager.iniciarTransaccion();
 					Empresa empresa;
 					if(usuario.getEmpresa() != null) {
 						empresa = empresaDAO.findById(usuario.getEmpresa().getId());
 					} else {
 						empresa = new Empresa();
+						empresaDAO.insert(empresa);
 					}
-					usuario.setUsername(username);
-					usuario.setPassword(password);
-					usuario.setNombre(nombre);
-					usuario.setApellidos(apellidos);
-					usuario.setDocumento(documento);
-					usuario.setTelefono(telefono);
+					daoManager.terminarTransaccion();
+					daoManager.iniciarTransaccion();
 					direccion.setCodigoPostal(codigoPostal);
 					direccion.setPuerta(puerta);
 					direccion.setPiso(piso);
@@ -188,8 +190,18 @@ public class UsuarioPerfil extends HttpServlet {
 					direccion.setCiudad(ciudad);
 					direccion.setRegion(region);
 					direccion.setPais(pais);
-					usuario.setDireccion(direccion);
+					daoManager.terminarTransaccion();
+					daoManager.iniciarTransaccion();
 					empresa.setNombre(nombreEmpresa);
+					daoManager.terminarTransaccion();
+					daoManager.iniciarTransaccion();
+					usuario.setUsername(username);
+					usuario.setPassword(password);
+					usuario.setNombre(nombre);
+					usuario.setApellidos(apellidos);
+					usuario.setDocumento(documento);
+					usuario.setTelefono(telefono);
+					usuario.setDireccion(direccion);
 					usuario.setEmpresa(empresa);
 
 					daoManager.terminarTransaccion();

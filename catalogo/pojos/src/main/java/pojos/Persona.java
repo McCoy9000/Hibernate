@@ -43,7 +43,7 @@ public class Persona implements Serializable {
 	@OneToOne(cascade = { CascadeType.ALL })
 	@JoinColumn(name = "id_direccion")
 	private Direccion direccion;
-	@ManyToOne(cascade = { CascadeType.PERSIST }, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = { CascadeType.ALL })
 	@JoinColumn(name = "id_empresa")
 	private Empresa empresa;
 	@OneToOne(cascade = { CascadeType.ALL })
