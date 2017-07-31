@@ -36,13 +36,10 @@ public class ArticuloForm extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		// Recoger el objeto application del ServletContext
-		ServletContext application = getServletContext();
 		HttpSession session = request.getSession();
 
 		// Borrar los errores que puedan venir en sesión
 		session.removeAttribute("errorProducto");
-
-//		ArticuloStockDAO articuloDAO = (ArticuloStockDAO) application.getAttribute("productos");
 
 		// Recoger la opción elegida por el usuario en el formulario enviada por url
 		String op = request.getParameter("opform");
@@ -165,6 +162,7 @@ public class ArticuloForm extends HttpServlet {
 //					articuloDAO.abrirManager();
 //					articuloDAO.iniciarTransaccion();
 					DAOManagerHibernate daomanager = new DAOManagerHibernate();
+					daomanager.abrir();
 					ArticuloStockDAO articuloStockDAO = daomanager.getArticuloStockDAO();
 					daomanager.iniciarTransaccion();
 					articuloStockDAO.insert(articulo);
@@ -182,10 +180,9 @@ public class ArticuloForm extends HttpServlet {
 				// Aquí hay que declarar un nuevo producto con los datos recogidos del formulario. Como en el caso
 				// modificar, el campo groupId está deshabilitado y no lo envía, hay que extraerlo a través del id.
 				// Como el nombre se extrae del mismo campo, para este caso solicitamos el parametro "nombre".
-//				articuloDAO.abrirManager();
 				DAOManagerHibernate daomanager = new DAOManagerHibernate();
-				ArticuloStockDAO articuloDAO = daomanager.getArticuloStockDAO();
 				daomanager.abrir();
+				ArticuloStockDAO articuloDAO = daomanager.getArticuloStockDAO();
 				daomanager.iniciarTransaccion();
 				articulo = articuloDAO.findById(id);
 				articulo.setCodigoArticulo(codigoArticulo);
@@ -199,8 +196,6 @@ public class ArticuloForm extends HttpServlet {
 				articulo.setStock(nuevaCantidad);
 				daomanager.terminarTransaccion();
 				daomanager.cerrar();
-//				articuloDAO.cerrarManager();
-				// articuloDAO.update(articulo);
 
 				if (nombre == null || nombre == "") {
 					session.setAttribute("errorProducto", "Debes introducir un nombre de producto");
@@ -212,15 +207,11 @@ public class ArticuloForm extends HttpServlet {
 				}
 				break;
 			case "borrar":
-//				articuloDAO.abrirManager();
-//				articuloDAO.iniciarTransaccion();
 				DAOManagerHibernate daoman = new DAOManagerHibernate();
-				ArticuloStockDAO artDAO = daoman.getArticuloStockDAO();
 				daoman.abrir();
+				ArticuloStockDAO artDAO = daoman.getArticuloStockDAO();
 				daoman.iniciarTransaccion();
 				artDAO.delete(id);
-//				artDAO.terminarTransaccion();
-//				artDAO.cerrarManager();
 				daoman.terminarTransaccion();
 				daoman.cerrar();
 				session.removeAttribute("errorProducto");

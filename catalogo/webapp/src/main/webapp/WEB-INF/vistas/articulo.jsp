@@ -21,7 +21,7 @@
 <div id="producto" class="container-fluid">
 
 <div class="row">
-<div class="col-md-12"  style="background:url(${rutaBase}/img/${sessionScope.articulo.imagen.url}) 10% no-repeat; vertical-align:bottom; padding-top:300px; margin:2em"><h1 style="color:#ECC007; font-family:'Special Elite', sans-serif; font-size:10vw; ">${sessionScope.articulo.nombre}</h1></div>
+<div class="col-md-12"  style="background:url(${rutaBase}${sessionScope.articulo.imagen.url}) 10% no-repeat; vertical-align:bottom; padding-top:300px; margin:2em"><h1 style="color:#ECC007; font-family:'Special Elite', sans-serif; font-size:10vw; ">${sessionScope.articulo.nombre}</h1></div>
 </div>
 
 <div class="row">

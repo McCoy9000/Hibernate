@@ -22,7 +22,7 @@ public class Constantes {
 	
 	public static final String RUTA_FORMULARIO_PRODUCTO = "/WEB-INF/vistas/productoform.jsp";
 	public static final String RUTA_LISTADO_PRODUCTO = "/WEB-INF/vistas/productocrud.jsp";
-	public static final String RUTA_SERVLET_LISTADO_PRODUCTO = "/admin/productocrud";
+	public static final String RUTA_SERVLET_LISTADO_PRODUCTO = "/admin/articulocrud";
 	public static final String RUTA_FORMULARIO_IMAGEN_PRODUCTOS = "/WEB-INF/vistas/imagenproductoform.jsp";
 	
 	public static final String RUTA_FORMULARIO_FACTURA = "/WEB-INF/vistas/facturaform.jsp";

@@ -31,7 +31,7 @@
 			<tr id="${articulo.id}">
 				<td style="text-align:center; vertical-align: middle;"><a  onclick="window.open('${applicationScope.rutaBase}/catalogo?op=ver&id=${articulo.id}', '_blank', 'width=800,height=600')">${articulo.nombre}</a></td>
 				<td style="text-align:center; vertical-align: middle;"><a  onclick="window.open('${applicationScope.rutaBase}/catalogo?op=ver&id=${articulo.id}', '_blank', 'width=800,height=600')"><object data="${applicationScope.rutaBase}/img/${articulo.imagen.url}.jpg" height="128" type="image/png">
-					<img src="${applicationScope.rutaBase}/img/0.jpg" class="img-thumbnail" height="128" width="128"/></object></a></td>
+					<img src="${applicationScope.rutaBase}${articulo.imagen.url}" class="img-thumbnail" height="128" width="128"/></object></a></td>
 				<td style="text-align:center; vertical-align: middle;">${articulo.precio} €</td>
 				<td style="text-align:center; vertical-align: middle;">${articulo.stock}</td>
 				<td id="anadir" style="text-align:center; vertical-align:middle;">

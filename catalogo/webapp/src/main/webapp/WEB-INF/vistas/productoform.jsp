@@ -8,7 +8,7 @@
 <div class="container" style="margin-top:2em">
 <div class="row">
 <div class="col-md-6">
-	<form action="${applicationScope.rutaBase}/admin/productoform" method="post">
+	<form action="${applicationScope.rutaBase}/admin/articuloform" method="post">
 		<fieldset class="form-group" style="display:none;">
 			<label for="id">Id</label> 
 			

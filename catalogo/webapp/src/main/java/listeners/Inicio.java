@@ -44,26 +44,6 @@ public class Inicio implements ServletContextListener {
 
 		PropertyConfigurator.configure(Inicio.class.getClassLoader().getResource("log4j.properties"));
 
-		// UsuarioDAO usuarioDAO = UsuarioDAOFactory.getUsuarioDAO();
-		// ArticuloStockDAO articuloDAO = ArticuloStockDAOFactory.getArticuloDAO();
-		// DireccionDAO direccionDAO = DireccionDAOFactory.getDireccionDAO();
-		// EmpresaDAO empresaDAO = EmpresaDAOFactory.getEmpresaDAO();
-		// ImagenDAO imagenDAO = ImagenDAOFactory.getImagenDAO();
-		// FacturaDAO facturaDAO = FacturaDAOFactory.getFacturaDAO();
-		// ArticuloVendidoDAO articuloVendidoDAO = ArticuloVendidoDAOFactory.getArticuloVendidoDAO();
-		// CompradorDAO compradorDAO = CompradorDAOFactory.getCompradorDAO();
-		// RolDAO rolDAO = RolDAOFactory.getRolDAO();
-		// log.info("Iniciados los DAO");
-		// application.setAttribute("usuarioDAO", usuarioDAO);
-		// application.setAttribute("articuloDAO", articuloDAO);
-		// application.setAttribute("rolDAO", rolDAO);
-		// application.setAttribute("direccionDAO", direccionDAO);
-		// application.setAttribute("empresaDAO", empresaDAO);
-		// application.setAttribute("imagenDAO", imagenDAO);
-		// application.setAttribute("facturaDAO", facturaDAO);
-		// application.setAttribute("articuloVendidoDAO", articuloVendidoDAO);
-		// application.setAttribute("compradorDAO", compradorDAO);
-		// log.info("Guardados los DAO en application");
 		DAOManagerHibernate daoManager = new DAOManagerHibernate();
 		daoManager.abrir();
 		RolDAO rolDAO = daoManager.getRolDAO();
@@ -73,16 +53,12 @@ public class Inicio implements ServletContextListener {
 
 		daoManager.iniciarTransaccion();
 
-		// rolDAO.abrirManager();
-		// rolDAO.iniciarTransaccion();
 		rolDAO.insert(new Rol(1, "Administrador", "Administrador de la web"));
 		rolDAO.insert(new Rol(2, "Usuario", "Usuario de la web"));
 		rolDAO.insert(new Rol(3, "Departamento", "Departamento de ventas"));
 		log.info("Creados los roles");
 		usuarioDAO.insert(new Usuario("DEVOLUCION", "DEVOLUCION", "DEVOLUCION", "DEVOLUCION", "DEVOLUCION", rolDAO.findByName("Departamento")));
 		log.info("Creado el usuario DEVOLUCION");
-		// rolDAO.terminarTransaccion();
-		// rolDAO.cerrarManager();
 
 		String rawadmin = "admin", admin;
 
@@ -94,16 +70,14 @@ public class Inicio implements ServletContextListener {
 		}
 
 		admin = miEncriptador.encriptar(rawadmin);
-		// usuarioDAO.abrirManager();
-		// usuarioDAO.iniciarTransaccion();
 		usuarioDAO.insert(new Usuario("admin", "admin", "admin@admin.com", "admin", admin, rolDAO.findByName("Administrador")));
 		log.info("Creado el usuario admin");
-		articuloStockDAO.insert(new ArticuloStock("001", "Mustang", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
-		articuloStockDAO.insert(new ArticuloStock("002", "Charger", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
-		articuloStockDAO.insert(new ArticuloStock("003", "Challenger", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
-		articuloStockDAO.insert(new ArticuloStock("004", "Ford GT", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
-		articuloStockDAO.insert(new ArticuloStock("005", "Cobra", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
-		articuloStockDAO.insert(new ArticuloStock("006", "Eldorado", "Descripción", new Imagen(), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
+		articuloStockDAO.insert(new ArticuloStock("1", "Mustang", "Descripción", new Imagen("/img/1.jpg"), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
+		articuloStockDAO.insert(new ArticuloStock("2", "Charger", "Descripción", new Imagen("/img/2.jpg"), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
+		articuloStockDAO.insert(new ArticuloStock("3", "Challenger", "Descripción", new Imagen("/img/3.jpg"), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
+		articuloStockDAO.insert(new ArticuloStock("4", "Ford GT", "Descripción", new Imagen("/img/4.jpg"), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
+		articuloStockDAO.insert(new ArticuloStock("5", "Cobra", "Descripción", new Imagen("/img/5.jpg"), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
+		articuloStockDAO.insert(new ArticuloStock("6", "Eldorado", "Descripción", new Imagen("/img/6.jpg"), new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
 		log.info("Creados 6 productos de prueba");
 		// usuarioDAO.terminarTransaccion();
 		application.setAttribute("catalogo", articuloStockDAO.findAll());

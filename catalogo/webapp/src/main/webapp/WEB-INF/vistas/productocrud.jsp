@@ -21,7 +21,7 @@
 					<tr>
 						<td style="text-align:center; vertical-align: middle;">${producto.nombre}</td>
 						<td style="text-align:center; vertical-align: middle;"><object data="${applicationScope.rutaBase}/img/${producto.imagen.url}" height="128" type="image/png">
-							<img src="${applicationScope.rutaBase}/img/0.jpg" class="img-thumbnail" height="128" width="128"/></object></td>
+							<img src="${applicationScope.rutaBase}${producto.imagen.url}" class="img-thumbnail" height="128" width="128"/></object></td>
 						<td style="text-align:center; vertical-align: middle;">${producto.precio} €</td>
 						<td style="text-align:center; vertical-align: middle;">${producto.stock}</td>
 						<td style="text-align:center; vertical-align: middle;">
