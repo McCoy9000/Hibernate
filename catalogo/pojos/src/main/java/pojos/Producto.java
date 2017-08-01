@@ -31,7 +31,7 @@ public abstract class Producto implements Serializable {
 	private String nombre;
 	@Column(name = "descripcion")
 	private String descripcion;
-	@ManyToOne(cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_imagen")
 	private Imagen imagen;
 	@Column(name = "precio")

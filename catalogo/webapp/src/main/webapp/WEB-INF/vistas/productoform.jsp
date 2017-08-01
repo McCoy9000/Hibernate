@@ -9,42 +9,29 @@
 <div class="row">
 <div class="col-md-6">
 	<form action="${applicationScope.rutaBase}/admin/articuloform" method="post">
+		
 		<fieldset class="form-group"
 			<c:if test="${param.op == 'borrar' or param.op == 'alta'}">
-				style="display:none" disabled="disabled"
-			</c:if>>
-			<label for="codigoArticulo">Codigo de producto</label> 
-			
-			<input id="codigoArticulo" name="codigoArticulo" type="text" class="form-control"
-			  required="required"  value="${articulo.codigoArticulo} - ${articulo.nombre}" readonly="readonly">
-		</fieldset>
-		<fieldset class="form-group" 
-			<c:if test="${param.op == 'borrar' or param.op == 'modificar'}">
 				style="display:none"
 			</c:if>>
-			<label for="codigoArticulo">Codigo artículo <span style="color:red">*</span></label> 
-			<select id="codigoArticulo" name="codigoArticulo" class="form-control"
-				<c:if test="${param.op == 'modificar'}">
-					; disabled = "disabled"
-			  	</c:if>
-			 >
-				<option>Nuevo grupo de productos</option>
-				<c:forEach items="${applicationScope.catalogo}" var="grupo">
-				<option <c:if test="${articulo.codigoArticulo == grupo.codigoArticulo}">selected="selected"</c:if>>${grupo.codigoArticulo} - ${grupo.nombre}</option>
-				</c:forEach>
-				
-			</select>
+			<label for="codigoArticulo">Codigo de articulo</label> 
+			
+			<input id="codigoArticulo" name="codigoArticulo" type="text" class="form-control"
+			    <c:if test="${param.op == 'modificar'}">
+				required="required" 
+			</c:if> value="${articulo.codigoArticulo}" readonly="readonly">
 		</fieldset>
+		
 		<fieldset class="form-group" 
 			<c:if test="${param.op == 'borrar' or param.op == 'modificar'}">
 				style="display:none"
 			</c:if>>
 			<label for="nuevoCodigoArticulo">Nuevo Código de Articulo</label> 
 			
-			<input <c:if test="${param.op == 'borrar'}">
-					readonly="readonly"
-					</c:if> id="nuevoCodigoArticulo" name="nuevoCodigoArticulo" type="text" class="form-control"  
-				required="required" placeholder="Codigo Articulo" value="${articulo.nombre}"/>
+			<input id="nuevoCodigoArticulo" name="nuevoCodigoArticulo" type="text" class="form-control"  
+				<c:if test="${param.op == 'alta'}">
+				required="required" 
+			</c:if> placeholder="Codigo Articulo"/>
 		</fieldset>
 		<fieldset class="form-group">
 			<label for="nombre">Nombre</label> 
@@ -91,18 +78,12 @@
 			  		style="display:none;"
 			  	</c:if>/>
 			
-			
 			<input type="hidden" name="opform" value="${param.op}" />
 			<input type="hidden" name="id" value="${articulo.id}" />
 		</fieldset>
 		
 	</form>
 	<div class="alert alert-danger" role="alert" <c:if test="${sessionScope.errorProducto==null}">style="display:none"</c:if>><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> ${sessionScope.errorProducto}</div>
-	</div>
-	<div class="col-md-6" style="color:grey; <c:if test="${param.op == 'borrar' or param.op == 'modificar'}">
-		display:none; </c:if>">
-	<p>Para dar de alta varios productos de un grupo ya existente, seleccione un grupo de productos y una cantidad.</p>
-	<p>Para dar de alta productos de un grupo aún no existente, seleccione "Nuevo grupo de productos" e introduzca un nombre, descripción, precio y cantidad.</p>
 	</div>
 	</div>
 	

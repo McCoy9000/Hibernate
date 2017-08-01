@@ -66,21 +66,21 @@ public class ArticuloForm extends HttpServlet {
 			id = 0;
 		}
 
-		String codigoArticulo;
+		String codigoArticulo, nuevoCodigoArticulo;
 
-		if (request.getParameter("id") != null) {
-			if (!(("Nuevo grupo de productos").equals(request.getParameter("codigoArticulo")))) {
-				try {
-					codigoArticulo = request.getParameter("codigoArticulo").split("\\ - ")[0];
-				} catch (Exception e) {
-					codigoArticulo = "0";
-				}
-			} else {
-				codigoArticulo = request.getParameter("nuevoCodigoArticulo");
-			}
+		if (request.getParameter("codigoArticulo") != null) {
+			codigoArticulo = request.getParameter("codigoArticulo").trim();
 		} else {
-			codigoArticulo = "0";
+			codigoArticulo = request.getParameter("codigoArticulo");
 		}
+ 
+
+		if (request.getParameter("nuevoCodigoArticulo") != null) {
+			nuevoCodigoArticulo = request.getParameter("nuevoCodigoArticulo").trim();
+		} else {
+			nuevoCodigoArticulo = request.getParameter("nuevoCodigoArticulo");
+		}
+		
 
 		String nombre, descripcion;
 
@@ -135,7 +135,7 @@ public class ArticuloForm extends HttpServlet {
 			switch (op) {
 			case "alta":
 
-				articulo = new ArticuloStock(codigoArticulo, nombre, descripcion, precio, cantidad);
+				articulo = new ArticuloStock(nuevoCodigoArticulo, nombre, descripcion, precio, cantidad);
 
 				if (nombre == null || nombre == "") {
 					session.setAttribute("errorProducto", "Debes introducir un nombre de producto");
@@ -146,16 +146,12 @@ public class ArticuloForm extends HttpServlet {
 					request.setAttribute("articulo", articulo);
 					request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_PRODUCTO + "?op=alta").forward(request, response);
 				} else {
-//					articuloDAO.abrirManager();
-//					articuloDAO.iniciarTransaccion();
 					DAOManagerHibernate daomanager = new DAOManagerHibernate();
 					daomanager.abrir();
 					ArticuloStockDAO articuloStockDAO = daomanager.getArticuloStockDAO();
 					daomanager.iniciarTransaccion();
 					articuloStockDAO.insert(articulo);
 					daomanager.terminarTransaccion();
-//					articuloDAO.terminarTransaccion();
-//					articuloDAO.cerrarManager();
 					daomanager.cerrar();
 					session.removeAttribute("errorProducto");
 					log.info("Producto(s) dado(s) de alta");
@@ -164,33 +160,31 @@ public class ArticuloForm extends HttpServlet {
 				break;
 			case "modificar":
 
-				DAOManagerHibernate daomanager = new DAOManagerHibernate();
-				daomanager.abrir();
-				ArticuloStockDAO articuloDAO = daomanager.getArticuloStockDAO();
-				daomanager.iniciarTransaccion();
+				DAOManagerHibernate manager = new DAOManagerHibernate();
+				manager.abrir();
+				ArticuloStockDAO articuloDAO = manager.getArticuloStockDAO();
+				manager.iniciarTransaccion();
 				articulo = articuloDAO.findById(id);
-				daomanager.terminarTransaccion();
+				manager.terminarTransaccion();
 				
 				if (nombre == null || nombre == "") {
 					
 					session.setAttribute("errorProducto", "Debes introducir un nombre de producto");
 					request.setAttribute("articulo", articulo);
 					request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_PRODUCTO + "?op=modificar").forward(request, response);
+
 					break;
 				}
-				// Aquí hay que declarar un nuevo producto con los datos recogidos del formulario. Como en el caso
-				// modificar, el campo groupId está deshabilitado y no lo envía, hay que extraerlo a través del id.
-				// Como el nombre se extrae del mismo campo, para este caso solicitamos el parametro "nombre".
 			
-				daomanager.iniciarTransaccion();
+				manager.iniciarTransaccion();
 				articulo.setCodigoArticulo(codigoArticulo);
 				articulo.setNombre(nombre);
 				articulo.setDescripcion(descripcion);
 				articulo.setPrecio(precio);
 				articulo.setStock(cantidad);
 				
-				daomanager.terminarTransaccion();
-				daomanager.cerrar();
+				manager.terminarTransaccion();
+				manager.cerrar();
 				 
 				session.removeAttribute("errorProducto");
 				rutaListado.forward(request, response);
@@ -198,9 +192,10 @@ public class ArticuloForm extends HttpServlet {
 			case "borrar":
 				DAOManagerHibernate daoman = new DAOManagerHibernate();
 				daoman.abrir();
-				ArticuloStockDAO artDAO = daoman.getArticuloStockDAO();
+				ArticuloStockDAO articuloStockDAO = daoman.getArticuloStockDAO();
 				daoman.iniciarTransaccion();
-				artDAO.delete(id);
+				log.info(id);
+				articuloStockDAO.delete(id);
 				daoman.terminarTransaccion();
 				daoman.cerrar();
 				session.removeAttribute("errorProducto");

@@ -6,13 +6,14 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.NoSuchPaddingException;
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
 
 import pojos.Usuario;
 import recursos.Constantes;
@@ -25,6 +26,8 @@ import encriptacion.Encriptador;
 public class Signup extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	private static Logger log = Logger.getLogger(Signup.class);
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		doPost(request, response);
@@ -33,17 +36,15 @@ public class Signup extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		ServletContext application = request.getServletContext();
-//		UsuarioDAO usuarioDAO = (UsuarioDAO) application.getAttribute("usuarioDAO");
-//		RolDAO rolDAO = (RolDAO) application.getAttribute("rolDAO");
 		DAOManagerHibernate daoManager = new DAOManagerHibernate();
+		daoManager.abrir();
 		UsuarioDAO usuarioDAO = daoManager.getUsuarioDAO();
 		RolDAO rolDAO = daoManager.getRolDAO();
 		
 		HttpSession session = request.getSession();
 		session.removeAttribute("errorSignup");
 
-		String nombre = null, apellidos = null, email = null, username = null, rawpassword = null, rawpassword2 = null, password = null;
+		String nombre = null, apellidos = null, email = null, username = null, rawpassword = null, rawpassword2 = null, password = null, password2 = null;
 
 		if (request.getParameter("nombre") != null) {
 			nombre = request.getParameter("nombre").trim();
@@ -57,9 +58,9 @@ public class Signup extends HttpServlet {
 		if (request.getParameter("username") != null) {
 			username = request.getParameter("username").trim();
 		}
+		Encriptador miEncriptador = null;
 		if (request.getParameter("password") != null) {
 			rawpassword = request.getParameter("password").trim();
-			Encriptador miEncriptador = null;
 			try {
 				miEncriptador = new Encriptador();
 			} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException e1) {
@@ -69,21 +70,32 @@ public class Signup extends HttpServlet {
 		}
 		if (request.getParameter("password2") != null) {
 			rawpassword2 = request.getParameter("password2").trim();
+			try {
+				miEncriptador = new Encriptador();
+			} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException e1) {
+				e1.printStackTrace();
+			}
+			password2 = miEncriptador.encriptar(rawpassword2);
 		}
-		daoManager.abrir();
+		
 		daoManager.iniciarTransaccion();
 		Usuario usuario = new Usuario(nombre, apellidos, email, username, password, rolDAO.findByName("Usuario"));
 		daoManager.terminarTransaccion();
 		boolean sinDatos = username == null || rawpassword == null || rawpassword2 == null;
-		boolean nombreLargo = username.length() > 20;
-		boolean passDistintas = rawpassword != null && rawpassword.equals(rawpassword2);
+		boolean nombreLargo = username != null && username.length() > 20;
+		boolean passDistintas = rawpassword != null && !password.equals(password2);
 		boolean emailNoValido = false;
 		if (email != null) {
 			String user = email.split("@")[0];
-			String dominio = email.split("@")[1];
+			String dominio = null;
+			try {
+			dominio = email.split("@")[1];
+			} catch (ArrayIndexOutOfBoundsException aioobe) {
+				emailNoValido = true;
+			}
 			if (user == null || user.length() < 1)
 				emailNoValido = true;
-			if (dominio == null || dominio.split(".").length < 2)
+			if (dominio == null)
 				emailNoValido = true;
 		}
 		boolean userExiste = usuarioDAO.validarNombre(usuario);
@@ -92,34 +104,29 @@ public class Signup extends HttpServlet {
 		RequestDispatcher rutaSignup = request.getRequestDispatcher(Constantes.RUTA_SIGNUP);
 
 		if (sinDatos) {
-//			rolDAO.cerrarManager();
 			daoManager.cerrar();
 			rutaSignup.forward(request, response);
 			return;
 		}
 		if (nombreLargo) {
-//			rolDAO.cerrarManager();
 			daoManager.cerrar();
 			session.setAttribute("errorSignup", "El username debe tener un máximo de 20 caracteres");
 			rutaSignup.forward(request, response);
 			return;
 		}
 		if (passDistintas) {
-//			rolDAO.cerrarManager();
 			daoManager.cerrar();
 			session.setAttribute("errorSignup", "Las contraseñas deben ser iguales");
 			rutaSignup.forward(request, response);
 			return;
 		}
 		if (emailNoValido) {
-//			rolDAO.cerrarManager();
 			daoManager.cerrar();
 			session.setAttribute("errorSignup", "El email no es válido");
 			rutaSignup.forward(request, response);
 			return;
 		}
 		if (userExiste) {
-//			rolDAO.cerrarManager();
 			daoManager.cerrar();
 			session.setAttribute("errorSignup", "Ya existe un usuario con ese username");
 			rutaSignup.forward(request, response);
@@ -129,7 +136,6 @@ public class Signup extends HttpServlet {
 		daoManager.iniciarTransaccion();
 		usuarioDAO.insert(usuario);
 		daoManager.terminarTransaccion();
-//		rolDAO.cerrarManager();
 		daoManager.cerrar();
 
 		rutaLogin.forward(request, response);

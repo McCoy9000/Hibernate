@@ -31,8 +31,7 @@ public class ArticuloStockDAOHibernate extends IpartekDAOHibernate implements Ar
 
 	@Override
 	public void delete(ArticuloStock articulo) {
-		ArticuloStock art = man.find(ArticuloStock.class, articulo.getId());
-		man.remove(art);
+		man.remove(articulo);
 	}
 
 	@Override

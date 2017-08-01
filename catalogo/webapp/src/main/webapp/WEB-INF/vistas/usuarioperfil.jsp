@@ -31,7 +31,7 @@
 </div>
 <div  class="bg-info" style="margin:1em">
 <div class="row">
-	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="direccion">Calle</label><p id="direccion">${sessionScope.usuario.direccion.calle}</p>
+	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="direccion">Direccion</label><p id="direccion">${sessionScope.usuario.direccion.calle} ${sessionScope.usuario.direccion.puerta} ${sessionScope.usuario.direccion.piso}</p>
 	</div>
 	<div class="col-xs-3 col-md-3" style="margin:1em"><label for="codigoPostal">Código postal</label><p id="codigoPostal">${sessionScope.usuario.direccion.codigoPostal}</p>
 	</div>

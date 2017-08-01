@@ -6,7 +6,7 @@
 <div class="jumbotron">
 <h1>¡Date ahora de alta!</h1>
 <p>Tan solo te llevará unos pocos segundos...</p>
-<p><a class="btn btn-primary btn-lg" style="background:#ECC007; border:none; color:black" href="${applicationScope.rutaBase}/alta">ALTA</a>
+<p><a class="btn btn-primary btn-lg" style="background:#ECC007; border:none; color:black" href="${applicationScope.rutaBase}/signup">ALTA</a>
 </p>
 </div>
 </div>

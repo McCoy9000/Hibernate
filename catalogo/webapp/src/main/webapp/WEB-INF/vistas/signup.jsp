@@ -5,7 +5,7 @@
 <div class="container" style="margin-top:2em">
 <div class="row">
 <div class="col-md-6">
-<form action="alta" method="post">
+<form action="signup" method="post">
 <fieldset class="form-group">
 <label for="username">Nombre de usuario <span style="color:red">*</span></label>
 <input id="username" class="form-control" name="username" placeholder="Nombre de usuario" maxlength="16" required="required"/>

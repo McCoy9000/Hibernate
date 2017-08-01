@@ -36,7 +36,6 @@ public class UsuarioForm extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		ServletContext application = getServletContext();
 		HttpSession session = request.getSession();
 
 		session.removeAttribute("errorUsuario");
@@ -91,7 +90,7 @@ public class UsuarioForm extends HttpServlet {
 		}
 
 		if (rawpassword2 != null) {
-			password2 = miEncriptador.encriptar(password2);
+			password2 = miEncriptador.encriptar(rawpassword2);
 		}
 
 		if (request.getParameter("email") != null) {
@@ -135,9 +134,10 @@ public class UsuarioForm extends HttpServlet {
 
 				if (password != null && password != "" && password.equals(password2)) {
 					if (!usuarioDAO.validarNombre(usuario)) {
+						daoManager.iniciarTransaccion();
 						usuarioDAO.insert(usuario);
+						daoManager.terminarTransaccion();
 						daoManager.cerrar();
-						session.removeAttribute("errorUsuario");
 						log.info("Usuario " + usuario.getUsername() + " dado de alta");
 						session.removeAttribute("errorUsuario");
 						rutaListado.forward(request, response);
@@ -167,6 +167,8 @@ public class UsuarioForm extends HttpServlet {
 					usuario.setRol(rol);
 					daoManager.terminarTransaccion();
 					daoManager.cerrar();
+					session.removeAttribute("errorUsuario");
+					rutaListado.forward(request, response);
 				} else {
 					daoManager.cerrar();
 					session.setAttribute("errorUsuario", "Por el momento no es posible modificar el usuario 'admin'");
