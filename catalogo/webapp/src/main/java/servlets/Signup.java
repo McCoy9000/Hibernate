@@ -13,20 +13,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
-
 import pojos.Usuario;
 import recursos.Constantes;
-import dataAccessLayer.DAOManagerHibernate;
+import dataAccessLayer.DAOManager;
+import dataAccessLayer.DAOManagerFactory;
 import dataAccessLayer.RolDAO;
 import dataAccessLayer.UsuarioDAO;
 import encriptacion.Encriptador;
 
 @WebServlet("/signup")
 public class Signup extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 
-	private static Logger log = Logger.getLogger(Signup.class);
+	private static final long serialVersionUID = -1879791727577370812L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -36,7 +34,7 @@ public class Signup extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		DAOManagerHibernate daoManager = new DAOManagerHibernate();
+		DAOManager daoManager = DAOManagerFactory.getDAOManager();
 		daoManager.abrir();
 		UsuarioDAO usuarioDAO = daoManager.getUsuarioDAO();
 		RolDAO rolDAO = daoManager.getRolDAO();

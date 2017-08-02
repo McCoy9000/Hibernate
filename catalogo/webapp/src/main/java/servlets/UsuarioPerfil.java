@@ -5,7 +5,6 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.NoSuchPaddingException;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,10 +19,10 @@ import pojos.Empresa;
 import pojos.Rol;
 import pojos.Usuario;
 import recursos.Constantes;
-import dataAccessLayer.DAOManagerHibernate;
+import dataAccessLayer.DAOManager;
+import dataAccessLayer.DAOManagerFactory;
 import dataAccessLayer.DireccionDAO;
 import dataAccessLayer.EmpresaDAO;
-import dataAccessLayer.ImagenDAO;
 import dataAccessLayer.RolDAO;
 import dataAccessLayer.UsuarioDAO;
 import encriptacion.Encriptador;
@@ -41,19 +40,16 @@ public class UsuarioPerfil extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		ServletContext application = request.getServletContext();
-
 		HttpSession session = request.getSession();
 
 		session.removeAttribute("errorPerfil");
 
-		DAOManagerHibernate daoManager = new DAOManagerHibernate();
+		DAOManager daoManager = DAOManagerFactory.getDAOManager();
 		daoManager.abrir();
 		
 		UsuarioDAO usuarioDAO = daoManager.getUsuarioDAO();
 		RolDAO rolDAO = daoManager.getRolDAO();
 		EmpresaDAO empresaDAO = daoManager.getEmpresaDAO();
-		ImagenDAO imagenDAO = daoManager.getImagenDAO();
 		DireccionDAO direccionDAO = daoManager.getDireccionDAO();
 
 		long id = ((Usuario) session.getAttribute("usuario")).getId();

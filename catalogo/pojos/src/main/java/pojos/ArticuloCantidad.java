@@ -11,7 +11,6 @@ public class ArticuloCantidad extends Producto implements Serializable {
 	private BigInteger cantidad;
 
 	public ArticuloCantidad() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public ArticuloCantidad(long id, String codigoArticulo, String nombre, String descripcion, Imagen imagen, BigDecimal precio, BigInteger cantidad) {

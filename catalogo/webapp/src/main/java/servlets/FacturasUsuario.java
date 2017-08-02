@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,7 +18,8 @@ import pojos.Factura;
 import pojos.Usuario;
 import recursos.Constantes;
 import dataAccessLayer.CompradorDAO;
-import dataAccessLayer.DAOManagerHibernate;
+import dataAccessLayer.DAOManager;
+import dataAccessLayer.DAOManagerFactory;
 import dataAccessLayer.FacturaDAO;
 import dataAccessLayer.UsuarioDAO;
 
@@ -34,14 +34,13 @@ public class FacturasUsuario extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		ServletContext application = request.getServletContext();
 		HttpSession session = request.getSession();
 
 		session.removeAttribute("errorFactura");
 
 		Usuario usuario = (Usuario) session.getAttribute("usuario");
 
-		DAOManagerHibernate daoManager = new DAOManagerHibernate();
+		DAOManager daoManager = DAOManagerFactory.getDAOManager();
 		daoManager.abrir();
 		FacturaDAO facturaDAO = daoManager.getFacturaDAO();
 		CompradorDAO compradorDAO = daoManager.getCompradorDAO();

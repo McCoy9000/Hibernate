@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,7 +22,8 @@ import pojos.Usuario;
 import dataAccessLayer.ArticuloStockDAO;
 import dataAccessLayer.CarritoDAO;
 import dataAccessLayer.CarritoDAOFactory;
-import dataAccessLayer.DAOManagerHibernate;
+import dataAccessLayer.DAOManager;
+import dataAccessLayer.DAOManagerFactory;
 import dataAccessLayer.FacturaDAO;
 import dataAccessLayer.ImagenDAO;
 import dataAccessLayer.UsuarioDAO;
@@ -39,7 +39,6 @@ public class Checkout extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		ServletContext application = request.getServletContext();
 		HttpSession session = request.getSession();
 
 		String op = request.getParameter("op");
@@ -49,7 +48,7 @@ public class Checkout extends HttpServlet {
 			cantidad = new BigInteger(request.getParameter("cantidad"));
 
 		CarritoDAO carritoDAO = (CarritoDAO) session.getAttribute("carritoDAO");
-		DAOManagerHibernate daoManager = new DAOManagerHibernate();
+		DAOManager daoManager = DAOManagerFactory.getDAOManager();
 		daoManager.abrir();
 		session.setAttribute("articulosCarrito", carritoDAO.findAll());
 		session.setAttribute("numeroProductos", carritoDAO.findAll().size());

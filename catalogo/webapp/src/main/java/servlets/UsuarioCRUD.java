@@ -14,7 +14,8 @@ import javax.servlet.http.HttpSession;
 
 import pojos.Usuario;
 import recursos.Constantes;
-import dataAccessLayer.DAOManagerHibernate;
+import dataAccessLayer.DAOManager;
+import dataAccessLayer.DAOManagerFactory;
 import dataAccessLayer.UsuarioDAO;
 
 @WebServlet("/admin/usuariocrud")
@@ -30,7 +31,7 @@ public class UsuarioCRUD extends HttpServlet {
 
 		ServletContext application = getServletContext();
 
-		DAOManagerHibernate daoManager = new DAOManagerHibernate();
+		DAOManager daoManager = DAOManagerFactory.getDAOManager();
 		daoManager.abrir();
 		UsuarioDAO usuarioDAO = daoManager.getUsuarioDAO();
 		

@@ -6,7 +6,6 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.NoSuchPaddingException;
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,7 +18,8 @@ import org.apache.log4j.Logger;
 import pojos.Rol;
 import pojos.Usuario;
 import recursos.Constantes;
-import dataAccessLayer.DAOManagerHibernate;
+import dataAccessLayer.DAOManager;
+import dataAccessLayer.DAOManagerFactory;
 import dataAccessLayer.RolDAO;
 import dataAccessLayer.UsuarioDAO;
 import encriptacion.Encriptador;
@@ -40,7 +40,7 @@ public class UsuarioForm extends HttpServlet {
 
 		session.removeAttribute("errorUsuario");
 
-		DAOManagerHibernate daoManager = new DAOManagerHibernate();
+		DAOManager daoManager = DAOManagerFactory.getDAOManager();
 		daoManager.abrir();
 		UsuarioDAO usuarioDAO = daoManager.getUsuarioDAO();
 		RolDAO rolDAO = daoManager.getRolDAO();

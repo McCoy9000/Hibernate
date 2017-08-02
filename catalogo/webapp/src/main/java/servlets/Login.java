@@ -13,11 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
-
 import pojos.Usuario;
 import recursos.Constantes;
-import dataAccessLayer.DAOManagerHibernate;
+import dataAccessLayer.DAOManager;
+import dataAccessLayer.DAOManagerFactory;
 import dataAccessLayer.UsuarioDAO;
 import encriptacion.Encriptador;
 
@@ -25,7 +24,6 @@ import encriptacion.Encriptador;
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private static Logger log = Logger.getLogger(Login.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
@@ -36,7 +34,7 @@ public class Login extends HttpServlet {
 		// RECOPILACIÓN DE LOS OBJETOS A ANALIZAR Y UTILIZAR
 		HttpSession session = request.getSession();
 
-		DAOManagerHibernate daoManager = new DAOManagerHibernate();
+		DAOManager daoManager = DAOManagerFactory.getDAOManager();
 		daoManager.abrir();
 		UsuarioDAO usuarioDAO = daoManager.getUsuarioDAO();
 
@@ -119,8 +117,22 @@ public class Login extends HttpServlet {
 			session.removeAttribute("errorLogin");
 			session.setAttribute("logueado", "si");
 			session.setAttribute("usuario", usuario);
+			
+//			String referer;
+//			try {
+//				referer = new URI(request.getHeader("referer")).getPath();
+//			} catch (URISyntaxException e) {
+//				referer = "";
+//				e.printStackTrace();
+//			}
+//			if (referer.contains("checkout")) {
+//				request.getRequestDispatcher("/checkout").forward(request, response);
+//				return;
+//			}
+//			TODO redireccionamiento login
 			// Se le envía al catálogo
 			catalogo.forward(request, response);
+			return;
 		} else {
 			daoManager.cerrar();
 			session.setAttribute("errorLogin", "Contraseña incorrecta");

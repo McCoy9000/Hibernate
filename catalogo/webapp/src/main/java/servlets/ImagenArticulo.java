@@ -26,7 +26,8 @@ import pojos.ArticuloStock;
 import pojos.Imagen;
 import recursos.Constantes;
 import dataAccessLayer.ArticuloStockDAO;
-import dataAccessLayer.DAOManagerHibernate;
+import dataAccessLayer.DAOManager;
+import dataAccessLayer.DAOManagerFactory;
 import dataAccessLayer.ImagenDAO;
 
 @WebServlet("/admin/imagenarticulo")
@@ -46,25 +47,25 @@ public class ImagenArticulo extends HttpServlet {
 
 		session.removeAttribute("errorImagen");
 
-		DAOManagerHibernate daomanager = new DAOManagerHibernate();
-		daomanager.abrir();
-		ArticuloStockDAO articuloDAO = daomanager.getArticuloStockDAO();
-		daomanager.iniciarTransaccion();
+		DAOManager daoManager = DAOManagerFactory.getDAOManager();
+		daoManager.abrir();
+		ArticuloStockDAO articuloDAO = daoManager.getArticuloStockDAO();
+		daoManager.iniciarTransaccion();
 		application.setAttribute("catalogo", articuloDAO.findAll());
-		daomanager.terminarTransaccion();
+		daoManager.terminarTransaccion();
 		String realPath = application.getRealPath("/img/");
 		String op = request.getParameter("op");
 		String codigoArticulo = null;
 
 		if (("subir").equals(op)) {
-			daomanager.cerrar();
+			daoManager.cerrar();
 			request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_IMAGEN_PRODUCTOS).forward(request, response);
 			return;
 		} else {
 			try {
 				List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
 				if (items == null) {
-					daomanager.cerrar();
+					daoManager.cerrar();
 					request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_IMAGEN_PRODUCTOS + "?op=subir").forward(request, response);
 					return;
 				} else {
@@ -92,7 +93,7 @@ public class ImagenArticulo extends HttpServlet {
 								// método sin errores.
 								outStream.write(buffer);
 								log.info("Imagen cargada con éxito.");
-								ImagenDAO imagenDAO = daomanager.getImagenDAO();
+								ImagenDAO imagenDAO = daoManager.getImagenDAO();
 								Imagen imagen = new Imagen(codigoArticulo, "/img/" + codigoArticulo + ".jpg");
 								imagenDAO.insert(imagen);
 								ArticuloStock articulo = articuloDAO.findByCodigo(codigoArticulo);
@@ -121,7 +122,7 @@ public class ImagenArticulo extends HttpServlet {
 				e.printStackTrace();
 				return;
 			}
-			daomanager.cerrar();
+			daoManager.cerrar();
 			request.getRequestDispatcher(Constantes.RUTA_LISTADO_PRODUCTO).forward(request, response);
 		}
 	}

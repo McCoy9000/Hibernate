@@ -13,18 +13,21 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import pojos.ArticuloStock;
 import pojos.ArticuloCantidad;
+import pojos.ArticuloStock;
 import recursos.Constantes;
 import dataAccessLayer.ArticuloStockDAO;
 import dataAccessLayer.CarritoDAO;
 import dataAccessLayer.CarritoDAOFactory;
-import dataAccessLayer.DAOManagerHibernate;
+import dataAccessLayer.DAOManager;
+import dataAccessLayer.DAOManagerFactory;
 import factories.ProductoFactory;
 
 @WebServlet("/catalogo")
 public class Catalogo extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	
+	private static final long serialVersionUID = 5511427823584098761L;
+	
 	private static Logger log = Logger.getLogger(Catalogo.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -36,7 +39,7 @@ public class Catalogo extends HttpServlet {
 		ServletContext application = getServletContext();
 		HttpSession session = request.getSession();
 
-		DAOManagerHibernate daoManager = new DAOManagerHibernate();
+		DAOManager daoManager = DAOManagerFactory.getDAOManager();
 
 		daoManager.abrir();
 		ArticuloStockDAO articuloStockDAO = daoManager.getArticuloStockDAO();
@@ -66,7 +69,6 @@ public class Catalogo extends HttpServlet {
 
 		case "anadir":
 			id = Long.parseLong(request.getParameter("id"));
-			String codigoArticulo = request.getParameter("codigoArticulo");
 			BigInteger cantidad = BigInteger.ONE;
 			try {
 				cantidad = new BigInteger(request.getParameter("cantidad"));
@@ -80,7 +82,9 @@ public class Catalogo extends HttpServlet {
 			daoManager.iniciarTransaccion();
 			ArticuloStock as = articuloStockDAO.findById(id);
 			ArticuloCantidad ac = ProductoFactory.getArticuloCantidad(as, cantidad);
-			carritoDAO.insert(ac);
+			long acId = carritoDAO.insert(ac);
+			if (carritoDAO.findById(acId).getCantidad().compareTo(as.getStock()) > 0)
+				carritoDAO.findById(acId).setCantidad(as.getStock());
 			daoManager.terminarTransaccion();
 			daoManager.cerrar();
 

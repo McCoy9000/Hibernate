@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,10 +15,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import pojos.ArticuloStock;
-import pojos.Imagen;
 import recursos.Constantes;
 import dataAccessLayer.ArticuloStockDAO;
-import dataAccessLayer.DAOManagerHibernate;
+import dataAccessLayer.DAOManager;
+import dataAccessLayer.DAOManagerFactory;
 
 @WebServlet("/admin/articuloform")
 public class ArticuloForm extends HttpServlet {
@@ -146,13 +145,13 @@ public class ArticuloForm extends HttpServlet {
 					request.setAttribute("articulo", articulo);
 					request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_PRODUCTO + "?op=alta").forward(request, response);
 				} else {
-					DAOManagerHibernate daomanager = new DAOManagerHibernate();
-					daomanager.abrir();
-					ArticuloStockDAO articuloStockDAO = daomanager.getArticuloStockDAO();
-					daomanager.iniciarTransaccion();
+					DAOManager daoManager = DAOManagerFactory.getDAOManager();
+					daoManager.abrir();
+					ArticuloStockDAO articuloStockDAO = daoManager.getArticuloStockDAO();
+					daoManager.iniciarTransaccion();
 					articuloStockDAO.insert(articulo);
-					daomanager.terminarTransaccion();
-					daomanager.cerrar();
+					daoManager.terminarTransaccion();
+					daoManager.cerrar();
 					session.removeAttribute("errorProducto");
 					log.info("Producto(s) dado(s) de alta");
 					rutaListado.forward(request, response);
@@ -160,7 +159,7 @@ public class ArticuloForm extends HttpServlet {
 				break;
 			case "modificar":
 
-				DAOManagerHibernate manager = new DAOManagerHibernate();
+				DAOManager manager = DAOManagerFactory.getDAOManager();
 				manager.abrir();
 				ArticuloStockDAO articuloDAO = manager.getArticuloStockDAO();
 				manager.iniciarTransaccion();
@@ -190,7 +189,7 @@ public class ArticuloForm extends HttpServlet {
 				rutaListado.forward(request, response);
 				break;
 			case "borrar":
-				DAOManagerHibernate daoman = new DAOManagerHibernate();
+				DAOManager daoman = DAOManagerFactory.getDAOManager();
 				daoman.abrir();
 				ArticuloStockDAO articuloStockDAO = daoman.getArticuloStockDAO();
 				daoman.iniciarTransaccion();

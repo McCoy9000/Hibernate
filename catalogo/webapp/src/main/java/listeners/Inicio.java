@@ -16,11 +16,11 @@ import org.apache.log4j.PropertyConfigurator;
 
 import pojos.ArticuloStock;
 import pojos.Factura;
-import pojos.Imagen;
 import pojos.Rol;
 import pojos.Usuario;
 import dataAccessLayer.ArticuloStockDAO;
-import dataAccessLayer.DAOManagerHibernate;
+import dataAccessLayer.DAOManager;
+import dataAccessLayer.DAOManagerFactory;
 import dataAccessLayer.FacturaDAO;
 import dataAccessLayer.RolDAO;
 import dataAccessLayer.UsuarioDAO;
@@ -32,7 +32,6 @@ public class Inicio implements ServletContextListener {
 	private static Logger log = Logger.getLogger(Inicio.class);
 
 	public void contextDestroyed(ServletContextEvent sce) {
-		// TODO Auto-generated method stub
 	}
 
 	public void contextInitialized(ServletContextEvent sce) {
@@ -44,7 +43,7 @@ public class Inicio implements ServletContextListener {
 
 		PropertyConfigurator.configure(Inicio.class.getClassLoader().getResource("log4j.properties"));
 
-		DAOManagerHibernate daoManager = new DAOManagerHibernate();
+		DAOManager daoManager = DAOManagerFactory.getDAOManager();
 		daoManager.abrir();
 		RolDAO rolDAO = daoManager.getRolDAO();
 		UsuarioDAO usuarioDAO = daoManager.getUsuarioDAO();

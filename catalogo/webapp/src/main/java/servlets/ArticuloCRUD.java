@@ -13,7 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import pojos.ArticuloStock;
 import recursos.Constantes;
 import dataAccessLayer.ArticuloStockDAO;
-import dataAccessLayer.DAOManagerHibernate;
+import dataAccessLayer.DAOManager;
+import dataAccessLayer.DAOManagerFactory;
 
 @WebServlet("/admin/articulocrud")
 public class ArticuloCRUD extends HttpServlet {
@@ -31,7 +32,7 @@ public class ArticuloCRUD extends HttpServlet {
 
 
 		String op = request.getParameter("op");
-		DAOManagerHibernate daoManager = new DAOManagerHibernate();
+		DAOManager daoManager = DAOManagerFactory.getDAOManager();
 		daoManager.abrir();
 		ArticuloStockDAO articuloStockDAO = daoManager.getArticuloStockDAO();
 		

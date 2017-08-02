@@ -28,6 +28,8 @@ public class CarritoDAOColeccion implements CarritoDAO {
 
 	@Override
 	public long insert(ArticuloCantidad articulo) {
+		
+		
 		if(carrito.getListaArticulos().containsKey(articulo.getId())) {
 			carrito.getListaArticulos().get(articulo.getId()).setCantidad(carrito.getListaArticulos().get(articulo.getId()).getCantidad().add(articulo.getCantidad()));
 		} else {

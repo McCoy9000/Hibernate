@@ -42,9 +42,9 @@
 			<header class="container">
 	
 				<div class="row">
-				<div class="col-xs-10 col-md-11 col-lg-12">
-				<h1 style="color:#ECC007; font-family:'Special Elite', sans-serif; font-size:19vw; display:inline-block; margin-top:50px;">DRIVER</h1>
-				</div>
+				<a href = "${applicationScope.rutaBase}/catalogo"><div class="col-xs-10 col-md-11 col-lg-12">
+				 <h1 style="color:#ECC007; font-family:'Special Elite', sans-serif; font-size:19vw; display:inline-block; margin-top:50px;">DRIVER</h1>
+				</div></a>
 
 				</div>
 				<div class="row">

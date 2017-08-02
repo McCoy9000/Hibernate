@@ -5,7 +5,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
-public class DAOManagerHibernate {
+public class DAOManagerHibernate implements DAOManager {
 	protected static EntityManagerFactory emf = null;
 	protected EntityManager man = null;
 	protected EntityTransaction trans = null;
@@ -45,6 +45,9 @@ public class DAOManagerHibernate {
 		trans.commit();
 	}
 
+	public void abortarTransaccion() {
+		trans.rollback();
+	}
 
 	public ArticuloStockDAO getArticuloStockDAO() {
 			this.articuloDAO = ArticuloStockDAOFactory.getArticuloStockDAO(man);

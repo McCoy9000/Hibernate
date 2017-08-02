@@ -16,13 +16,14 @@ import pojos.ArticuloVendido;
 import pojos.Factura;
 import pojos.Usuario;
 import recursos.Constantes;
-import dataAccessLayer.DAOManagerHibernate;
+import dataAccessLayer.DAOManager;
+import dataAccessLayer.DAOManagerFactory;
 import dataAccessLayer.FacturaDAO;
 
 @WebServlet("/admin/facturacrud")
 public class FacturaCRUD extends HttpServlet {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -487312998985232007L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
@@ -32,7 +33,7 @@ public class FacturaCRUD extends HttpServlet {
 
 		ServletContext application = getServletContext();
 
-		DAOManagerHibernate daoManager = new DAOManagerHibernate();
+		DAOManager daoManager = DAOManagerFactory.getDAOManager();
 		daoManager.abrir();
 		FacturaDAO facturaDAO = daoManager.getFacturaDAO();
 
