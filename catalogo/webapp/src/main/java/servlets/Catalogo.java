@@ -50,7 +50,7 @@ public class Catalogo extends HttpServlet {
 			carritoDAO = CarritoDAOFactory.getCarritoDAO();
 		}
 
-		long id;
+		long id = 0;
 
 		String op = request.getParameter("op");
 
@@ -61,14 +61,19 @@ public class Catalogo extends HttpServlet {
 			session.setAttribute("carritoDAO", carritoDAO);
 			session.setAttribute("numeroArticulos", carritoDAO.getTotalArticulos());
 
-			request.getRequestDispatcher("/WEB-INF/vistas/catalogo.jsp").forward(request, response);
+			request.getRequestDispatcher(Constantes.RUTA_CATALOGO).forward(request, response);
 			return;
 		}
 
 		switch (op) {
 
 		case "anadir":
+			try {
 			id = Long.parseLong(request.getParameter("id"));
+			} catch (NumberFormatException nfe) {
+				nfe.printStackTrace();
+				log.info("Error al parsear el id del artículo");
+			}
 			BigInteger cantidad = BigInteger.ONE;
 			try {
 				cantidad = new BigInteger(request.getParameter("cantidad"));
@@ -80,25 +85,46 @@ public class Catalogo extends HttpServlet {
 			log.info("Cantidad recogida: " + cantidad);
 			
 			daoManager.iniciarTransaccion();
+			try {
 			ArticuloStock as = articuloStockDAO.findById(id);
 			ArticuloCantidad ac = ProductoFactory.getArticuloCantidad(as, cantidad);
 			long acId = carritoDAO.insert(ac);
 			if (carritoDAO.findById(acId).getCantidad().compareTo(as.getStock()) > 0)
 				carritoDAO.findById(acId).setCantidad(as.getStock());
-			daoManager.terminarTransaccion();
-			daoManager.cerrar();
-
+				daoManager.terminarTransaccion();
+			} catch (Exception e) {
+				daoManager.abortarTransaccion();
+				e.printStackTrace();
+				log.info("Error al añadir productos al carrito. Revise el estado de su compra, por favor");
+			} finally {
+				daoManager.cerrar();
+			}
+			
 			session.setAttribute("numeroArticulos", carritoDAO.getTotalArticulos());
 
 			request.getRequestDispatcher(Constantes.RUTA_CATALOGO).forward(request, response);
 			break;
 
 		case "ver":
-			id = Long.parseLong(request.getParameter("id"));
-
-			ArticuloStock art = articuloStockDAO.findById(id);
+			try {
+				id = Long.parseLong(request.getParameter("id"));
+			} catch (NumberFormatException nfe) {
+				nfe.printStackTrace();
+				log.info("Error al parsear el id del artículo");
+			}
+			ArticuloStock art = null;
+			daoManager.iniciarTransaccion();
+			try {
+				art = articuloStockDAO.findById(id);
+				daoManager.terminarTransaccion();
+			} catch (Exception e) {
+				daoManager.abortarTransaccion();
+				e.printStackTrace();
+				log.info("Error al recuperar el artículo con id " + id + " de la base de datos.");
+			} finally {
+				daoManager.cerrar();
+			}
 			session.setAttribute("articulo", art);
-			daoManager.cerrar();
 			request.getRequestDispatcher(Constantes.RUTA_ARTICULO).forward(request, response);
 			break;
 

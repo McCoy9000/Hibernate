@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import pojos.ArticuloStock;
 import recursos.Constantes;
 import dataAccessLayer.ArticuloStockDAO;
@@ -19,8 +21,10 @@ import dataAccessLayer.DAOManagerFactory;
 @WebServlet("/admin/articulocrud")
 public class ArticuloCRUD extends HttpServlet {
 
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = 8657287130744542024L;
+	
+	private static Logger log = Logger.getLogger(ArticuloCRUD.class);
+		
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		doPost(request, response);
@@ -37,15 +41,24 @@ public class ArticuloCRUD extends HttpServlet {
 		ArticuloStockDAO articuloStockDAO = daoManager.getArticuloStockDAO();
 		
 		if (op == null) {
-			
-			List<ArticuloStock> articulos = articuloStockDAO.findAll();
-			daoManager.cerrar();
+			List<ArticuloStock> articulos = null;
+			daoManager.iniciarTransaccion();
+			try {
+				articulos = articuloStockDAO.findAll();
+				daoManager.terminarTransaccion();
+			} catch (Exception e) {
+				daoManager.abortarTransaccion();
+				e.printStackTrace();
+				log.info("Error al recuperar los articulos del catálogo");
+			} finally {
+				daoManager.cerrar();
+			}
 			application.setAttribute("articulos", articulos);
 			request.getRequestDispatcher(Constantes.RUTA_LISTADO_PRODUCTO).forward(request, response);
 			return;
 		}
 
-		ArticuloStock articulo;
+		ArticuloStock articulo = null;
 
 		switch (op) {
 		case "modificar":
@@ -55,12 +68,23 @@ public class ArticuloCRUD extends HttpServlet {
 				id = Long.parseLong(request.getParameter("id"));
 			} catch (Exception e) {
 				e.printStackTrace();
+				log.info("Error al parsear el id de artículo");
 				request.getRequestDispatcher(Constantes.RUTA_LISTADO_PRODUCTO).forward(request, response);
 				break;
 			}
-			articulo = articuloStockDAO.findById(id);
-			daoManager.cerrar();
+			daoManager.iniciarTransaccion();
+			try {
+				articulo = articuloStockDAO.findById(id);
+				daoManager.terminarTransaccion();
+			} catch (Exception e) {
+				daoManager.abortarTransaccion();
+				e.printStackTrace();
+				log.info("Error al recuperar el artículo según Id");
+			} finally {
+				daoManager.cerrar();
+			}
 			request.setAttribute("articulo", articulo);
+			
 		case "alta":
 			request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_PRODUCTO).forward(request, response);
 			break;

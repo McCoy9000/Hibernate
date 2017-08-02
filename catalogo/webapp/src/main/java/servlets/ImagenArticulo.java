@@ -51,8 +51,15 @@ public class ImagenArticulo extends HttpServlet {
 		daoManager.abrir();
 		ArticuloStockDAO articuloDAO = daoManager.getArticuloStockDAO();
 		daoManager.iniciarTransaccion();
-		application.setAttribute("catalogo", articuloDAO.findAll());
-		daoManager.terminarTransaccion();
+		try {
+			application.setAttribute("catalogo", articuloDAO.findAll());
+			daoManager.terminarTransaccion();
+		} catch (Exception e) {
+			daoManager.abortarTransaccion();
+			e.printStackTrace();
+			log.info("Error al recuperar el catálogo de artículos");
+			
+		}
 		String realPath = application.getRealPath("/img/");
 		String op = request.getParameter("op");
 		String codigoArticulo = null;

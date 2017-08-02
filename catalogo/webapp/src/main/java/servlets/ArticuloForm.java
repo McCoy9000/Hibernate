@@ -24,6 +24,7 @@ import dataAccessLayer.DAOManagerFactory;
 public class ArticuloForm extends HttpServlet {
 
 	private static final long serialVersionUID = 3997952646417125446L;
+
 	private static Logger log = Logger.getLogger(ArticuloForm.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -51,18 +52,17 @@ public class ArticuloForm extends HttpServlet {
 		// Declaración de las variables para construir el objeto con el que se trabajará e iniciarlas con los valores recogidos
 		// del formulario
 
-		ArticuloStock articulo;
+		ArticuloStock articulo = null;
 
-		long id;
+		long id = 0;
 
 		if (request.getParameter("id") != null) {
 			try {
 				id = Long.parseLong(request.getParameter("id"));
 			} catch (Exception e) {
-				id = 0;
+				e.printStackTrace();
+				log.info("Error al parsear el Id del artículo. Se considerará 0.");
 			}
-		} else {
-			id = 0;
 		}
 
 		String codigoArticulo, nuevoCodigoArticulo;
@@ -96,39 +96,34 @@ public class ArticuloForm extends HttpServlet {
 			descripcion = request.getParameter("descripcion");
 		}
 
-		BigDecimal precio;
+		BigDecimal precio = BigDecimal.ZERO;
 
 		if (request.getParameter("precio") != null) {
 			try {
 				precio = new BigDecimal(request.getParameter("precio"));
 			} catch (Exception e) {
-				precio = BigDecimal.ZERO;
+				e.printStackTrace();
 				log.info("Error al parsear precio");
 			}
-		} else {
-			precio = BigDecimal.ZERO;
 		}
 
-		BigInteger cantidad;
+		BigInteger cantidad = BigInteger.ONE;
 
 		if (request.getParameter("cantidad") != null) {
 			try {
 				cantidad = new BigInteger(request.getParameter("cantidad"));
 			} catch (Exception e) {
-				cantidad = BigInteger.ONE;
+				e.printStackTrace();
 				log.info("Error al parsear la cantidad");
 			}
-		} else {
-			cantidad = BigInteger.ONE;
 		}
-
 		// Lógica del servlet según la opción elegida por el usuario y enviada por el navegador
 		// encapsulada en opform.
 		if (op == null) {
 			articulo = new ArticuloStock(codigoArticulo, nombre, descripcion, precio, cantidad);
 			session.removeAttribute("errorProducto");
 			request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_PRODUCTO + "?op=alta").forward(request, response);
-			//TODO aquí arriba por qué declaro un artículo y porqué el forward con op alta
+			//TODO aquí arriba por qué declaro un artículo?
 		} else {
 
 			switch (op) {
@@ -149,11 +144,18 @@ public class ArticuloForm extends HttpServlet {
 					daoManager.abrir();
 					ArticuloStockDAO articuloStockDAO = daoManager.getArticuloStockDAO();
 					daoManager.iniciarTransaccion();
-					articuloStockDAO.insert(articulo);
-					daoManager.terminarTransaccion();
-					daoManager.cerrar();
+					try {
+						articuloStockDAO.insert(articulo);
+						daoManager.terminarTransaccion();
+						log.info("Producto dado de alta.");
+					} catch (Exception e) {
+						daoManager.abortarTransaccion();
+						e.printStackTrace();
+						log.info("Error al insertar el producto.");
+					} finally {
+						daoManager.cerrar();
+					}
 					session.removeAttribute("errorProducto");
-					log.info("Producto(s) dado(s) de alta");
 					rutaListado.forward(request, response);
 				}
 				break;
@@ -163,8 +165,14 @@ public class ArticuloForm extends HttpServlet {
 				manager.abrir();
 				ArticuloStockDAO articuloDAO = manager.getArticuloStockDAO();
 				manager.iniciarTransaccion();
-				articulo = articuloDAO.findById(id);
-				manager.terminarTransaccion();
+				try {
+					articulo = articuloDAO.findById(id);
+					manager.terminarTransaccion();
+				} catch (Exception e) {
+					manager.abortarTransaccion();
+					e.printStackTrace();
+					log.info("Error al recuperar el producto con id " + id + " de la base de datos.");
+				}
 				
 				if (nombre == null || nombre == "") {
 					
@@ -176,15 +184,21 @@ public class ArticuloForm extends HttpServlet {
 				}
 			
 				manager.iniciarTransaccion();
-				articulo.setCodigoArticulo(codigoArticulo);
-				articulo.setNombre(nombre);
-				articulo.setDescripcion(descripcion);
-				articulo.setPrecio(precio);
-				articulo.setStock(cantidad);
-				
-				manager.terminarTransaccion();
-				manager.cerrar();
-				 
+				try {
+					articulo.setCodigoArticulo(codigoArticulo);
+					articulo.setNombre(nombre);
+					articulo.setDescripcion(descripcion);
+					articulo.setPrecio(precio);
+					articulo.setStock(cantidad);
+					
+					manager.terminarTransaccion();
+				} catch (Exception e) {
+					manager.abortarTransaccion();
+					e.printStackTrace();
+					log.info("Error al actualizar el artículo.");
+				} finally {
+					manager.cerrar();
+				}
 				session.removeAttribute("errorProducto");
 				rutaListado.forward(request, response);
 				break;
@@ -193,10 +207,16 @@ public class ArticuloForm extends HttpServlet {
 				daoman.abrir();
 				ArticuloStockDAO articuloStockDAO = daoman.getArticuloStockDAO();
 				daoman.iniciarTransaccion();
-				log.info(id);
-				articuloStockDAO.delete(id);
-				daoman.terminarTransaccion();
-				daoman.cerrar();
+				try {
+					articuloStockDAO.delete(id);
+					daoman.terminarTransaccion();
+				} catch (Exception e) {
+					daoman.abortarTransaccion();
+					e.printStackTrace();
+					log.info("Error al borrar el artículo.");
+				} finally {
+					daoman.cerrar();
+				}
 				session.removeAttribute("errorProducto");
 				rutaListado.forward(request, response);
 

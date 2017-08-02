@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import pojos.Usuario;
 import recursos.Constantes;
 import dataAccessLayer.DAOManager;
@@ -25,6 +27,8 @@ import encriptacion.Encriptador;
 public class Signup extends HttpServlet {
 
 	private static final long serialVersionUID = -1879791727577370812L;
+
+	private static Logger log = Logger.getLogger(Signup.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -76,9 +80,16 @@ public class Signup extends HttpServlet {
 			password2 = miEncriptador.encriptar(rawpassword2);
 		}
 		
+		Usuario usuario = null;
 		daoManager.iniciarTransaccion();
-		Usuario usuario = new Usuario(nombre, apellidos, email, username, password, rolDAO.findByName("Usuario"));
-		daoManager.terminarTransaccion();
+		try {
+			usuario = new Usuario(nombre, apellidos, email, username, password, rolDAO.findByName("Usuario"));
+			daoManager.terminarTransaccion();
+		} catch (Exception e) {
+			daoManager.abortarTransaccion();
+			e.printStackTrace();
+			log.info("Error al recuperar el rol de nombre Usuario");
+		}
 		boolean sinDatos = username == null || rawpassword == null || rawpassword2 == null;
 		boolean nombreLargo = username != null && username.length() > 20;
 		boolean passDistintas = rawpassword != null && !password.equals(password2);
@@ -132,9 +143,16 @@ public class Signup extends HttpServlet {
 		}
 
 		daoManager.iniciarTransaccion();
-		usuarioDAO.insert(usuario);
-		daoManager.terminarTransaccion();
-		daoManager.cerrar();
+		try {
+			usuarioDAO.insert(usuario);
+			daoManager.terminarTransaccion();
+		} catch (Exception e) {
+			daoManager.abortarTransaccion();
+			e.printStackTrace();
+			log.info("Error al insertar el usuario");
+		} finally {
+			daoManager.cerrar();
+		}
 
 		rutaLogin.forward(request, response);
 	}

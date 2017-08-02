@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import pojos.Usuario;
 import recursos.Constantes;
 import dataAccessLayer.DAOManager;
@@ -22,8 +24,10 @@ import encriptacion.Encriptador;
 
 @WebServlet("/login")
 public class Login extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	
+	private static final long serialVersionUID = -7432700501449176526L;
 
+	private static Logger log = Logger.getLogger(Login.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
@@ -72,10 +76,18 @@ public class Login extends HttpServlet {
 		boolean quiereSalir = ("logout").equals(op);
 		boolean yaLogueado = ("si").equals(session.getAttribute("logueado"));
 		boolean sinDatos = username == null || username == "" || password == "" || password == null;
+		boolean uInexistente = false;
+		boolean esValido = false;
 		daoManager.iniciarTransaccion();
-		boolean uInexistente = !usuarioDAO.validarNombre(usuario);
-		boolean esValido = usuarioDAO.validar(usuario);
-		daoManager.terminarTransaccion();
+		try {
+			uInexistente = !usuarioDAO.validarNombre(usuario);
+			esValido = usuarioDAO.validar(usuario);
+			daoManager.terminarTransaccion();
+		} catch (Exception e) {
+			daoManager.abortarTransaccion();
+			e.printStackTrace();
+			log.info("Error al validar el usuario");
+		}
 		RequestDispatcher login = request.getRequestDispatcher(Constantes.RUTA_LOGIN);
 		RequestDispatcher catalogo = request.getRequestDispatcher("/catalogo");
 
@@ -111,9 +123,16 @@ public class Login extends HttpServlet {
 		}
 		if (esValido) {
 			daoManager.iniciarTransaccion();
-			usuario = usuarioDAO.findByName(username);
-			daoManager.terminarTransaccion();
-			daoManager.cerrar();
+			try {
+				usuario = usuarioDAO.findByName(username);
+				daoManager.terminarTransaccion();
+			} catch (Exception e) {
+				daoManager.abortarTransaccion();
+				e.printStackTrace();
+				log.info("Error al recuperar el usuario de username " + username + ".");
+			} finally {
+				daoManager.cerrar();
+			}
 			session.removeAttribute("errorLogin");
 			session.setAttribute("logueado", "si");
 			session.setAttribute("usuario", usuario);

@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import pojos.ArticuloVendido;
 import pojos.Factura;
 import pojos.Usuario;
@@ -24,6 +26,8 @@ import dataAccessLayer.FacturaDAO;
 public class FacturaCRUD extends HttpServlet {
 
 	private static final long serialVersionUID = -487312998985232007L;
+
+	private static Logger log = Logger.getLogger(FacturaCRUD.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
@@ -44,11 +48,19 @@ public class FacturaCRUD extends HttpServlet {
 		String op = request.getParameter("op");
 
 		if (op == null) {
-
+			
+			List<Factura> facturas = null;
 			daoManager.iniciarTransaccion();
-			List<Factura> facturas = facturaDAO.findAll();
-			daoManager.terminarTransaccion();
-			daoManager.cerrar();
+			try {
+				facturas = facturaDAO.findAll();
+				daoManager.terminarTransaccion();
+			} catch (Exception e) {
+				daoManager.abortarTransaccion();
+				e.printStackTrace();
+				log.info("Error al recuperar la lista de todas las facturas");
+			} finally {
+				daoManager.cerrar();
+			}
 			application.setAttribute("facturas", facturas);
 
 			request.getRequestDispatcher(Constantes.RUTA_LISTADO_FACTURA).forward(request, response);
@@ -59,11 +71,11 @@ public class FacturaCRUD extends HttpServlet {
 
 			case "ver":
 
-				Factura factura;
-				List<ArticuloVendido> productosFactura;
-				BigDecimal ivaFactura;
-				BigDecimal precioFactura;
-				Usuario usuarioFactura;
+				Factura factura = null;
+				List<ArticuloVendido> productosFactura = null;
+				BigDecimal ivaFactura = BigDecimal.ZERO;
+				BigDecimal precioFactura = BigDecimal.ZERO;
+				Usuario usuarioFactura = null;
 
 				long id = 0;
 
@@ -76,18 +88,25 @@ public class FacturaCRUD extends HttpServlet {
 					return;
 				}
 				daoManager.iniciarTransaccion();
-				factura = facturaDAO.findById(id);
+				try {
+					factura = facturaDAO.findById(id);
 
-				productosFactura = factura.getArticulos();
-				productosFactura.size();
+					productosFactura = factura.getArticulos();
+					productosFactura.size();
 				
-				ivaFactura = facturaDAO.getIvaTotal(id);
+					ivaFactura = facturaDAO.getIvaTotal(id);
 
-				precioFactura = facturaDAO.getPrecioTotal(id);
+					precioFactura = facturaDAO.getPrecioTotal(id);
 
-				usuarioFactura = factura.getUsuario();
-				daoManager.terminarTransaccion();
-				daoManager.cerrar();
+					usuarioFactura = factura.getUsuario();
+					daoManager.terminarTransaccion();
+				} catch (Exception e) {
+					daoManager.abortarTransaccion();
+					e.printStackTrace();
+					log.info("Error al recuperar la factura");
+				} finally {
+					daoManager.cerrar();
+				}
 				session.setAttribute("factura", factura);
 				session.setAttribute("productosFactura", productosFactura);
 				session.setAttribute("ivaFactura", ivaFactura);

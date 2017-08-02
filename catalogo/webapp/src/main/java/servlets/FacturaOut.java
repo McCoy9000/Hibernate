@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import recursos.Constantes;
+
 @WebServlet("/facturaout")
 public class FacturaOut extends HttpServlet {
 
@@ -24,11 +26,11 @@ public class FacturaOut extends HttpServlet {
 		String op = request.getParameter("op");
 
 		if (op == null) {
-			request.getRequestDispatcher("/WEB-INF/vistas/agradecimiento.jsp").forward(request, response);
+			request.getRequestDispatcher(Constantes.RUTA_AGRADECIMIENTO).forward(request, response);
 		} else {
 			switch (op) {
 			case "factura":
-				request.getRequestDispatcher("/WEB-INF/vistas/factura.jsp").forward(request, response);
+				request.getRequestDispatcher(Constantes.RUTA_FACTURA_FACTURA).forward(request, response);
 				break;
 			}
 		}

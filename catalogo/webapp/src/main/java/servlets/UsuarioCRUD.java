@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import pojos.Usuario;
 import recursos.Constantes;
 import dataAccessLayer.DAOManager;
@@ -22,6 +24,8 @@ import dataAccessLayer.UsuarioDAO;
 public class UsuarioCRUD extends HttpServlet {
 
 	private static final long serialVersionUID = 5262202010560510599L;
+
+	private static Logger log = Logger.getLogger(UsuarioCRUD.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
@@ -45,7 +49,18 @@ public class UsuarioCRUD extends HttpServlet {
 		String op = request.getParameter("op");
 
 		if (op == null) {
-			List<Usuario> usuarios = usuarioDAO.findAll();
+			List<Usuario> usuarios = null;
+			daoManager.iniciarTransaccion();
+			try {
+				usuarios = usuarioDAO.findAll();
+				daoManager.terminarTransaccion();
+			} catch (Exception e) {
+				daoManager.abortarTransaccion();
+				e.printStackTrace();
+				log.info("Error al recuperar la lista de usuarios");
+			} finally {
+				daoManager.cerrar();
+			}
 			Iterator<Usuario> it = usuarios.iterator();
 			do {
 				Usuario usuario = it.next();
@@ -53,13 +68,12 @@ public class UsuarioCRUD extends HttpServlet {
 					it.remove();;
 			} while (it.hasNext());
 
-			daoManager.cerrar();
 			application.setAttribute("usuarios", usuarios);
 			request.getRequestDispatcher(Constantes.RUTA_LISTADO_USUARIO).forward(request, response);
 			return;
 		}
 
-		Usuario usuario;
+		Usuario usuario = null;
 
 		switch (op) {
 		case "modificar":
@@ -72,8 +86,15 @@ public class UsuarioCRUD extends HttpServlet {
 				request.getRequestDispatcher(Constantes.RUTA_LISTADO_USUARIO).forward(request, response);
 				break;
 			}
-			
-			usuario = usuarioDAO.findById(id);
+			daoManager.iniciarTransaccion();
+			try {
+				usuario = usuarioDAO.findById(id);
+				daoManager.terminarTransaccion();
+			} catch (Exception e) {
+				daoManager.abortarTransaccion();
+				e.printStackTrace();
+				log.info("Error al recuperar el usuario con id " + id + ".");
+			}
 			request.setAttribute("usuario", usuario);
 		case "alta":
 			daoManager.cerrar();;

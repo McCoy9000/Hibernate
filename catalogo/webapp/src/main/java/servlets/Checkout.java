@@ -13,12 +13,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import pojos.ArticuloCantidad;
 import pojos.ArticuloStock;
 import pojos.ArticuloVendido;
 import pojos.Comprador;
 import pojos.Factura;
 import pojos.Usuario;
+import recursos.Constantes;
 import dataAccessLayer.ArticuloStockDAO;
 import dataAccessLayer.CarritoDAO;
 import dataAccessLayer.CarritoDAOFactory;
@@ -31,7 +34,10 @@ import factories.ProductoFactory;
 
 @WebServlet("/checkout")
 public class Checkout extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = 6627315683844676739L;
+	
+	private static Logger log = Logger.getLogger(Checkout.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
@@ -86,38 +92,54 @@ public class Checkout extends HttpServlet {
 			
 			ArticuloStockDAO articuloStockDAO = daoManager.getArticuloStockDAO();
 			UsuarioDAO usuarioDAO = daoManager.getUsuarioDAO();
-			usuario = usuarioDAO.findById(usuario.getId());
+			daoManager.iniciarTransaccion();
+			try {
+				usuario = usuarioDAO.findById(usuario.getId());
+				daoManager.terminarTransaccion();
+			} catch (Exception e) {
+				daoManager.abortarTransaccion();
+				e.printStackTrace();
+				log.info("Error al recuperar el usuario con id " + usuario.getId() + " de la base de datos.");
+			}
 			FacturaDAO facturaDAO = daoManager.getFacturaDAO();
 			daoManager.iniciarTransaccion();
-			Factura factura = new Factura(usuario, new Comprador(usuario.getId(), usuario.getNombre(), usuario.getApellidos(), usuario.getFechaNacimiento(), usuario.getDocumento(),
-					usuario.getTelefono(), usuario.getEmail(), usuario.getDireccion(), usuario.getEmpresa()), LocalDate.now());
-			facturaDAO.insert(factura);
-
-			List<ArticuloCantidad> articulosCarrito = carritoDAO.findAll();
-			List<ArticuloVendido> articulosFactura = new ArrayList<ArticuloVendido>();
-			
-			for (ArticuloCantidad ac : articulosCarrito) {
-				articulosFactura.add(ProductoFactory.getArticuloVendido(ac, ac.getCantidad(), factura));
-				ArticuloStock as = articuloStockDAO.findById(ac.getId());
-				as.setStock(as.getStock().subtract(ac.getCantidad()));
-			}
-			
-			
-			ImagenDAO imagenDAO = daoManager.getImagenDAO();
-			for (ArticuloVendido av: articulosFactura) {
-				av.setImagen(imagenDAO.findById(av.getImagen().getId()));
+			try {
+				Factura factura = new Factura(usuario, new Comprador(usuario.getId(), usuario.getNombre(), usuario.getApellidos(), usuario.getFechaNacimiento(), usuario.getDocumento(),
+						usuario.getTelefono(), usuario.getEmail(), usuario.getDireccion(), usuario.getEmpresa()), LocalDate.now());
+				facturaDAO.insert(factura);
+	
+				List<ArticuloCantidad> articulosCarrito = carritoDAO.findAll();
+				List<ArticuloVendido> articulosFactura = new ArrayList<ArticuloVendido>();
 				
+				for (ArticuloCantidad ac : articulosCarrito) {
+					articulosFactura.add(ProductoFactory.getArticuloVendido(ac, ac.getCantidad(), factura));
+					ArticuloStock as = articuloStockDAO.findById(ac.getId());
+					as.setStock(as.getStock().subtract(ac.getCantidad()));
+				}
+				
+				
+				ImagenDAO imagenDAO = daoManager.getImagenDAO();
+				for (ArticuloVendido av: articulosFactura) {
+					av.setImagen(imagenDAO.findById(av.getImagen().getId()));
+					
+				}
+				factura.setArticulos(articulosFactura);
+	
+	
+				session.setAttribute("factura", factura);
+				session.setAttribute("articulosFactura", factura.getArticulos());
+				session.setAttribute("ivaFactura", facturaDAO.getIvaTotal(factura.getId()));
+				session.setAttribute("precioFactura", facturaDAO.getPrecioTotal(factura.getId()));
+				session.setAttribute("usuarioFactura", factura.getComprador());
+				daoManager.terminarTransaccion();
+			} catch (Exception e) {
+				daoManager.terminarTransaccion();
+				e.printStackTrace();
+				log.info("Error al pagar la compra. Revise sus facturas y, en caso necesario, repita la operación");
+			} finally {
+				daoManager.cerrar();
 			}
-			factura.setArticulos(articulosFactura);
-
-
-			session.setAttribute("factura", factura);
-			session.setAttribute("articulosFactura", factura.getArticulos());
-			session.setAttribute("ivaFactura", facturaDAO.getIvaTotal(factura.getId()));
-			session.setAttribute("precioFactura", facturaDAO.getPrecioTotal(factura.getId()));
-			session.setAttribute("usuarioFactura", factura.getComprador());
-			daoManager.terminarTransaccion();
-			daoManager.cerrar();
+			
 			
 			session.setAttribute("carritoDAO", CarritoDAOFactory.getCarritoDAO());
 			session.setAttribute("articulosCarrito", carritoDAO.findAll());
@@ -135,7 +157,7 @@ public class Checkout extends HttpServlet {
 			try {
 				id = Long.parseLong(request.getParameter("id"));
 			} catch (NumberFormatException nfe) {
-				request.getRequestDispatcher("/catalogo").forward(request, response);
+				request.getRequestDispatcher("/checkout").forward(request, response);
 				break;
 			}
 			
@@ -154,11 +176,11 @@ public class Checkout extends HttpServlet {
 				request.getRequestDispatcher("/catalogo").forward(request, response);
 				break;
 			}
-			request.getRequestDispatcher("/WEB-INF/vistas/checkout.jsp").forward(request, response);
+			request.getRequestDispatcher(Constantes.RUTA_CHECKOUT).forward(request, response);
 			break;
 		default:
 			daoManager.cerrar();
-			request.getRequestDispatcher("/WEB-INF/vistas/checkout.jsp").forward(request, response);
+			request.getRequestDispatcher(Constantes.RUTA_CHECKOUT).forward(request, response);
 		}
 	}
 }

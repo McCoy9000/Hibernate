@@ -26,8 +26,9 @@ import encriptacion.Encriptador;
 
 @WebServlet("/admin/usuarioform")
 public class UsuarioForm extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-
+	
+	private static final long serialVersionUID = 178925444152187664L;
+	
 	private static Logger log = Logger.getLogger(UsuarioForm.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -48,7 +49,7 @@ public class UsuarioForm extends HttpServlet {
 		
 		String op = request.getParameter("opform");
 
-		Usuario usuario;
+		Usuario usuario = null;
 
 		long id;
 		try {
@@ -135,10 +136,17 @@ public class UsuarioForm extends HttpServlet {
 				if (password != null && password != "" && password.equals(password2)) {
 					if (!usuarioDAO.validarNombre(usuario)) {
 						daoManager.iniciarTransaccion();
-						usuarioDAO.insert(usuario);
-						daoManager.terminarTransaccion();
-						daoManager.cerrar();
-						log.info("Usuario " + usuario.getUsername() + " dado de alta");
+						try {
+							usuarioDAO.insert(usuario);
+							daoManager.terminarTransaccion();
+							log.info("Usuario " + usuario.getUsername() + " dado de alta");
+						} catch (Exception e) {
+							daoManager.abortarTransaccion();
+							e.printStackTrace();
+							log.info("Error al insertar usuario");
+						} finally {
+							daoManager.cerrar();
+						}
 						session.removeAttribute("errorUsuario");
 						rutaListado.forward(request, response);
 					} else {
@@ -159,14 +167,22 @@ public class UsuarioForm extends HttpServlet {
 				daoManager.iniciarTransaccion();
 				usuario = usuarioDAO.findById(id);
 				if (!("admin").equals(usuario.getUsername())) {
-					usuario.setUsername(username);
-					usuario.setPassword(password2);
-					usuario.setEmail(email);
-					usuario.setNombre(nombre);
-					usuario.setApellidos(apellidos);
-					usuario.setRol(rol);
-					daoManager.terminarTransaccion();
-					daoManager.cerrar();
+					try {
+						usuario.setUsername(username);
+						usuario.setPassword(password2);
+						usuario.setEmail(email);
+						usuario.setNombre(nombre);
+						usuario.setApellidos(apellidos);
+						usuario.setRol(rol);
+						daoManager.terminarTransaccion();
+					
+					} catch (Exception e) {
+						daoManager.abortarTransaccion();
+						e.printStackTrace();
+						log.info("Error al actualizar el usuario");
+					} finally {
+						daoManager.cerrar();
+					}
 					session.removeAttribute("errorUsuario");
 					rutaListado.forward(request, response);
 				} else {
@@ -179,11 +195,26 @@ public class UsuarioForm extends HttpServlet {
 
 			case "borrar":
 				daoManager.iniciarTransaccion();
-				usuario = usuarioDAO.findById(id);
-				if (!("admin").equals(usuario.getUsername())) {
-					usuarioDAO.delete(id);
+				try {
+					usuario = usuarioDAO.findById(id);
 					daoManager.terminarTransaccion();
-					daoManager.cerrar();
+				} catch (Exception e) {
+					daoManager.abortarTransaccion();
+					e.printStackTrace();
+					log.info("Error al buscar el usuario con id " + id + ".");
+				}
+				if (!("admin").equals(usuario.getUsername())) {
+					daoManager.iniciarTransaccion();
+					try {
+						usuarioDAO.delete(id);
+						daoManager.terminarTransaccion();
+					} catch (Exception e) {
+						daoManager.abortarTransaccion();
+						e.printStackTrace();
+						log.info("Error al borrar el usuario");
+					} finally {
+						daoManager.cerrar();
+					}
 					session.removeAttribute("errorUsuario");
 					rutaListado.forward(request, response);
 					break;

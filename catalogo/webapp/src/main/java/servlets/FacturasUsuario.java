@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import pojos.ArticuloVendido;
 import pojos.Comprador;
 import pojos.Factura;
@@ -27,6 +29,8 @@ import dataAccessLayer.UsuarioDAO;
 public class FacturasUsuario extends HttpServlet {
 
 	private static final long serialVersionUID = 7854898201744246941L;
+
+	private static Logger log = Logger.getLogger(FacturasUsuario.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
@@ -47,7 +51,15 @@ public class FacturasUsuario extends HttpServlet {
 		UsuarioDAO usuarioDAO = daoManager.getUsuarioDAO();
 		
 		if(usuario != null) {
+			daoManager.iniciarTransaccion();
+			try {
 			usuario = usuarioDAO.findById(usuario.getId());
+			daoManager.terminarTransaccion();
+			} catch (Exception e) {
+				daoManager.abortarTransaccion();
+				e.printStackTrace();
+				log.info("Error al recuperar el usuario con id " + usuario.getId() + " de la base de datos");
+			}
 		} else {
 			daoManager.cerrar();
 			request.getRequestDispatcher(Constantes.RUTA_LOGIN).forward(request, response);

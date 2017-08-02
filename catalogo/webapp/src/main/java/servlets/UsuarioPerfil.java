@@ -119,13 +119,20 @@ public class UsuarioPerfil extends HttpServlet {
 
 		String opform = request.getParameter("opform");
 
-		Usuario usuario;
+		Usuario usuario = null;
 
 		if (("ver").equals(op)) {
 			daoManager.iniciarTransaccion();
-			usuario = usuarioDAO.findById(id);
-			daoManager.terminarTransaccion();
-			daoManager.cerrar();
+			try {
+				usuario = usuarioDAO.findById(id);
+				daoManager.terminarTransaccion();
+			} catch (Exception e) {
+				daoManager.abortarTransaccion();
+				e.printStackTrace();
+				log.info("Error al recuperar el usuario con id " + id + ".");
+			} finally {
+				daoManager.cerrar();
+			}
 			session.setAttribute("usuario", usuario);
 			request.getRequestDispatcher(Constantes.RUTA_PERFIL_USUARIO).forward(request, response);
 			return;
@@ -134,9 +141,16 @@ public class UsuarioPerfil extends HttpServlet {
 			case "formulario":
 				
 				daoManager.iniciarTransaccion();
-				usuario = usuarioDAO.findById(id);
-				daoManager.terminarTransaccion();
-				daoManager.cerrar();
+				try {
+					usuario = usuarioDAO.findById(id);
+					daoManager.terminarTransaccion();
+				} catch (Exception e) {
+					daoManager.abortarTransaccion();
+					e.printStackTrace();
+					log.info("Error al recuperar el usuario con id " + id + ".");
+				} finally {
+					daoManager.cerrar();
+				}
 				session.setAttribute("usuario", usuario);
 
 				request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_PERFIL_USUARIO).forward(request, response);
@@ -146,10 +160,16 @@ public class UsuarioPerfil extends HttpServlet {
 
 				usuario = new Usuario(nombre, apellidos, email, username, password, rol);
 				
-				log.info(usuarioDAO.findById(id).getUsername());
-				log.info(usuario.getUsername());
-				boolean usuarioExistente = usuarioDAO.validarNombre(usuario) && !usuario.getUsername().equals(usuarioDAO.findById(id).getUsername());
-
+				boolean usuarioExistente = false;
+				daoManager.iniciarTransaccion();
+				try {
+					usuarioExistente = usuarioDAO.validarNombre(usuario) && !usuario.getUsername().equals(usuarioDAO.findById(id).getUsername());
+					daoManager.terminarTransaccion();
+				} catch (Exception e) {
+					daoManager.abortarTransaccion();
+					e.printStackTrace();
+					log.info("Error al validar el nombre de usuario " + usuario.getNombre() + ".");
+				} 
 				if (usuarioExistente) {
 					daoManager.cerrar();
 					log.info("pasa por usuario existente");
@@ -158,18 +178,19 @@ public class UsuarioPerfil extends HttpServlet {
 					return;
 				} else if (password != null && password != "" && password.equals(password2)) {
 					daoManager.iniciarTransaccion();
+					try {
 					usuario = usuarioDAO.findById(id);
-					daoManager.terminarTransaccion();
-					daoManager.iniciarTransaccion();
+					
+					
 					Direccion direccion = null;
+					
 					if(usuario.getDireccion() != null) {
 						direccion = direccionDAO.findById(usuario.getDireccion().getId());
 					} else {
 						direccion = new Direccion();
 						direccionDAO.insert(direccion);
 					}
-					daoManager.terminarTransaccion();
-					daoManager.iniciarTransaccion();
+					
 					Empresa empresa;
 					if(usuario.getEmpresa() != null) {
 						empresa = empresaDAO.findById(usuario.getEmpresa().getId());
@@ -177,8 +198,7 @@ public class UsuarioPerfil extends HttpServlet {
 						empresa = new Empresa();
 						empresaDAO.insert(empresa);
 					}
-					daoManager.terminarTransaccion();
-					daoManager.iniciarTransaccion();
+					
 					direccion.setCodigoPostal(codigoPostal);
 					direccion.setPuerta(puerta);
 					direccion.setPiso(piso);
@@ -201,8 +221,13 @@ public class UsuarioPerfil extends HttpServlet {
 					usuario.setEmpresa(empresa);
 
 					daoManager.terminarTransaccion();
-					daoManager.cerrar();
-					
+					} catch (Exception e) {
+						daoManager.abortarTransaccion();
+						e.printStackTrace();
+						log.info("Error al buscar el usuario con id " + id + ".");
+					} finally {
+						daoManager.cerrar();
+					}
 					session.setAttribute("usuario", usuario);
 					session.setAttribute("usuarioFactura", usuario);
 					session.removeAttribute("errorPerfil");

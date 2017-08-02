@@ -74,9 +74,10 @@ public class UsuarioDAOHibernate extends IpartekDAOHibernate implements UsuarioD
 		Usuario user = null;
 		if (usuario != null) {
 			user = this.findByName(usuario.getUsername());
-			if (usuario.getUsername() != null && usuario.getPassword() != null)
-				if (usuario.getUsername().equals(user.getUsername()) && usuario.getPassword().equals(user.getPassword()))
-					return true;
+			if (user != null)
+				if (usuario.getUsername() != null && usuario.getPassword() != null)
+					if (usuario.getUsername().equals(user.getUsername()) && usuario.getPassword().equals(user.getPassword()))
+						return true;
 		}
 		return false;
 	}
