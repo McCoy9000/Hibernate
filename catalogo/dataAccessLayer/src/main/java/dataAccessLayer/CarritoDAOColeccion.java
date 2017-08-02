@@ -6,15 +6,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import pojos.ArticuloCantidad;
 import pojos.Carrito;
 import recursos.Constantes;
 
 public class CarritoDAOColeccion implements CarritoDAO {
-
-	private static Logger log = Logger.getLogger(CarritoDAOColeccion.class);
 
 	Carrito carrito;
 
