@@ -57,7 +57,7 @@ public class Checkout extends HttpServlet {
 		DAOManager daoManager = DAOManagerFactory.getDAOManager();
 		daoManager.abrir();
 		session.setAttribute("articulosCarrito", carritoDAO.findAll());
-		session.setAttribute("numeroProductos", carritoDAO.findAll().size());
+		session.setAttribute("numeroArticulos", carritoDAO.getTotalArticulos());
 		session.setAttribute("precioTotal", carritoDAO.getPrecioTotal());
 
 		if (carritoDAO.findAll().size() == 0) {
@@ -78,7 +78,7 @@ public class Checkout extends HttpServlet {
 			carritoDAO = CarritoDAOFactory.getCarritoDAO();
 			daoManager.cerrar();
 			session.setAttribute("carritoDAO", carritoDAO);
-			session.setAttribute("numeroProductos", carritoDAO.findAll().size());
+			session.setAttribute("numeroArticulos", carritoDAO.getTotalArticulos());
 			request.getRequestDispatcher("/catalogo").forward(request, response);
 			break;
 
@@ -143,7 +143,7 @@ public class Checkout extends HttpServlet {
 			
 			session.setAttribute("carritoDAO", CarritoDAOFactory.getCarritoDAO());
 			session.setAttribute("articulosCarrito", carritoDAO.findAll());
-			session.setAttribute("numeroProductos", carritoDAO.findAll().size());
+			session.setAttribute("numeroArticulos", carritoDAO.getTotalArticulos());
 			session.setAttribute("precioTotal", carritoDAO.getPrecioTotal());
 
 			request.getRequestDispatcher("/catalogo").forward(request, response);
@@ -169,7 +169,7 @@ public class Checkout extends HttpServlet {
 			daoManager.cerrar();
 			session.setAttribute("carritoDAO", carritoDAO);
 			session.setAttribute("articulosCarrito", carritoDAO.findAll());
-			session.setAttribute("numeroProductos", carritoDAO.findAll().size());
+			session.setAttribute("numeroArticulos", carritoDAO.getTotalArticulos());
 			session.setAttribute("precioTotal", carritoDAO.getPrecioTotal());
 
 			if (carritoDAO.findAll().size() == 0) {
