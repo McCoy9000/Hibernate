@@ -18,11 +18,11 @@ import org.apache.log4j.Logger;
 import pojos.Rol;
 import pojos.Usuario;
 import recursos.Constantes;
+import recursos.Encriptador;
 import dataAccessLayer.DAOManager;
 import dataAccessLayer.DAOManagerFactory;
 import dataAccessLayer.RolDAO;
 import dataAccessLayer.UsuarioDAO;
-import encriptacion.Encriptador;
 
 @WebServlet("/admin/usuarioform")
 public class UsuarioForm extends HttpServlet {

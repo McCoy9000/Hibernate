@@ -17,10 +17,10 @@ import org.apache.log4j.Logger;
 
 import pojos.Usuario;
 import recursos.Constantes;
+import recursos.Encriptador;
 import dataAccessLayer.DAOManager;
 import dataAccessLayer.DAOManagerFactory;
 import dataAccessLayer.UsuarioDAO;
-import encriptacion.Encriptador;
 
 @WebServlet("/login")
 public class Login extends HttpServlet {

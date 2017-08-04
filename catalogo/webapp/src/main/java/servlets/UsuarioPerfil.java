@@ -19,13 +19,13 @@ import pojos.Empresa;
 import pojos.Rol;
 import pojos.Usuario;
 import recursos.Constantes;
+import recursos.Encriptador;
 import dataAccessLayer.DAOManager;
 import dataAccessLayer.DAOManagerFactory;
 import dataAccessLayer.DireccionDAO;
 import dataAccessLayer.EmpresaDAO;
 import dataAccessLayer.RolDAO;
 import dataAccessLayer.UsuarioDAO;
-import encriptacion.Encriptador;
 
 @WebServlet("/usuarioperfil")
 public class UsuarioPerfil extends HttpServlet {

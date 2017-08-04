@@ -23,6 +23,6 @@ public interface FacturaDAO extends IpartekDAO {
 
 	public BigDecimal getPrecioTotal(long id);
 
-	public long getMaxId();
+	public long getNextId();
 
 }

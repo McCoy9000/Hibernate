@@ -18,13 +18,13 @@ import pojos.ArticuloStock;
 import pojos.Factura;
 import pojos.Rol;
 import pojos.Usuario;
+import recursos.Encriptador;
 import dataAccessLayer.ArticuloStockDAO;
 import dataAccessLayer.DAOManager;
 import dataAccessLayer.DAOManagerFactory;
 import dataAccessLayer.FacturaDAO;
 import dataAccessLayer.RolDAO;
 import dataAccessLayer.UsuarioDAO;
-import encriptacion.Encriptador;
 
 @WebListener("/inicio")
 public class Inicio implements ServletContextListener {
@@ -51,7 +51,7 @@ public class Inicio implements ServletContextListener {
 		FacturaDAO facturaDAO = daoManager.getFacturaDAO();
 
 		daoManager.iniciarTransaccion();
-
+		try {
 		rolDAO.insert(new Rol(1, "Administrador", "Administrador de la web"));
 		rolDAO.insert(new Rol(2, "Usuario", "Usuario de la web"));
 		rolDAO.insert(new Rol(3, "Departamento", "Departamento de ventas"));
@@ -78,15 +78,18 @@ public class Inicio implements ServletContextListener {
 		articuloStockDAO.insert(new ArticuloStock("5", "Cobra", "Descripción", new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
 		articuloStockDAO.insert(new ArticuloStock("6", "Eldorado", "Descripción", new BigDecimal("1000").setScale(2, BigDecimal.ROUND_HALF_EVEN), new BigInteger("10")));
 		log.info("Creados 6 productos de prueba");
-		// usuarioDAO.terminarTransaccion();
 		application.setAttribute("catalogo", articuloStockDAO.findAll());
 		log.info("Guardado el catalogo en application");
-		Factura.setSiguienteFactura(facturaDAO.getMaxId());
+		Factura.setSiguienteFactura(facturaDAO.getNextId());
 		log.info("Registrado el último número de factura: " + Factura.getSiguienteFactura());
-		// usuarioDAO.cerrarManager();
 		daoManager.terminarTransaccion();
-		daoManager.cerrar();
-
+		} catch (Exception e) {
+			daoManager.abortarTransaccion();
+			e.printStackTrace();
+			log.info("Error al crear el entorno de la web. Por favor, reinicie la aplicación.");
+		} finally {
+			daoManager.cerrar();
+		}
 	}
 
 }

@@ -80,7 +80,7 @@ public class FacturaDAOHibernate extends IpartekDAOHibernate implements FacturaD
 	}
 
 	@Override
-	public long getMaxId() {
+	public long getNextId() {
 		long maxFactura = 0L;
 				try {
 					maxFactura = (long) man.createQuery("SELECT max(f.id) from Factura f").getSingleResult();
