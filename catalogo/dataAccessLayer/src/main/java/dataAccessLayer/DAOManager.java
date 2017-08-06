@@ -1,6 +1,7 @@
 package dataAccessLayer;
 
 public interface DAOManager {
+	
 	public void abrir() ;
 	
 	public void cerrar();

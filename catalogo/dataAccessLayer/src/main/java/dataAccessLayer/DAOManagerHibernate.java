@@ -6,6 +6,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 public class DAOManagerHibernate implements DAOManager {
+	
 	protected static EntityManagerFactory emf = null;
 	protected EntityManager man = null;
 	protected EntityTransaction trans = null;

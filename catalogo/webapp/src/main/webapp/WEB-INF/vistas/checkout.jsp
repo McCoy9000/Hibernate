@@ -29,7 +29,7 @@
 		<c:forEach items="${sessionScope.articulosCarrito}" var="producto">
 			<tr id="carrito">
 				<td style="text-align:center; vertical-align: middle;">${producto.nombre}</td>
-				<td style="text-align:center; vertical-align: middle;"><object data="${applicationScope.rutaBase}${articulo.imagen.url}" height="128" type="image/png"><img src="${applicationScope.rutaBase}/img/0.jpg" height="128"/></object></td>
+				<td style="text-align:center; vertical-align: middle;"><object data="${applicationScope.rutaBase}${producto.imagen.url}" height="128" type="image/png"><img src="${applicationScope.rutaBase}/img/0.jpg" height="128"/></object></td>
 				<td style="text-align:center; vertical-align: middle;">${producto.precio} €</td>
 				<td style="text-align:center; vertical-align: middle;">${producto.cantidad}</td>
 				<td style="text-align:center; vertical-align: middle;"><form action="${applicationScope.rutaBase}/checkout#${articulo.codigoArticulo}" method="post">
