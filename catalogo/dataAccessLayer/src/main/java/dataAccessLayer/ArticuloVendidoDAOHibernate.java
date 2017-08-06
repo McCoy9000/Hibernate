@@ -55,11 +55,10 @@ public class ArticuloVendidoDAOHibernate extends IpartekDAOHibernate implements 
 	}
 
 	@Override
-	public ArticuloVendido findByCodigo(String codigo) {
+	public List<ArticuloVendido> findByCodigo(String codigo) {
 		@SuppressWarnings("unchecked")
 		List<ArticuloVendido> articulos = (List<ArticuloVendido>) man.createQuery("FROM ArticuloVendido WHERE codigoArticulo='" + codigo + "'").getResultList();
-		ArticuloVendido articulo = articulos.get(0);
-		return articulo;
+		return articulos;
 	}
 
 	@Override

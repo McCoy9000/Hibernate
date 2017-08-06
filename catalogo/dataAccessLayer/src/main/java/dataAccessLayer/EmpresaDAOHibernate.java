@@ -55,11 +55,10 @@ public class EmpresaDAOHibernate extends IpartekDAOHibernate implements EmpresaD
 	}
 
 	@Override
-	public Empresa findByName(String nombre) {
+	public List<Empresa> findByName(String nombre) {
 		@SuppressWarnings("unchecked")
-		List<Empresa> empresas = (List<Empresa>) man.createQuery("FROM Empresa WHERE username='" + nombre + "'").getResultList();
-		Empresa empresa = empresas.get(0);
-		return empresa;
+		List<Empresa> empresas = (List<Empresa>) man.createQuery("FROM Empresa WHERE nombre='" + nombre + "'").getResultList();
+		return empresas;
 	}
 
 	@Override

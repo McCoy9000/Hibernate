@@ -5,10 +5,14 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.apache.log4j.Logger;
+
 import pojos.ArticuloStock;
 
 public class ArticuloStockDAOHibernate extends IpartekDAOHibernate implements ArticuloStockDAO {
 
+	private static Logger log = Logger.getLogger(ArticuloStockDAOHibernate.class);
+	
 	public ArticuloStockDAOHibernate() {
 
 	}
@@ -55,8 +59,14 @@ public class ArticuloStockDAOHibernate extends IpartekDAOHibernate implements Ar
 
 	@Override
 	public ArticuloStock findByCodigo(String codigo) {
-		ArticuloStock articulo = (ArticuloStock) man.createQuery("FROM ArticuloStock WHERE codigoArticulo='" + codigo + "'").getSingleResult();
-		return articulo;
+		ArticuloStock articulo = null;
+		try {
+		articulo = (ArticuloStock) man.createQuery("FROM ArticuloStock WHERE codigoArticulo='" + codigo + "'").getSingleResult();
+		} catch (Exception e) {
+			log.info("Cazada excepción por no encontrar resultado con un método getSingleResult()");
+		}	
+			return articulo;
+		
 	}
 
 	@Override

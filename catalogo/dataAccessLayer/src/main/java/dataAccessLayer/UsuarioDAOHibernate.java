@@ -63,8 +63,8 @@ public class UsuarioDAOHibernate extends IpartekDAOHibernate implements UsuarioD
 		try {
 			usuario = (Usuario) man.createQuery("FROM Usuario u WHERE u.username='" + username + "'").getSingleResult();
 		} catch (Exception e) {
-			e.printStackTrace();
-			log.info("usuario = null en Usuario.findByName()");
+			log.info("Cazada excepción por no encontrar ningún resultado en la Base de Datos al buscar con createQuery y"
+					+ "pedir getSingleResult()");
 		}
 		return usuario;
 	}

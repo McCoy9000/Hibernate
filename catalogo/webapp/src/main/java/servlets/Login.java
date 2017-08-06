@@ -1,6 +1,8 @@
 package servlets;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
@@ -137,17 +139,28 @@ public class Login extends HttpServlet {
 			session.setAttribute("logueado", "si");
 			session.setAttribute("usuario", usuario);
 			
-//			String referer;
-//			try {
-//				referer = new URI(request.getHeader("referer")).getPath();
-//			} catch (URISyntaxException e) {
-//				referer = "";
-//				e.printStackTrace();
-//			}
-//			if (referer.contains("checkout")) {
-//				request.getRequestDispatcher("/checkout").forward(request, response);
-//				return;
-//			}
+			String referer;
+			try {
+				referer = new URI(request.getHeader("referer")).getPath();
+			} catch (URISyntaxException e) {
+				referer = "";
+				e.printStackTrace();
+			}
+
+			if (referer.contains("checkout")) {
+				request.getRequestDispatcher(Constantes.RUTA_SERVLET_CHECKOUT).forward(request, response);
+				return;
+			}
+			
+			if (referer.contains("usuarioperfil")) {
+				request.getRequestDispatcher(Constantes.RUTA_SERVLET_PERFIL_USUARIO + "?opform=formulario").forward(request, response);
+				return;
+			}
+
+			if (referer.contains("facturasusuario")) {
+				request.getRequestDispatcher(Constantes.RUTA_SERVLET_FACTURA_USUARIOS).forward(request, response);
+				return;
+			}
 //			TODO redireccionamiento login
 			// Se le envía al catálogo
 			catalogo.forward(request, response);

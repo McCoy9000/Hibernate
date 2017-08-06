@@ -18,7 +18,7 @@ public interface ArticuloVendidoDAO extends IpartekDAO {
 
 	public ArticuloVendido findById(long id);
 
-	public ArticuloVendido findByCodigo(String codigo);
+	public List<ArticuloVendido> findByCodigo(String codigo);
 
 	public boolean validar(ArticuloVendido articulo);
 

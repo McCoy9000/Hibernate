@@ -12,6 +12,8 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import recursos.Constantes;
+
 @WebFilter("/facturaout")
 public class FacturaFilter implements Filter {
 
@@ -30,7 +32,7 @@ public class FacturaFilter implements Filter {
 		HttpSession session = req.getSession();
 		
 		if (session.getAttribute("usuario") == null) {
-			request.getRequestDispatcher("/WEB-INF/vistas/loginprompt.jsp").forward(request, response);
+			request.getRequestDispatcher(Constantes.RUTA_LOGINPROMPT).forward(request, response);
 		} else {
 			chain.doFilter(request, response);
 		}

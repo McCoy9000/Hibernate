@@ -18,7 +18,7 @@ public interface EmpresaDAO extends IpartekDAO {
 
 	public Empresa findById(long id);
 
-	public Empresa findByName(String nombre);
+	public List<Empresa> findByName(String nombre);
 
 	public boolean validar(Empresa empresa);
 

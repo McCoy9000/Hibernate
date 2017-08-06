@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import pojos.Usuario;
+import recursos.Constantes;
 
 @WebFilter("/admin/*")
 public class AutorizacionFilter implements Filter {
@@ -53,7 +54,7 @@ public class AutorizacionFilter implements Filter {
 		// !esAdmin significa cualquier id_roles que no sea 1, el de administrador, por si se crean más en el futuro
 		if (!esAdmin) {
 			session.setAttribute("errorLogin", "No tienes permiso para acceder a esa sección");
-			req.getRequestDispatcher("/login").forward(request, response);
+			req.getRequestDispatcher(Constantes.RUTA_SERVLET_LOGIN).forward(request, response);
 			// else quiere decir que sí es Administrador por lo que se le deja vía libre
 		} else {
 

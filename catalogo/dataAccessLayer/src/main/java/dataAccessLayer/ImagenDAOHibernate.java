@@ -55,9 +55,11 @@ public class ImagenDAOHibernate extends IpartekDAOHibernate implements ImagenDAO
 
 	@Override
 	public Imagen findByUrl(String url) {
+		Imagen imagen = null;
 		@SuppressWarnings("unchecked")
 		List<Imagen> imagenes = (List<Imagen>) man.createQuery("FROM Imagen WHERE url='" + url + "'").getResultList();
-		Imagen imagen = imagenes.get(0);
+		if(!imagenes.isEmpty())
+		imagen = imagenes.get(0);
 		return imagen;
 	}
 

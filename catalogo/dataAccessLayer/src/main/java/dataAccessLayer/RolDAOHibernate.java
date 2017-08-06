@@ -55,9 +55,10 @@ public class RolDAOHibernate extends IpartekDAOHibernate implements RolDAO {
 
 	@Override
 	public Rol findByName(String nombre) {
+		Rol rol = null;
 		@SuppressWarnings("unchecked")
 		List<Rol> roles = (List<Rol>) man.createQuery("FROM Rol WHERE nombre='" + nombre + "'").getResultList();
-		Rol rol = roles.get(0);
+		rol = roles.get(0);
 		return rol;
 	}
 
