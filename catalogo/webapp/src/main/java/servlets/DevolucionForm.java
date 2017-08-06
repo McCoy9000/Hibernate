@@ -111,12 +111,12 @@ public class DevolucionForm extends HttpServlet {
 			} finally {
 				daoManager.cerrar();
 			}
-			request.getRequestDispatcher("/admin/facturacrud").forward(request, response);
+			request.getRequestDispatcher(Constantes.RUTA_SERVLET_LISTADO_FACTURA).forward(request, response);
 			break;
 			
 		default:
 			daoManager.cerrar();
-			request.getRequestDispatcher("/admin/facturacrud").forward(request, response);
+			request.getRequestDispatcher(Constantes.RUTA_SERVLET_LISTADO_FACTURA).forward(request, response);
 		}
 	}
 

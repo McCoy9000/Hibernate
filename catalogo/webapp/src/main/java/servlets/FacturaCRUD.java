@@ -116,7 +116,7 @@ public class FacturaCRUD extends HttpServlet {
 				break;
 			case "devolucion":
 				daoManager.cerrar();
-				request.getRequestDispatcher("/WEB-INF/vistas/devolucionform.jsp").forward(request, response);
+				request.getRequestDispatcher(Constantes.RUTA_DEVOLUCION).forward(request, response);
 				break;
 
 			}

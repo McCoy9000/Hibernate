@@ -62,13 +62,13 @@ public class Checkout extends HttpServlet {
 
 		if (carritoDAO.findAll().size() == 0) {
 			daoManager.cerrar();
-			request.getRequestDispatcher("/catalogo").forward(request, response);
+			request.getRequestDispatcher(Constantes.RUTA_SERVLET_CATALOGO).forward(request, response);
 			return;
 		}
 
 		if (op == null) {
 			daoManager.cerrar();
-			request.getRequestDispatcher("/WEB-INF/vistas/checkout.jsp").forward(request, response);
+			request.getRequestDispatcher(Constantes.RUTA_CHECKOUT).forward(request, response);
 			return;
 		}
 
@@ -79,14 +79,14 @@ public class Checkout extends HttpServlet {
 			daoManager.cerrar();
 			session.setAttribute("carritoDAO", carritoDAO);
 			session.setAttribute("numeroArticulos", carritoDAO.getTotalArticulos());
-			request.getRequestDispatcher("/catalogo").forward(request, response);
+			request.getRequestDispatcher(Constantes.RUTA_SERVLET_CATALOGO).forward(request, response);
 			break;
 
 		case "pagar":
 			Usuario usuario = (Usuario) session.getAttribute("usuario");
 			
 			if (usuario == null) {
-				request.getRequestDispatcher("/login").forward(request, response);
+				request.getRequestDispatcher(Constantes.RUTA_SERVLET_LOGIN).forward(request, response);
 				return;
 			}
 			
@@ -146,7 +146,7 @@ public class Checkout extends HttpServlet {
 			session.setAttribute("numeroArticulos", carritoDAO.getTotalArticulos());
 			session.setAttribute("precioTotal", carritoDAO.getPrecioTotal());
 
-			request.getRequestDispatcher("/catalogo").forward(request, response);
+			request.getRequestDispatcher(Constantes.RUTA_SERVLET_CATALOGO).forward(request, response);
 
 			break;
 
@@ -157,7 +157,7 @@ public class Checkout extends HttpServlet {
 			try {
 				id = Long.parseLong(request.getParameter("id"));
 			} catch (NumberFormatException nfe) {
-				request.getRequestDispatcher("/checkout").forward(request, response);
+				request.getRequestDispatcher(Constantes.RUTA_SERVLET_CHECKOUT).forward(request, response);
 				break;
 			}
 			
@@ -173,7 +173,7 @@ public class Checkout extends HttpServlet {
 			session.setAttribute("precioTotal", carritoDAO.getPrecioTotal());
 
 			if (carritoDAO.findAll().size() == 0) {
-				request.getRequestDispatcher("/catalogo").forward(request, response);
+				request.getRequestDispatcher(Constantes.RUTA_SERVLET_CATALOGO).forward(request, response);
 				break;
 			}
 			request.getRequestDispatcher(Constantes.RUTA_CHECKOUT).forward(request, response);

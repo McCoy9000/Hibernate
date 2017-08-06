@@ -9,11 +9,14 @@ public class Constantes {
 	public static final long ID_USUARIO_DEVOLUCION = 1L;
 	
 	public static final String RUTA_LOGIN = "/WEB-INF/vistas/login.jsp";
+	public static final String RUTA_SERVLET_LOGIN = "/login";
 	public static final String RUTA_SIGNUP = "/WEB-INF/vistas/signup.jsp";
 	
 	public static final String RUTA_CATALOGO = "/WEB-INF/vistas/catalogo.jsp";
+	public static final String RUTA_SERVLET_CATALOGO = "/catalogo";
 	public static final String RUTA_ARTICULO = "/WEB-INF/vistas/articulo.jsp";
 	public static final String RUTA_CHECKOUT = "/WEB-INF/vistas/checkout.jsp";
+	public static final String RUTA_SERVLET_CHECKOUT = "/checkout";
 	public static final String RUTA_DEVOLUCION = "/WEB-INF/vistas/devolucionform.jsp";
 	public static final String RUTA_AGRADECIMIENTO = "/WEB-INF/vistas/agradecimiento.jsp";
 	
