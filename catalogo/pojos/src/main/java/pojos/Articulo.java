@@ -16,9 +16,11 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import recursos.Constantes;
+
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Producto implements Serializable {
+public abstract class Articulo implements Serializable, IArticulo {
 
 	private static final long serialVersionUID = 2613954032931478117L;
 	
@@ -38,10 +40,10 @@ public abstract class Producto implements Serializable {
 	@Column(name = "precio")
 	private BigDecimal precio;
 
-	public Producto() {
+	public Articulo() {
 	}
 
-	public Producto(String codigoArticulo, String nombre, String descripcion,
+	public Articulo(String codigoArticulo, String nombre, String descripcion,
 			Imagen imagen, BigDecimal precio) {
 		super();
 		this.codigoArticulo = codigoArticulo;
@@ -51,7 +53,7 @@ public abstract class Producto implements Serializable {
 		this.precio = precio;
 	}
 
-	public Producto(long id, String codigoArticulo, String nombre,
+	public Articulo(long id, String codigoArticulo, String nombre,
 			String descripcion, Imagen imagen, BigDecimal precio) {
 		super();
 		this.id = id;
@@ -62,7 +64,7 @@ public abstract class Producto implements Serializable {
 		this.precio = precio;
 	}
 	
-	public Producto(String codigoArticulo, String nombre, String descripcion, BigDecimal precio) {
+	public Articulo(String codigoArticulo, String nombre, String descripcion, BigDecimal precio) {
 		this.codigoArticulo = codigoArticulo;
 		this.nombre = nombre;
 		this.imagen = new Imagen(codigoArticulo, File.separator + "img" + File.separator + codigoArticulo + ".jpg");
@@ -135,7 +137,7 @@ public abstract class Producto implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Producto other = (Producto) obj;
+		Articulo other = (Articulo) obj;
 		if (codigoArticulo == null) {
 			if (other.codigoArticulo != null)
 				return false;
@@ -144,5 +146,11 @@ public abstract class Producto implements Serializable {
 		return true;
 	}
 
+	public BigDecimal getPvp() {
+		BigDecimal pvp = BigDecimal.ZERO;
+		pvp = this.precio.multiply(BigDecimal.ONE.add(Constantes.IVA)).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+		return pvp;
+		
+	}
 	
 }

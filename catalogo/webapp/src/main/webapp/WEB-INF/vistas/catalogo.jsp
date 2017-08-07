@@ -32,7 +32,7 @@
 				<td style="text-align:center; vertical-align: middle;"><a  onclick="window.open('${applicationScope.rutaBase}/catalogo?op=ver&id=${articulo.id}', '_blank', 'width=800,height=600')">${articulo.nombre}</a></td>
 				<td style="text-align:center; vertical-align: middle;"><a  onclick="window.open('${applicationScope.rutaBase}/catalogo?op=ver&id=${articulo.id}', '_blank', 'width=800,height=600')"><object data="${applicationScope.rutaBase}${articulo.imagen.url}" height="128" type="image/png">
 					<img src="${applicationScope.rutaBase}/img/0.jpg" class="img-thumbnail" height="128"/></object></a></td>
-				<td style="text-align:center; vertical-align: middle;">${articulo.precio} €</td>
+				<td style="text-align:center; vertical-align: middle;">${articulo.pvp} €</td>
 				<td style="text-align:center; vertical-align: middle;">${articulo.stock}</td>
 				<td id="anadir" style="text-align:center; vertical-align:middle;">
 					<form action="${applicationScope.rutaBase}/catalogo#${articulo.codigoArticulo}" method="post">

@@ -34,7 +34,7 @@ public class Imagen implements Serializable {
 //	@OneToOne(mappedBy = "imagen", fetch = FetchType.LAZY)
 //	private Comprador comprador;
 	@OneToMany(mappedBy = "imagen", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<Producto> productos = new ArrayList<Producto>();
+	private List<Articulo> articulos = new ArrayList<Articulo>();
 
 
 	public Imagen() {

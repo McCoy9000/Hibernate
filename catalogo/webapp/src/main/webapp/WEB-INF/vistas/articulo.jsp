@@ -30,7 +30,7 @@
 		
 		
 	<div class="col-xs-6 col-md-3" style="text-align:right">
-	<div class="jumbotron"><h1 style="text-align:center; font-size:5vw;">${articulo.precio}€</h1>
+	<div class="jumbotron"><h1 style="text-align:center; font-size:5vw;">${articulo.pvp}€</h1>
 	</div></div>
 </div>
 </div>

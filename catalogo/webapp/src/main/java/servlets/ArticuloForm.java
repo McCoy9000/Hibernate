@@ -147,7 +147,7 @@ public class ArticuloForm extends HttpServlet {
 					try {
 						articuloStockDAO.insert(articulo);
 						daoManager.terminarTransaccion();
-						log.info("Producto dado de alta.");
+						log.info("Articulo dado de alta.");
 					} catch (Exception e) {
 						daoManager.abortarTransaccion();
 						e.printStackTrace();

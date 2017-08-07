@@ -21,7 +21,7 @@ import dataAccessLayer.CarritoDAO;
 import dataAccessLayer.CarritoDAOFactory;
 import dataAccessLayer.DAOManager;
 import dataAccessLayer.DAOManagerFactory;
-import factories.ProductoFactory;
+import factories.ArticuloFactory;
 
 @WebServlet("/catalogo")
 public class Catalogo extends HttpServlet {
@@ -87,7 +87,7 @@ public class Catalogo extends HttpServlet {
 			daoManager.iniciarTransaccion();
 			try {
 			ArticuloStock as = articuloStockDAO.findById(id);
-			ArticuloCantidad ac = ProductoFactory.getArticuloCantidad(as, cantidad);
+			ArticuloCantidad ac = ArticuloFactory.getArticuloCantidad(as, cantidad);
 			long acId = carritoDAO.insert(ac);
 			if (carritoDAO.findById(acId).getCantidad().compareTo(as.getStock()) > 0)
 				carritoDAO.findById(acId).setCantidad(as.getStock());

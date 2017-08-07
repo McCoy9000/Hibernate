@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-public class ArticuloCantidad extends Producto implements Serializable {
+public class ArticuloCantidad extends Articulo implements Serializable {
 
 	private static final long serialVersionUID = 4227855324423410643L;
 	

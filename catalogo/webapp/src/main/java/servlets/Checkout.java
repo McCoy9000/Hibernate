@@ -30,7 +30,7 @@ import dataAccessLayer.DAOManagerFactory;
 import dataAccessLayer.FacturaDAO;
 import dataAccessLayer.ImagenDAO;
 import dataAccessLayer.UsuarioDAO;
-import factories.ProductoFactory;
+import factories.ArticuloFactory;
 
 @WebServlet("/checkout")
 public class Checkout extends HttpServlet {
@@ -112,7 +112,7 @@ public class Checkout extends HttpServlet {
 				List<ArticuloVendido> articulosFactura = new ArrayList<ArticuloVendido>();
 				
 				for (ArticuloCantidad ac : articulosCarrito) {
-					articulosFactura.add(ProductoFactory.getArticuloVendido(ac, ac.getCantidad(), factura));
+					articulosFactura.add(ArticuloFactory.getArticuloVendido(ac, ac.getCantidad(), factura));
 					ArticuloStock as = articuloStockDAO.findById(ac.getId());
 					as.setStock(as.getStock().subtract(ac.getCantidad()));
 				}
