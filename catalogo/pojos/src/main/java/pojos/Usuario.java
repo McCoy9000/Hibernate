@@ -19,7 +19,7 @@ public class Usuario extends Persona {
 
 	private static final long serialVersionUID = 2671695361728068311L;
 
-	@Column(name = "username", nullable = false)
+	@Column(name = "username", unique = true, nullable = false)
 	private String username;
 	@Column(name = "password", nullable = false)
 	private String password;

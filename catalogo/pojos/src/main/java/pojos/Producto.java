@@ -1,5 +1,6 @@
 package pojos;
 
+import java.io.File;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -64,7 +65,7 @@ public abstract class Producto implements Serializable {
 	public Producto(String codigoArticulo, String nombre, String descripcion, BigDecimal precio) {
 		this.codigoArticulo = codigoArticulo;
 		this.nombre = nombre;
-		this.imagen = new Imagen(codigoArticulo, "/img/" + codigoArticulo + ".jpg");
+		this.imagen = new Imagen(codigoArticulo, File.separator + "img" + File.separator + codigoArticulo + ".jpg");
 		this.descripcion = descripcion;
 		this.precio = precio;
 	}
