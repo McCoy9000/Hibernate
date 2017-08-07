@@ -2,10 +2,7 @@ package listeners;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 
-import javax.crypto.NoSuchPaddingException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -18,7 +15,8 @@ import pojos.ArticuloStock;
 import pojos.Factura;
 import pojos.Rol;
 import pojos.Usuario;
-import recursos.Encriptador;
+import recursos.EncriptadorFactory;
+import recursos.IEncriptador;
 import dataAccessLayer.ArticuloStockDAO;
 import dataAccessLayer.DAOManager;
 import dataAccessLayer.DAOManagerFactory;
@@ -61,11 +59,12 @@ public class Inicio implements ServletContextListener {
 
 		String rawadmin = "admin", admin;
 
-		Encriptador miEncriptador = null;
+		IEncriptador miEncriptador = null;
 		try {
-			miEncriptador = new Encriptador();
-		} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException e1) {
-			e1.printStackTrace();
+			miEncriptador = EncriptadorFactory.getEncriptador();
+		} catch (Exception e) {
+			e.getMessage();
+			e.printStackTrace();
 		}
 
 		admin = miEncriptador.encriptar(rawadmin);

@@ -45,9 +45,6 @@ public class Comprador implements Serializable {
 	@ManyToOne(cascade = { CascadeType.PERSIST }, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_empresa")
 	private Empresa empresa;
-//	@OneToOne(cascade = { CascadeType.ALL })
-//	@JoinColumn(name = "id_imagen")
-//	private Imagen imagen;
 	@OneToOne(mappedBy = "comprador", fetch = FetchType.LAZY)
 	private Factura factura;
 
@@ -65,7 +62,6 @@ public class Comprador implements Serializable {
 		this.email = email;
 		this.direccion = direccion;
 		this.empresa = empresa;
-//		this.imagen = imagen;
 	}
 
 	public long getId() {
@@ -139,14 +135,6 @@ public class Comprador implements Serializable {
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
 	}
-
-//	public Imagen getImagen() {
-//		return imagen;
-//	}
-//
-//	public void setImagen(Imagen imagen) {
-//		this.imagen = imagen;
-//	}
 
 	public long getIdUsuario() {
 		return idUsuario;

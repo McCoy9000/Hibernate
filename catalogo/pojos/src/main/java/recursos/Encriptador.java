@@ -10,7 +10,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 
-public class Encriptador {
+public class Encriptador implements IEncriptador{
 
 	String Key = "todostusmuertos";
 	byte[] KeyData = Key.getBytes();

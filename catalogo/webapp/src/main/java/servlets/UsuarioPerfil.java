@@ -1,10 +1,7 @@
 package servlets;
 
 import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 
-import javax.crypto.NoSuchPaddingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,7 +16,8 @@ import pojos.Empresa;
 import pojos.Rol;
 import pojos.Usuario;
 import recursos.Constantes;
-import recursos.Encriptador;
+import recursos.EncriptadorFactory;
+import recursos.IEncriptador;
 import dataAccessLayer.DAOManager;
 import dataAccessLayer.DAOManagerFactory;
 import dataAccessLayer.DireccionDAO;
@@ -56,7 +54,7 @@ public class UsuarioPerfil extends HttpServlet {
 
 		String username = request.getParameter("username");
 
-		Encriptador miEncriptador = null;
+		IEncriptador miEncriptador = null;
 
 		String password = null;
 
@@ -74,9 +72,10 @@ public class UsuarioPerfil extends HttpServlet {
 		}
 
 		try {
-			miEncriptador = new Encriptador();
-		} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException e1) {
-			e1.printStackTrace();
+			miEncriptador = EncriptadorFactory.getEncriptador();
+		} catch (Exception e) {
+			e.printStackTrace();
+			e.getMessage();
 		}
 
 		if (rawpassword != null) {
@@ -206,11 +205,7 @@ public class UsuarioPerfil extends HttpServlet {
 					direccion.setCiudad(ciudad);
 					direccion.setRegion(region);
 					direccion.setPais(pais);
-					daoManager.terminarTransaccion();
-					daoManager.iniciarTransaccion();
 					empresa.setNombre(nombreEmpresa);
-					daoManager.terminarTransaccion();
-					daoManager.iniciarTransaccion();
 					usuario.setUsername(username);
 					usuario.setPassword(password);
 					usuario.setNombre(nombre);
@@ -224,7 +219,7 @@ public class UsuarioPerfil extends HttpServlet {
 					} catch (Exception e) {
 						daoManager.abortarTransaccion();
 						e.printStackTrace();
-						log.info("Error al buscar el usuario con id " + id + ".");
+						log.info("Error al establecer al actualizar el perfil de usuario");
 					} finally {
 						daoManager.cerrar();
 					}

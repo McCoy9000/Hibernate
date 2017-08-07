@@ -1,10 +1,7 @@
 package servlets;
 
 import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 
-import javax.crypto.NoSuchPaddingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,7 +15,8 @@ import org.apache.log4j.Logger;
 import pojos.Rol;
 import pojos.Usuario;
 import recursos.Constantes;
-import recursos.Encriptador;
+import recursos.EncriptadorFactory;
+import recursos.IEncriptador;
 import dataAccessLayer.DAOManager;
 import dataAccessLayer.DAOManagerFactory;
 import dataAccessLayer.RolDAO;
@@ -60,7 +58,7 @@ public class UsuarioForm extends HttpServlet {
 
 		String username, rawpassword, rawpassword2, password = null, password2 = null, email, nombre, apellidos;
 
-		Encriptador miEncriptador = null;
+		IEncriptador miEncriptador = null;
 
 		if (request.getParameter("username") != null) {
 			username = request.getParameter("username").trim();
@@ -81,9 +79,10 @@ public class UsuarioForm extends HttpServlet {
 		}
 
 		try {
-			miEncriptador = new Encriptador();
-		} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException e1) {
-			e1.printStackTrace();
+			miEncriptador = EncriptadorFactory.getEncriptador();
+		} catch (Exception e) {
+			e.printStackTrace();
+			e.getMessage();
 		}
 
 		if (rawpassword != null) {

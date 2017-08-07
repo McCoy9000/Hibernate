@@ -1,10 +1,7 @@
 package servlets;
 
 import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 
-import javax.crypto.NoSuchPaddingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,7 +14,8 @@ import org.apache.log4j.Logger;
 
 import pojos.Usuario;
 import recursos.Constantes;
-import recursos.Encriptador;
+import recursos.EncriptadorFactory;
+import recursos.IEncriptador;
 import dataAccessLayer.DAOManager;
 import dataAccessLayer.DAOManagerFactory;
 import dataAccessLayer.RolDAO;
@@ -46,7 +44,7 @@ public class Signup extends HttpServlet {
 		HttpSession session = request.getSession();
 		session.removeAttribute("errorSignup");
 
-		String nombre = null, apellidos = null, email = null, username = null, rawpassword = null, rawpassword2 = null, password = null, password2 = null;
+		String nombre = null, apellidos = null, email = null, username = null, rawpassword = null, rawpassword2 = null, password = null;
 
 		if (request.getParameter("nombre") != null) {
 			nombre = request.getParameter("nombre").trim();
@@ -60,24 +58,19 @@ public class Signup extends HttpServlet {
 		if (request.getParameter("username") != null) {
 			username = request.getParameter("username").trim();
 		}
-		Encriptador miEncriptador = null;
+		IEncriptador miEncriptador = null;
 		if (request.getParameter("password") != null) {
 			rawpassword = request.getParameter("password").trim();
 			try {
-				miEncriptador = new Encriptador();
-			} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException e1) {
-				e1.printStackTrace();
+				miEncriptador = EncriptadorFactory.getEncriptador();
+			} catch (Exception e) {
+				e.printStackTrace();
+				e.getMessage();
 			}
 			password = miEncriptador.encriptar(rawpassword);
 		}
 		if (request.getParameter("password2") != null) {
 			rawpassword2 = request.getParameter("password2").trim();
-			try {
-				miEncriptador = new Encriptador();
-			} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException e1) {
-				e1.printStackTrace();
-			}
-			password2 = miEncriptador.encriptar(rawpassword2);
 		}
 		
 		Usuario usuario = null;
@@ -92,7 +85,7 @@ public class Signup extends HttpServlet {
 		}
 		boolean sinDatos = username == null || rawpassword == null || rawpassword2 == null;
 		boolean nombreLargo = username != null && username.length() > 20;
-		boolean passDistintas = rawpassword != null && !password.equals(password2);
+		boolean passDistintas = rawpassword != null && !rawpassword.equals(rawpassword2);
 		boolean emailNoValido = false;
 		if (email != null) {
 			String user = email.split("@")[0];

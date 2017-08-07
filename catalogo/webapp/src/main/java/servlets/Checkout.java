@@ -133,7 +133,7 @@ public class Checkout extends HttpServlet {
 				session.setAttribute("usuarioFactura", factura.getComprador());
 				daoManager.terminarTransaccion();
 			} catch (Exception e) {
-				daoManager.terminarTransaccion();
+				daoManager.abortarTransaccion();
 				e.printStackTrace();
 				log.info("Error al pagar la compra. Revise sus facturas y, en caso necesario, repita la operación");
 			} finally {

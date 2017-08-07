@@ -42,15 +42,13 @@ public class AutorizacionFilter implements Filter {
 		
 		// En principio se considera al usuario no administrador
 		boolean esAdmin = false;
-		// Si no es nuevo usuario el usuario no es null por lo que se le puede pedir el id_roles sin miedo al NullPointerException
+		
 		if (usuario != null) {
 			esAdmin = usuario.getRol().getId() == 1;
 		}
 
 		// LÓGICA DEL FILTRO
 
-		// Si no es administrador se le enviará al login. Le meto el mensaje de error, pero al llegar al login, como no tiene datos
-		// de logueo en un primer momento, se cambia este mensaje por el de 'Debes rellenar todos los campos' :-(
 		// !esAdmin significa cualquier id_roles que no sea 1, el de administrador, por si se crean más en el futuro
 		if (!esAdmin) {
 			session.setAttribute("errorLogin", "No tienes permiso para acceder a esa sección");
