@@ -29,7 +29,7 @@ public class Imagen implements Serializable {
 	private String nombre;
 	@Column(name = "url")
 	private String url;
-	@OneToOne(mappedBy = "imagen", fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "imagen", fetch = FetchType.EAGER)
 	private Persona persona;
 //	@OneToOne(mappedBy = "imagen", fetch = FetchType.LAZY)
 //	private Comprador comprador;

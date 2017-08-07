@@ -67,7 +67,7 @@ public abstract class Articulo implements Serializable, IArticulo {
 	public Articulo(String codigoArticulo, String nombre, String descripcion, BigDecimal precio) {
 		this.codigoArticulo = codigoArticulo;
 		this.nombre = nombre;
-		this.imagen = new Imagen(codigoArticulo, File.separator + "img" + File.separator + codigoArticulo + ".jpg");
+		this.imagen = new Imagen(codigoArticulo, "/img/" + codigoArticulo + ".jpg");
 		this.descripcion = descripcion;
 		this.precio = precio;
 	}
