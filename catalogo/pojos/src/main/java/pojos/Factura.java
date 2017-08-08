@@ -18,7 +18,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "FACTURAS")
-public class Factura implements Serializable {
+public class Factura implements Serializable, IFactura {
 
 	private static final long serialVersionUID = -536150810066408871L;
 	

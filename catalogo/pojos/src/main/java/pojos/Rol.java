@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "ROLES")
-public class Rol implements Serializable {
+public class Rol implements Serializable, IRol {
 
 	private static final long serialVersionUID = -1078668164926429410L;
 	

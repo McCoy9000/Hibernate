@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "DIRECCIONES")
-public class Direccion implements Serializable {
+public class Direccion implements Serializable, IDireccion {
 
 	private static final long serialVersionUID = -2552617591759152168L;
 

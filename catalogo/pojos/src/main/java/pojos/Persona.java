@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "PERSONAS")
-public class Persona implements Serializable {
+public class Persona implements Serializable, IPersona {
 
 	private static final long serialVersionUID = -6391073844224165594L;
 	

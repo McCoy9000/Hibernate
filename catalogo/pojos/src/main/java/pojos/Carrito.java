@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
-public class Carrito implements Serializable {
+public class Carrito implements Serializable, ICarrito {
 
 	private static final long serialVersionUID = -1977919344319664515L;
 
