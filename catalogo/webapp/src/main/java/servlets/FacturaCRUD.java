@@ -108,7 +108,7 @@ public class FacturaCRUD extends HttpServlet {
 					daoManager.cerrar();
 				}
 				session.setAttribute("factura", factura);
-				session.setAttribute("productosFactura", productosFactura);
+				session.setAttribute("articulosFactura", productosFactura);
 				session.setAttribute("ivaFactura", ivaFactura);
 				session.setAttribute("precioFactura", precioFactura);
 				session.setAttribute("usuarioFactura", usuarioFactura);
