@@ -1,5 +1,7 @@
 package pojos;
 
+import interfaces.IImagen;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "IMAGENES")
-public class Imagen implements Serializable {
+public class Imagen implements Serializable, IImagen {
 
 	private static final long serialVersionUID = -7360393809608650040L;
 

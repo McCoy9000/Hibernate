@@ -1,10 +1,11 @@
 package factories;
 
+import interfaces.IPersona;
+
 import java.time.LocalDate;
 
 import pojos.Direccion;
 import pojos.Empresa;
-import pojos.IPersona;
 import pojos.Imagen;
 import pojos.Persona;
 import pojos.Rol;

@@ -1,9 +1,14 @@
-package recursos;
+package factories;
+
+import interfaces.IEncriptador;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.NoSuchPaddingException;
+
+import recursos.Encriptador;
+import recursos.EncriptadorException;
 
 public class EncriptadorFactory {
 	

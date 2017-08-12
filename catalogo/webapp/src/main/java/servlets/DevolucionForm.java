@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import pojos.ArticuloVendido;
+import pojos.ArticuloFactura;
 import pojos.Comprador;
 import pojos.Factura;
 import pojos.Imagen;
@@ -76,7 +76,7 @@ public class DevolucionForm extends HttpServlet {
 		UsuarioDAO usuarioDAO = daoManager.getUsuarioDAO();
 		Usuario usuario = null;
 		Factura factura = null;
-		ArticuloVendido devolucion = null;
+		ArticuloFactura devolucion = null;
 		daoManager.iniciarTransaccion();
 		try {
 			usuario = usuarioDAO.findById(Constantes.ID_USUARIO_DEVOLUCION);
@@ -84,7 +84,7 @@ public class DevolucionForm extends HttpServlet {
 			factura = new Factura(usuario, new Comprador(usuario.getId(), usuario.getNombre(), usuario.getApellidos(), usuario.getFechaNacimiento(), usuario.getDocumento(), usuario.getTelefono(),
 					usuario.getEmail(), usuario.getDireccion(), usuario.getEmpresa()), LocalDate.now());
 	
-			devolucion = new ArticuloVendido("DEVOLUCION", mensaje, "", new Imagen(), importe, BigInteger.ONE, factura);
+			devolucion = new ArticuloFactura("DEVOLUCION", mensaje, "", new Imagen(), importe, BigInteger.ONE, factura);
 			daoManager.terminarTransaccion();
 		} catch (Exception e) {
 			daoManager.abortarTransaccion();
@@ -100,7 +100,7 @@ public class DevolucionForm extends HttpServlet {
 			daoManager.iniciarTransaccion();
 			try {
 				facturaDAO.insert(factura);
-				List<ArticuloVendido> articulosFactura = new ArrayList<ArticuloVendido>();
+				List<ArticuloFactura> articulosFactura = new ArrayList<ArticuloFactura>();
 				articulosFactura.add(devolucion);
 				factura.setArticulos(articulosFactura);
 				daoManager.terminarTransaccion();

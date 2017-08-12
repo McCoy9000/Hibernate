@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import pojos.ArticuloVendido;
+import pojos.ArticuloFactura;
 import pojos.Comprador;
 import pojos.Factura;
 import pojos.Usuario;
@@ -92,7 +92,7 @@ public class FacturasUsuario extends HttpServlet {
 			case "ver":
 
 				Factura factura;
-				List<ArticuloVendido> articulosFactura;
+				List<ArticuloFactura> articulosFactura;
 				BigDecimal ivaFactura;
 				BigDecimal precioFactura;
 				Usuario usuarioFactura;

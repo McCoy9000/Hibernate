@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 
 import pojos.ArticuloCantidad;
 import pojos.ArticuloStock;
-import pojos.ArticuloVendido;
+import pojos.ArticuloFactura;
 import pojos.Comprador;
 import pojos.Factura;
 import pojos.Usuario;
@@ -109,7 +109,7 @@ public class Checkout extends HttpServlet {
 				facturaDAO.insert(factura);
 	
 				List<ArticuloCantidad> articulosCarrito = carritoDAO.findAll();
-				List<ArticuloVendido> articulosFactura = new ArrayList<ArticuloVendido>();
+				List<ArticuloFactura> articulosFactura = new ArrayList<ArticuloFactura>();
 				
 				for (ArticuloCantidad ac : articulosCarrito) {
 					articulosFactura.add(ArticuloFactory.getArticuloVendido(ac, ac.getCantidad(), factura));
@@ -119,7 +119,7 @@ public class Checkout extends HttpServlet {
 				
 				
 				ImagenDAO imagenDAO = daoManager.getImagenDAO();
-				for (ArticuloVendido av: articulosFactura) {
+				for (ArticuloFactura av: articulosFactura) {
 					av.setImagen(imagenDAO.findById(av.getImagen().getId()));
 					
 				}

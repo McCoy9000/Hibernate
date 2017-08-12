@@ -1,4 +1,4 @@
-package pojos;
+package interfaces;
 
 import java.math.BigDecimal;
 

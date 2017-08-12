@@ -1,24 +1,26 @@
 package pojos;
 
+import interfaces.ICarrito;
+
 import java.io.Serializable;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
-public class Carrito implements Serializable, ICarrito {
+public class CarritoHashMap implements Serializable, ICarrito {
 
 	private static final long serialVersionUID = -1977919344319664515L;
 
-	private static Logger log = Logger.getLogger(Carrito.class);
+	private static Logger log = Logger.getLogger(CarritoHashMap.class);
 
 	private HashMap<Long, ArticuloCantidad> listaArticulos;
 
-	public Carrito() {
+	public CarritoHashMap() {
 		this.listaArticulos = new HashMap<>();
 		log.info("Creado carrito con lista de productos vacía");
 	}
 
-	public Carrito(HashMap<Long, ArticuloCantidad> listaArticulos) {
+	public CarritoHashMap(HashMap<Long, ArticuloCantidad> listaArticulos) {
 		this.listaArticulos = listaArticulos;
 	}
 
@@ -46,7 +48,7 @@ public class Carrito implements Serializable, ICarrito {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Carrito other = (Carrito) obj;
+		CarritoHashMap other = (CarritoHashMap) obj;
 		if (listaArticulos == null) {
 			if (other.listaArticulos != null)
 				return false;

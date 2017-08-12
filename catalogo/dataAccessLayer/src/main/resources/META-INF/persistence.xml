@@ -14,8 +14,8 @@
     <class>pojos.ArticuloStock</class>
     <class>pojos.Rol</class>
     <class>pojos.ArticuloCantidad</class>
-    <class>pojos.ArticuloVendido</class>
-    <class>pojos.Carrito</class>
+    <class>pojos.ArticuloFactura</class>
+    <class>pojos.CarritoHashMap</class>
     <class>pojos.Comprador</class>
     <class>pojos.Factura</class>
     

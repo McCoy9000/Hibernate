@@ -1,5 +1,7 @@
 package pojos;
 
+import interfaces.IPersona;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "USUARIOS")
-public class Usuario extends Persona {
+public class Usuario extends Persona implements IPersona {
 
 	private static final long serialVersionUID = 2671695361728068311L;
 

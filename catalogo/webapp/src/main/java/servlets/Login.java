@@ -1,5 +1,7 @@
 package servlets;
 
+import interfaces.IEncriptador;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -16,11 +18,10 @@ import org.apache.log4j.Logger;
 
 import pojos.Usuario;
 import recursos.Constantes;
-import recursos.EncriptadorFactory;
-import recursos.IEncriptador;
 import dataAccessLayer.DAOManager;
 import dataAccessLayer.DAOManagerFactory;
 import dataAccessLayer.UsuarioDAO;
+import factories.EncriptadorFactory;
 
 @WebServlet("/login")
 public class Login extends HttpServlet {

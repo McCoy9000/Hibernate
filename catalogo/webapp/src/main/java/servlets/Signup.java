@@ -1,5 +1,7 @@
 package servlets;
 
+import interfaces.IEncriptador;
+
 import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
@@ -14,12 +16,11 @@ import org.apache.log4j.Logger;
 
 import pojos.Usuario;
 import recursos.Constantes;
-import recursos.EncriptadorFactory;
-import recursos.IEncriptador;
 import dataAccessLayer.DAOManager;
 import dataAccessLayer.DAOManagerFactory;
 import dataAccessLayer.RolDAO;
 import dataAccessLayer.UsuarioDAO;
+import factories.EncriptadorFactory;
 
 @WebServlet("/signup")
 public class Signup extends HttpServlet {

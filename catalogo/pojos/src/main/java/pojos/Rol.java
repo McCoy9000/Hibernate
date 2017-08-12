@@ -1,5 +1,7 @@
 package pojos;
 
+import interfaces.IRol;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

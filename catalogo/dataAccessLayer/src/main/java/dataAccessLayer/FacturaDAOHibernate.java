@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import pojos.ArticuloVendido;
+import pojos.ArticuloFactura;
 import pojos.Factura;
 import recursos.Constantes;
 
@@ -59,7 +59,7 @@ public class FacturaDAOHibernate extends IpartekDAOHibernate implements FacturaD
 	@Override
 	public BigDecimal getIvaTotal(long id) {
 		BigDecimal ivaTotal = BigDecimal.ZERO;
-		for (ArticuloVendido a : this.findById(id).getArticulos()) {
+		for (ArticuloFactura a : this.findById(id).getArticulos()) {
 			ivaTotal = ivaTotal.add(a.getPrecio().multiply(new BigDecimal(a.getCantidad().intValue())).multiply(Constantes.IVA));
 
 		}
@@ -71,7 +71,7 @@ public class FacturaDAOHibernate extends IpartekDAOHibernate implements FacturaD
 	public BigDecimal getPrecioTotal(long id) {
 		BigDecimal precioTotalSinIva = BigDecimal.ZERO;
 		BigDecimal precioTotal = BigDecimal.ZERO;
-		for (ArticuloVendido a : this.findById(id).getArticulos()) {
+		for (ArticuloFactura a : this.findById(id).getArticulos()) {
 			precioTotalSinIva = precioTotalSinIva.add(a.getPrecio().multiply(new BigDecimal(a.getCantidad().intValue())));
 		}
 		precioTotal = precioTotalSinIva.add(this.getIvaTotal(id));

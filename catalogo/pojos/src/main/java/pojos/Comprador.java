@@ -1,5 +1,7 @@
 package pojos;
 
+import interfaces.IPersona;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -17,7 +19,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "COMPRADORES")
-public class Comprador implements Serializable {
+public class Comprador implements Serializable, IPersona {
 
 	private static final long serialVersionUID = -6560554015670763910L;
 	

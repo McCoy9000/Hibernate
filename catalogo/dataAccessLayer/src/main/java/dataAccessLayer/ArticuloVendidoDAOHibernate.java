@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import pojos.ArticuloVendido;
+import pojos.ArticuloFactura;
 
 public class ArticuloVendidoDAOHibernate extends IpartekDAOHibernate implements ArticuloVendidoDAO {
 
@@ -18,59 +18,59 @@ public class ArticuloVendidoDAOHibernate extends IpartekDAOHibernate implements 
 
 	
 	@Override
-	public long insert(ArticuloVendido articulo) {
+	public long insert(ArticuloFactura articulo) {
 		man.persist(articulo);
 		long id = articulo.getId();
 		return id;
 	}
 
 	@Override
-	public void update(ArticuloVendido articulo) {
+	public void update(ArticuloFactura articulo) {
 		man.merge(articulo);
 	}
 
 	@Override
-	public void delete(ArticuloVendido articulo) {
-		ArticuloVendido art = man.find(ArticuloVendido.class, articulo.getId());
+	public void delete(ArticuloFactura articulo) {
+		ArticuloFactura art = man.find(ArticuloFactura.class, articulo.getId());
 		man.remove(art);
 	}
 
 	@Override
 	public void delete(long id) {
-		ArticuloVendido art = man.find(ArticuloVendido.class, id);
+		ArticuloFactura art = man.find(ArticuloFactura.class, id);
 		man.remove(art);
 	}
 
 	@Override
-	public List<ArticuloVendido> findAll() {
+	public List<ArticuloFactura> findAll() {
 		@SuppressWarnings("unchecked")
-		List<ArticuloVendido> articulos = (List<ArticuloVendido>) man.createQuery("FROM ArticuloVendido").getResultList();
+		List<ArticuloFactura> articulos = (List<ArticuloFactura>) man.createQuery("FROM ArticuloFactura").getResultList();
 		return articulos;
 	}
 
 	@Override
-	public ArticuloVendido findById(long id) {
-		ArticuloVendido art = man.find(ArticuloVendido.class, id);
+	public ArticuloFactura findById(long id) {
+		ArticuloFactura art = man.find(ArticuloFactura.class, id);
 		return art;
 	}
 
 	@Override
-	public List<ArticuloVendido> findByCodigo(String codigo) {
+	public List<ArticuloFactura> findByCodigo(String codigo) {
 		@SuppressWarnings("unchecked")
-		List<ArticuloVendido> articulos = (List<ArticuloVendido>) man.createQuery("FROM ArticuloVendido WHERE codigoArticulo='" + codigo + "'").getResultList();
+		List<ArticuloFactura> articulos = (List<ArticuloFactura>) man.createQuery("FROM ArticuloFactura WHERE codigoArticulo='" + codigo + "'").getResultList();
 		return articulos;
 	}
 
 	@Override
-	public boolean validar(ArticuloVendido articulo) {
-		ArticuloVendido art = man.find(ArticuloVendido.class, articulo.getId());
+	public boolean validar(ArticuloFactura articulo) {
+		ArticuloFactura art = man.find(ArticuloFactura.class, articulo.getId());
 		if (art == null)
 			return false;
 		return true;
 	}
 
 	@Override
-	public boolean validarCodigo(ArticuloVendido articulo) {
+	public boolean validarCodigo(ArticuloFactura articulo) {
 		if (this.findByCodigo(articulo.getCodigoArticulo()) != null)
 			return true;
 		return true;

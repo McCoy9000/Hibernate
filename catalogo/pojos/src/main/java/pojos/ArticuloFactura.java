@@ -1,5 +1,7 @@
 package pojos;
 
+import interfaces.IArticulo;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -13,8 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ARTICULOS_VENDIDOS")
-public class ArticuloVendido extends Articulo implements Serializable {
+@Table(name = "ARTICULOS_FACTURA")
+public class ArticuloFactura extends Articulo implements Serializable, IArticulo {
 
 	private static final long serialVersionUID = -8894436731693409575L;
 	
@@ -24,11 +26,11 @@ public class ArticuloVendido extends Articulo implements Serializable {
 	@JoinColumn(name = "id_factura")
 	private Factura factura;
 
-	public ArticuloVendido() {
+	public ArticuloFactura() {
 
 	}
 
-	public ArticuloVendido(String codigoArticulo, String nombre, String descripcion, Imagen imagen, BigDecimal precio, BigInteger cantidad, Factura factura) {
+	public ArticuloFactura(String codigoArticulo, String nombre, String descripcion, Imagen imagen, BigDecimal precio, BigInteger cantidad, Factura factura) {
 		super(codigoArticulo, nombre, descripcion, imagen, precio);
 		this.cantidad = cantidad;
 		this.factura = factura;

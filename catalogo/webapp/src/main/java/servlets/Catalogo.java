@@ -56,7 +56,7 @@ public class Catalogo extends HttpServlet {
 
 		if (op == null) {
 
-			// Si se llega al catálogo sin opciones, el carrito se empaqueta
+			// Si se llega al catálogo sin opciones, el carritoHashMap se empaqueta
 			// en el objeto sesión
 			session.setAttribute("carritoDAO", carritoDAO);
 			session.setAttribute("numeroArticulos", carritoDAO.getTotalArticulos());
@@ -95,7 +95,7 @@ public class Catalogo extends HttpServlet {
 			} catch (Exception e) {
 				daoManager.abortarTransaccion();
 				e.printStackTrace();
-				log.info("Error al añadir productos al carrito. Revise el estado de su compra, por favor");
+				log.info("Error al añadir productos al carritoHashMap. Revise el estado de su compra, por favor");
 			} finally {
 				daoManager.cerrar();
 			}

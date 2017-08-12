@@ -119,11 +119,14 @@ public class ArticuloForm extends HttpServlet {
 		}
 		// Lógica del servlet según la opción elegida por el usuario y enviada por el navegador
 		// encapsulada en opform.
+
+		// Si el usuario aún no ha elegido una opción. 
+		
 		if (op == null) {
 			articulo = new ArticuloStock(codigoArticulo, nombre, descripcion, precio, cantidad);
 			session.removeAttribute("errorProducto");
 			request.getRequestDispatcher(Constantes.RUTA_FORMULARIO_PRODUCTO + "?op=alta").forward(request, response);
-			//TODO aquí arriba por qué declaro un artículo?
+
 		} else {
 
 			switch (op) {

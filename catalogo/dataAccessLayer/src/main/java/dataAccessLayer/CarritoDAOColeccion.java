@@ -7,29 +7,29 @@ import java.util.HashMap;
 import java.util.List;
 
 import pojos.ArticuloCantidad;
-import pojos.Carrito;
+import pojos.CarritoHashMap;
 import recursos.Constantes;
 
 public class CarritoDAOColeccion implements CarritoDAO {
 
-	Carrito carrito;
+	CarritoHashMap carritoHashMap;
 
 	public CarritoDAOColeccion() {
-		this.carrito = new Carrito();
+		this.carritoHashMap = new CarritoHashMap();
 	}
 
 	public CarritoDAOColeccion(HashMap<Long, ArticuloCantidad> productosCarrito) {
-		this.carrito = new Carrito(productosCarrito);
+		this.carritoHashMap = new CarritoHashMap(productosCarrito);
 	}
 
 	@Override
 	public long insert(ArticuloCantidad articulo) {
 		
 		
-		if(carrito.getListaArticulos().containsKey(articulo.getId())) {
-			carrito.getListaArticulos().get(articulo.getId()).setCantidad(carrito.getListaArticulos().get(articulo.getId()).getCantidad().add(articulo.getCantidad()));
+		if(carritoHashMap.getListaArticulos().containsKey(articulo.getId())) {
+			carritoHashMap.getListaArticulos().get(articulo.getId()).setCantidad(carritoHashMap.getListaArticulos().get(articulo.getId()).getCantidad().add(articulo.getCantidad()));
 		} else {
-			carrito.getListaArticulos().put(articulo.getId(), articulo);
+			carritoHashMap.getListaArticulos().put(articulo.getId(), articulo);
 		}
 		return articulo.getId();
 	}
@@ -46,25 +46,25 @@ public class CarritoDAOColeccion implements CarritoDAO {
 
 	@Override
 	public void delete(long id, BigInteger cantidad) {
-		ArticuloCantidad articulo = carrito.getListaArticulos().get(id);
+		ArticuloCantidad articulo = carritoHashMap.getListaArticulos().get(id);
 		articulo.setCantidad(articulo.getCantidad().subtract(cantidad));;
 		if (articulo.getCantidad().compareTo(BigInteger.ZERO) <= 0)
-			carrito.getListaArticulos().remove(id);
+			carritoHashMap.getListaArticulos().remove(id);
 	}
 
 	@Override
 	public List<ArticuloCantidad> findAll() {
-		return new ArrayList<ArticuloCantidad>(carrito.getListaArticulos().values());
+		return new ArrayList<ArticuloCantidad>(carritoHashMap.getListaArticulos().values());
 	}
 
 	@Override
 	public ArticuloCantidad findById(long id) {
-		return carrito.getListaArticulos().get(id);
+		return carritoHashMap.getListaArticulos().get(id);
 	}
 
 	@Override
 	public ArticuloCantidad findByCodigo(String codigo) {
-		for (ArticuloCantidad articulo : carrito.getListaArticulos().values()) {
+		for (ArticuloCantidad articulo : carritoHashMap.getListaArticulos().values()) {
 			if (articulo.getCodigoArticulo() == codigo)
 				return articulo;
 		}
@@ -73,14 +73,14 @@ public class CarritoDAOColeccion implements CarritoDAO {
 
 	@Override
 	public boolean validar(ArticuloCantidad articulo) {
-		if (carrito.getListaArticulos().values().contains(articulo))
+		if (carritoHashMap.getListaArticulos().values().contains(articulo))
 			return true;
 		return false;
 	}
 
 	@Override
 	public boolean validarCodigo(String codigo) {
-		for (ArticuloCantidad articulo : new ArrayList<ArticuloCantidad>(carrito.getListaArticulos().values())) {
+		for (ArticuloCantidad articulo : new ArrayList<ArticuloCantidad>(carritoHashMap.getListaArticulos().values())) {
 			if (articulo.getCodigoArticulo() == codigo)
 				return true;
 		}
@@ -103,7 +103,7 @@ public class CarritoDAOColeccion implements CarritoDAO {
 
 	public BigInteger getTotalArticulos() {
 		BigInteger totalArticulos = BigInteger.ZERO;
-		if(carrito.getListaArticulos().keySet().size() > 0)
+		if(carritoHashMap.getListaArticulos().keySet().size() > 0)
 		for (ArticuloCantidad ac : this.findAll()) {
 			totalArticulos = totalArticulos.add(ac.getCantidad());
 		}

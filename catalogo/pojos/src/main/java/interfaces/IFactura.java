@@ -1,5 +1,6 @@
-package pojos;
+package interfaces;
 
 public interface IFactura {
 
+	
 }

@@ -1,5 +1,7 @@
 package pojos;
 
+import interfaces.IPersona;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 

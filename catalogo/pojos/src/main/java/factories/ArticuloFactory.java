@@ -4,7 +4,7 @@ import java.math.BigInteger;
 
 import pojos.ArticuloCantidad;
 import pojos.ArticuloStock;
-import pojos.ArticuloVendido;
+import pojos.ArticuloFactura;
 import pojos.Factura;
 import pojos.Articulo;
 
@@ -26,11 +26,11 @@ public class ArticuloFactory {
 		return new ArticuloStock (articulo.getCodigoArticulo(), articulo.getNombre(), articulo.getDescripcion(), articulo.getImagen(), articulo.getPrecio(), stock);
 	}
 	
-	public static ArticuloVendido getArticuloVendido() {
-		return new ArticuloVendido();
+	public static ArticuloFactura getArticuloVendido() {
+		return new ArticuloFactura();
 	}
 	
-	public static ArticuloVendido getArticuloVendido(Articulo articulo, BigInteger cantidad, Factura factura) {
-		return new ArticuloVendido (articulo.getCodigoArticulo(), articulo.getNombre(), articulo.getDescripcion(), articulo.getImagen(), articulo.getPrecio(), cantidad, factura);
+	public static ArticuloFactura getArticuloVendido(Articulo articulo, BigInteger cantidad, Factura factura) {
+		return new ArticuloFactura (articulo.getCodigoArticulo(), articulo.getNombre(), articulo.getDescripcion(), articulo.getImagen(), articulo.getPrecio(), cantidad, factura);
 	}
 }

@@ -19,7 +19,7 @@ public class Session implements HttpSessionListener {
 		HttpSession session = se.getSession();
 		// Darle un tiempo máximo de inactividad de 15 minutos
 		session.setMaxInactiveInterval(900);
-		// Obtener un DAO de carrito que le asigna un nuevo carrito a la sesión
+		// Obtener un DAO de carritoHashMap que le asigna un nuevo carritoHashMap a la sesión
 		CarritoDAO carritoDAO = CarritoDAOFactory.getCarritoDAO();
 		session.setAttribute("carritoDAO", carritoDAO);
 		session.setAttribute("numeroProductos", carritoDAO.findAll().size());

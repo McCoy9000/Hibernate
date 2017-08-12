@@ -1,5 +1,7 @@
 package servlets;
 
+import interfaces.IEncriptador;
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -16,14 +18,13 @@ import pojos.Empresa;
 import pojos.Rol;
 import pojos.Usuario;
 import recursos.Constantes;
-import recursos.EncriptadorFactory;
-import recursos.IEncriptador;
 import dataAccessLayer.DAOManager;
 import dataAccessLayer.DAOManagerFactory;
 import dataAccessLayer.DireccionDAO;
 import dataAccessLayer.EmpresaDAO;
 import dataAccessLayer.RolDAO;
 import dataAccessLayer.UsuarioDAO;
+import factories.EncriptadorFactory;
 
 @WebServlet("/usuarioperfil")
 public class UsuarioPerfil extends HttpServlet {

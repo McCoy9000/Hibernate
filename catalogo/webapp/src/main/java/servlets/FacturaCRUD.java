@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import pojos.ArticuloVendido;
+import pojos.ArticuloFactura;
 import pojos.Factura;
 import pojos.Usuario;
 import recursos.Constantes;
@@ -72,7 +72,7 @@ public class FacturaCRUD extends HttpServlet {
 			case "ver":
 
 				Factura factura = null;
-				List<ArticuloVendido> productosFactura = null;
+				List<ArticuloFactura> productosFactura = null;
 				BigDecimal ivaFactura = BigDecimal.ZERO;
 				BigDecimal precioFactura = BigDecimal.ZERO;
 				Usuario usuarioFactura = null;
@@ -108,7 +108,7 @@ public class FacturaCRUD extends HttpServlet {
 					daoManager.cerrar();
 				}
 				session.setAttribute("factura", factura);
-				session.setAttribute("productosFactura", productosFactura);
+				session.setAttribute("articulosFactura", productosFactura);
 				session.setAttribute("ivaFactura", ivaFactura);
 				session.setAttribute("precioFactura", precioFactura);
 				session.setAttribute("usuarioFactura", usuarioFactura);

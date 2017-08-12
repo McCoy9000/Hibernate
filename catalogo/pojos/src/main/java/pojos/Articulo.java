@@ -1,5 +1,7 @@
 package pojos;
 
+import interfaces.IArticulo;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 

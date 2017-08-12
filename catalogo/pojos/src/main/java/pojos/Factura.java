@@ -1,5 +1,7 @@
 package pojos;
 
+import interfaces.IFactura;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -35,7 +37,7 @@ public class Factura implements Serializable, IFactura {
 	@JoinColumn(name = "id_comprador")
 	private Comprador comprador;
 	@OneToMany(mappedBy = "factura", cascade = CascadeType.ALL)
-	private List<ArticuloVendido> articulos = new ArrayList<ArticuloVendido>();
+	private List<ArticuloFactura> articulos = new ArrayList<ArticuloFactura>();
 	@Column(name = "fecha")
 	private LocalDate fecha;
 	private static long siguienteFactura = 0L;
@@ -105,13 +107,13 @@ public class Factura implements Serializable, IFactura {
 		this.comprador = comprador;
 	}
 
-	public List<ArticuloVendido> getArticulos() {
+	public List<ArticuloFactura> getArticulos() {
 		return articulos;
 	}
 
-	public void setArticulos(List<ArticuloVendido> articulos) {
+	public void setArticulos(List<ArticuloFactura> articulos) {
 		this.articulos = articulos;
-		for(ArticuloVendido av : articulos) {
+		for(ArticuloFactura av : articulos) {
 			av.setFactura(this);
 		}
 	}

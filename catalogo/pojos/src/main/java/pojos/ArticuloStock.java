@@ -1,5 +1,7 @@
 package pojos;
 
+import interfaces.IArticulo;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -10,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "ARTICULOS_STOCK")
-public class ArticuloStock extends Articulo implements Serializable {
+public class ArticuloStock extends Articulo implements Serializable, IArticulo {
 
 	private static final long serialVersionUID = 2702580752722330560L;
 
