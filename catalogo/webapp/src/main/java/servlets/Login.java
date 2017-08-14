@@ -147,17 +147,18 @@ public class Login extends HttpServlet {
 			}
 
 			if (referer.contains("checkout")) {
-				request.getRequestDispatcher(Constantes.RUTA_SERVLET_CHECKOUT).forward(request, response);
+				response.sendRedirect(request.getContextPath() + Constantes.RUTA_SERVLET_CHECKOUT);
+				//request.getRequestDispatcher(Constantes.RUTA_SERVLET_CHECKOUT).forward(request, response);
 				return;
 			}
 			
 			if (referer.contains("usuarioperfil")) {
-				request.getRequestDispatcher(Constantes.RUTA_SERVLET_PERFIL_USUARIO + "?opform=formulario").forward(request, response);
+				response.sendRedirect(request.getContextPath() + Constantes.RUTA_SERVLET_PERFIL_USUARIO + "?op=ver");
 				return;
 			}
 
 			if (referer.contains("facturasusuario")) {
-				request.getRequestDispatcher(Constantes.RUTA_SERVLET_FACTURA_USUARIOS).forward(request, response);
+				response.sendRedirect(request.getContextPath() + Constantes.RUTA_SERVLET_FACTURA_USUARIOS);
 				return;
 			}
 //			TODO redireccionamiento login
