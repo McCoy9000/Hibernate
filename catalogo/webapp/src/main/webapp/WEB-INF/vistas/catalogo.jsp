@@ -28,7 +28,7 @@
 	</thead>
 	<tbody>
 		<c:forEach items="${applicationScope.catalogo}" var="articulo">
-			<tr id="${articulo.id}">
+			<tr id="${articulo.codigoArticulo}">
 				<td style="text-align:center; vertical-align: middle;"><a  onclick="window.open('${applicationScope.rutaBase}/catalogo?op=ver&id=${articulo.id}', '_blank', 'width=800,height=600')">${articulo.nombre}</a></td>
 				<td style="text-align:center; vertical-align: middle;"><a  onclick="window.open('${applicationScope.rutaBase}/catalogo?op=ver&id=${articulo.id}', '_blank', 'width=800,height=600')"><object data="${applicationScope.rutaBase}${articulo.imagen.url}" height="128" type="image/png">
 					<img src="${applicationScope.rutaBase}/img/0.jpg" class="img-thumbnail" height="128"/></object></a></td>
