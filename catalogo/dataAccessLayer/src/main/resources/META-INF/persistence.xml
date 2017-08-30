@@ -21,7 +21,7 @@
     
     <properties>
         <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
-		<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/testDriver" />
+		<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/Driver" />
         <property name="javax.persistence.jdbc.user" value="Mikel" />
         <property name="javax.persistence.jdbc.password" value="tuput4m4dr3" />
         <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
