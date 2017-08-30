@@ -1,13 +1,17 @@
 package pojos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -39,8 +43,8 @@ public class Direccion implements Serializable {
 	private Persona persona;
 	@OneToOne(mappedBy = "direccion", fetch = FetchType.LAZY)
 	private Empresa empresa;
-	@OneToOne(mappedBy = "direccion", fetch = FetchType.LAZY)
-	private Comprador comprador;
+	@OneToMany(mappedBy = "direccion", cascade = CascadeType.PERSIST)
+	private List<Comprador> compradores = new ArrayList<Comprador>();
 
 	public Direccion() {
 
@@ -144,7 +148,7 @@ public class Direccion implements Serializable {
 		result = prime * result + ((calle == null) ? 0 : calle.hashCode());
 		result = prime * result + ((ciudad == null) ? 0 : ciudad.hashCode());
 		result = prime * result + ((codigoPostal == null) ? 0 : codigoPostal.hashCode());
-		result = prime * result + ((comprador == null) ? 0 : comprador.hashCode());
+		result = prime * result + ((compradores == null) ? 0 : compradores.hashCode());
 		result = prime * result + ((empresa == null) ? 0 : empresa.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result + ((pais == null) ? 0 : pais.hashCode());
@@ -179,10 +183,10 @@ public class Direccion implements Serializable {
 				return false;
 		} else if (!codigoPostal.equals(other.codigoPostal))
 			return false;
-		if (comprador == null) {
-			if (other.comprador != null)
+		if (compradores == null) {
+			if (other.compradores != null)
 				return false;
-		} else if (!comprador.equals(other.comprador))
+		} else if (!compradores.equals(other.compradores))
 			return false;
 		if (empresa == null) {
 			if (other.empresa != null)

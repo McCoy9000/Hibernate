@@ -20,7 +20,7 @@ import javax.persistence.Table;
 public class Comprador implements Serializable {
 
 	private static final long serialVersionUID = -6560554015670763910L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
@@ -39,7 +39,7 @@ public class Comprador implements Serializable {
 	private String telefono;
 	@Column(name = "email")
 	private String email;
-	@OneToOne(cascade = { CascadeType.ALL })
+	@ManyToOne(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_direccion")
 	private Direccion direccion;
 	@ManyToOne(cascade = { CascadeType.PERSIST }, fetch = FetchType.LAZY)
@@ -151,6 +151,5 @@ public class Comprador implements Serializable {
 	public void setFactura(Factura factura) {
 		this.factura = factura;
 	}
-
 
 }
